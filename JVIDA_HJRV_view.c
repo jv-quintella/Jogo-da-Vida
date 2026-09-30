@@ -1,3 +1,7 @@
+//JVIDA_HJRV_View - Projeto Jogo da Vida LP2026
+//30/09/2026
+//Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -5,7 +9,7 @@
 ** Le um texto, remove a quebra de linha e descarta o excesso.
 ** Parametros:
 **      entrada - vetor que recebe o texto
-**      tamanho - capacidade do vetor, no minimo 2
+**      tamanho - capacidade do vetor
 */
 int obter_input(char entrada[], int tamanho)
 {
@@ -45,4 +49,13 @@ void pause() {
         printf("\n\nPressione Enter para continuar...");
         getchar();
     #endif
+}
+
+/*
+** Exibe uma mensagem de texto na tela
+** Parametros:
+**      msg - (const char*) mensagem a ser exibida
+*/
+void mostrarMensagem(const char* msg) {
+    printf("%s", msg);
 }
