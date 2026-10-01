@@ -15,3 +15,29 @@ void iniciar_simulacao()
         imprimir_mundo(mundo.tamanho, mundo.celulas);
 
     }
+
+void primeira_celula()
+{
+	int temp_alt = obter_input();
+	int temp_lar = obter_input();
+	int excluir;
+	
+	if(temp_alt < 1 || temp_alt > mundo->tamanho || temp_lar < 1 || temp_lar > mundo->tamanho)
+	{
+		mostrarMensagem("Posicao invalida");
+	}
+	
+	if(mundo->celula[temp_alt][temp_lar] == O)
+	{
+		mostrarMensagem("Deseja excluir esta celula? [s][n]:");
+		excluir = obter_input();
+		if(excluir == s)
+		{
+			mundo->celula[temp_alt][temp_lar] = '.';
+		}
+	}
+	else
+	{
+		mundo->celula[temp_alt][temp_lar] =; //função 3;
+	}
+}
