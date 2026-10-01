@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "JVIDA_HJRV_view_jogo.h"
 
 /*
 ** Imprime o mundo atual no terminal.

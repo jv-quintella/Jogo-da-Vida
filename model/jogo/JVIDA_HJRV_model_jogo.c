@@ -2,6 +2,9 @@
 //30/09/2026
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
+#include "JVIDA_HJRV_model_struct.h"
+#include "JVIDA_HJRV_model_jogo.h"
+
 /*
 ** Inicializa o mundo com celulas vazias, representadas por pontos.
 ** Parametros:

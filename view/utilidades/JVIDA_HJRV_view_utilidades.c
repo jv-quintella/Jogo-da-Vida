@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "JVIDA_HJRV_view_utilidades.h"
 
 /*
 ** Le um texto, remove a quebra de linha e descarta o excesso.
