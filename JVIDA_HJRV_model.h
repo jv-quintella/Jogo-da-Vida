@@ -2,5 +2,10 @@
 //30/09/2026
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
-typedef struct Mundo Mundo;
 
+struct Mundo {
+     char celulas[60][60];
+    int tamanho;
+};
+
+void criar_mundo(struct Mundo *mundo, int tamanho);

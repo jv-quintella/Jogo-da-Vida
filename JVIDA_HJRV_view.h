@@ -5,3 +5,5 @@
 int obter_input(char entrada[], int tamanho);
 void mostrarMensagem(const char* msg);
 void pause();
+void imprimir_mundo(int tamanho, char mundo[60][60]);
+int obter_tamanho();
