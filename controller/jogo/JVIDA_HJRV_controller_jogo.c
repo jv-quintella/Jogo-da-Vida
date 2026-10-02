@@ -62,5 +62,14 @@ void iniciar_simulacao()
 
 void mostrar_celula(struct Mundo *mundo, int tamanho)
     {
-        
+        int i, j;
+        mundo->tamanho = tamanho;
+        //inserir entrada no mapa
+        for(i = 0; i < tamanho; i++)
+            {
+                for(j = 0; j < tamanho; j++)
+                {
+                    mundo->celulas[i][j] = '.';
+                }
+            }
 }
