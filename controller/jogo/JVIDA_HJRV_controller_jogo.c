@@ -41,6 +41,11 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
         {
 			mundo->celulas[temp_alt][temp_lar] = '.';
 		}
+
+        else
+        {
+            
+        }
 	}
 
 	else
