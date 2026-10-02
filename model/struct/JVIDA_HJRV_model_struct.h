@@ -3,6 +3,6 @@
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
 struct Mundo {
-     char celulas[60][60];
+    char celulas[60][60];
     int tamanho;
 };
