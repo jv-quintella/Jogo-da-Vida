@@ -21,10 +21,10 @@ void iniciar_simulacao()
 
     }
 
-void primeira_celula(struct Mundo *mundo, int tamanho)
+void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
     {	
-        int temp_alt = obter_input("Digite a linha da celula: ");	
-        int temp_lar = obter_input("Digite a coluna da celula: ");	
+        int temp_alt = obter_input(entrada, tamanho);	
+        int temp_lar = obter_input(entrada, tamanho);	
         int excluir;
 
         if(temp_alt < 1 || temp_alt > mundo->tamanho || temp_lar < 1 || temp_lar > mundo->tamanho)
@@ -35,7 +35,7 @@ void primeira_celula(struct Mundo *mundo, int tamanho)
 	if(mundo->celulas[temp_alt][temp_lar] == 'O')
 	{
 		mostrarMensagem("Deseja excluir esta celula? [s][n]:");
-		excluir = obter_input();
+		excluir = obter_input(entrada, tamanho);
 
 		if(excluir == 's')
         {
@@ -48,17 +48,6 @@ void primeira_celula(struct Mundo *mundo, int tamanho)
 		//mundo->celula[temp_alt][temp_lar] = função 3; 
 	}
 }
-
-//quem foi
-void iniciar_simulacao()
-    {
-        struct Mundo mundo;
-        int tamanho = obter_tamanho();
-        //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
-        criar_mundo(&mundo, tamanho);
-        imprimir_mundo(mundo.tamanho, mundo.celulas);
-
-    }
 
 void mostrar_celula(struct Mundo *mundo, int tamanho)
     {
