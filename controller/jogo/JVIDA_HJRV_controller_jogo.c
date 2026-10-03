@@ -21,8 +21,8 @@ void iniciar_simulacao()
 
 void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
     {	
-        int temp_alt = obter_input(entrada, tamanho);	
-        int temp_lar = obter_input(entrada, tamanho);	
+        int temp_alt = obter_input(entrada, tamanho) - 1;	
+        int temp_lar = obter_input(entrada, tamanho) - 1;	
         char excluir;
 
         if(temp_alt < 1 || temp_alt > mundo->tamanho || temp_lar < 1 || temp_lar > mundo->tamanho)
@@ -55,13 +55,9 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
     imprimir_mundo(mundo->tamanho, mundo->celulas);
 }
 
-/*void limpar_celula(struct Mundo *mundo, int tamanho)
+void limpar_celula(struct Mundo *mundo, int tamanho)
 {
-    //zera todos os dados da matriz na memoria 
-	memset(mundo->celulas, 0, sizeof(mundo->celulas));
+	memset(mundo->celulas, '.', sizeof(mundo->celulas));
 				
-    criar_mundo(&mundo, tamanho);
     imprimir_mundo(mundo->tamanho, mundo->celulas);
-
 }
-*/
