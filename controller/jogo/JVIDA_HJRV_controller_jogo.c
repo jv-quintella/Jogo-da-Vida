@@ -2,8 +2,6 @@
 //30/09/2026
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
-//verificar obter_input()
-
 #include "JVIDA_HJRV_model_jogo.h"
 #include "JVIDA_HJRV_model_struct.h"
 #include "JVIDA_HJRV_view_jogo.h"
@@ -25,11 +23,12 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
     {	
         int temp_alt = obter_input(entrada, tamanho);	
         int temp_lar = obter_input(entrada, tamanho);	
-        int excluir;
+        char excluir;
 
         if(temp_alt < 1 || temp_alt > mundo->tamanho || temp_lar < 1 || temp_lar > mundo->tamanho)
 	{
 		mostrarMensagem("Posicao invalida");
+        return;
 	}
 	
 	if(mundo->celulas[temp_alt][temp_lar] == 'O')
@@ -44,26 +43,25 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 
         else
         {
-            
+            primeira_celula(mundo, tamanho, entrada);
         }
 	}
 
 	else
 	{
-		//mundo->celula[temp_alt][temp_lar] = função 3; 
+		mundo->celulas[temp_alt][temp_lar] = 'O';
 	}
+
+    imprimir_mundo(mundo->tamanho, mundo->celulas);
 }
 
-void mostrar_celula(struct Mundo *mundo, int tamanho)
-    {
-        int i, j;
-        mundo->tamanho = tamanho;
-        //inserir entrada no mapa
-        for(i = 0; i < tamanho; i++)
-            {
-                for(j = 0; j < tamanho; j++)
-                {
-                    mundo->celulas[i][j] = '.';
-                }
-            }
+/*void limpar_celula(struct Mundo *mundo, int tamanho)
+{
+    //zera todos os dados da matriz na memoria 
+	memset(mundo->celulas, 0, sizeof(mundo->celulas));
+				
+    criar_mundo(&mundo, tamanho);
+    imprimir_mundo(mundo->tamanho, mundo->celulas);
+
 }
+*/
