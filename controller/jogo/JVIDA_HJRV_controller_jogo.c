@@ -53,11 +53,11 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 	}
 
     imprimir_mundo(mundo->tamanho, mundo->celulas);
-}
+    }
 
 void limpar_celula(struct Mundo *mundo, int tamanho)
-{
+    {
 	memset(mundo->celulas, '.', sizeof(mundo->celulas));
 				
     imprimir_mundo(mundo->tamanho, mundo->celulas);
-}
+    }
