@@ -20,40 +20,81 @@ void iniciar_simulacao()
     }
 
 void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
-    {	
+{	
+    char continuar = 's';
+    do
+    {
+
         int temp_alt = obter_input(entrada, tamanho) - 1;	
         int temp_lar = obter_input(entrada, tamanho) - 1;	
         char excluir;
 
         if(temp_alt < 1 || temp_alt > mundo->tamanho || temp_lar < 1 || temp_lar > mundo->tamanho)
-	{
-		mostrarMensagem("Posicao invalida");
-        return;
-	}
+	    {
+		    mostrarMensagem("Posicao invalida");
+            return;
+	    }
 	
-	if(mundo->celulas[temp_alt][temp_lar] == 'O')
-	{
-		mostrarMensagem("Deseja excluir esta celula? [s][n]:");
-		excluir = obter_input(entrada, tamanho);
+	    if(mundo->celulas[temp_alt][temp_lar] == 'O')
+	    {
+	    	mostrarMensagem("Deseja excluir esta celula? [s][n]:");
+		    excluir = obter_input(entrada, tamanho);
 
-		if(excluir == 's')
-        {
-			mundo->celulas[temp_alt][temp_lar] = '.';
-		}
+		    if(excluir == 's')
+            {
+                mostrarMensagem("Celula excluida");
+			    mundo->celulas[temp_alt][temp_lar] = '.';
 
-        else
-        {
-            primeira_celula(mundo, tamanho, entrada);
-        }
-	}
+                mostrarMensagem("Deseja adicionar ou excluir outra celula? [s][n]:");
+                continuar = obter_input(entrada, tamanho);
 
-	else
-	{
-		mundo->celulas[temp_alt][temp_lar] = 'O';
-	}
+                if(continuar == 's')
+                {
+                    continue;
+                }
+                if(continuar == 'n')
+                {
+                    break;
+                }
+                else
+                {
+                    mostrarMensagem("Opcao invalida");
+                    break;
+                }
+		    }
+            else if(excluir == 'n')
+            {
+                mostrarMensagem("Celula mantida");
+                mostrarMensagem("Deseja adicionar ou excluir outra celula? [s][n]:");
+                continuar = obter_input(entrada, tamanho);
+                if(continuar == 's')
+                {
+                    continue;
+                }
+                if(continuar == 'n')
+                {
+                    break;
+                }
+                else
+                {
+                    mostrarMensagem("Opcao invalida");
+                    break;
+                }
+            }
+            else
+            {
+                mostrarMensagem("Opcao invalida");
+                break;
+            }
+	    }
+	    else
+	    {
+		    mundo->celulas[temp_alt][temp_lar] = 'O';
+	    }
 
-    imprimir_mundo(mundo->tamanho, mundo->celulas);
-    }
+        imprimir_mundo(mundo->tamanho, mundo->celulas);
+    }while(continuar != 'n');
+}
 
 void limpar_celula(struct Mundo *mundo, int tamanho)
     {
@@ -61,3 +102,4 @@ void limpar_celula(struct Mundo *mundo, int tamanho)
 				
     imprimir_mundo(mundo->tamanho, mundo->celulas);
     }
+    

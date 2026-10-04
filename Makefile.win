@@ -1,0 +1,40 @@
+# Project: Projeto2
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = controller/jogo/JVIDA_HJRV_controller_jogo.o model/jogo/JVIDA_HJRV_model_jogo.o view/jogo/JVIDA_HJRV_view_jogo.o view/menu/JVIDA_HJRV_view_menu.o view/utilidades/JVIDA_HJRV_view_utilidades.o
+LINKOBJ  = controller/jogo/JVIDA_HJRV_controller_jogo.o model/jogo/JVIDA_HJRV_model_jogo.o view/jogo/JVIDA_HJRV_view_jogo.o view/menu/JVIDA_HJRV_view_menu.o view/utilidades/JVIDA_HJRV_view_utilidades.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+BIN      = Projeto1.exe
+CXXFLAGS = $(CXXINCS) 
+CFLAGS   = $(INCS) 
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+controller/jogo/JVIDA_HJRV_controller_jogo.o: controller/jogo/JVIDA_HJRV_controller_jogo.c
+	$(CPP) -c controller/jogo/JVIDA_HJRV_controller_jogo.c -o controller/jogo/JVIDA_HJRV_controller_jogo.o $(CXXFLAGS)
+
+model/jogo/JVIDA_HJRV_model_jogo.o: model/jogo/JVIDA_HJRV_model_jogo.c
+	$(CPP) -c model/jogo/JVIDA_HJRV_model_jogo.c -o model/jogo/JVIDA_HJRV_model_jogo.o $(CXXFLAGS)
+
+view/jogo/JVIDA_HJRV_view_jogo.o: view/jogo/JVIDA_HJRV_view_jogo.c
+	$(CPP) -c view/jogo/JVIDA_HJRV_view_jogo.c -o view/jogo/JVIDA_HJRV_view_jogo.o $(CXXFLAGS)
+
+view/menu/JVIDA_HJRV_view_menu.o: view/menu/JVIDA_HJRV_view_menu.c
+	$(CPP) -c view/menu/JVIDA_HJRV_view_menu.c -o view/menu/JVIDA_HJRV_view_menu.o $(CXXFLAGS)
+
+view/utilidades/JVIDA_HJRV_view_utilidades.o: view/utilidades/JVIDA_HJRV_view_utilidades.c
+	$(CPP) -c view/utilidades/JVIDA_HJRV_view_utilidades.c -o view/utilidades/JVIDA_HJRV_view_utilidades.o $(CXXFLAGS)
