@@ -2,12 +2,12 @@
 //30/09/2026
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
-#include "JVIDA_HJRV_model_jogo.h"
-#include "JVIDA_HJRV_model_struct.h"
-#include "JVIDA_HJRV_view_jogo.h"
-#include "JVIDA_HJRV_view_menu.h"
-#include "JVIDA_HJRV_view_utilidades.h"
+#include <string.h>
 #include "JVIDA_HJRV_controller_jogo.h"
+#include "../../model/jogo/JVIDA_HJRV_model_jogo.h"
+#include "../../view/jogo/JVIDA_HJRV_view_jogo.h"
+#include "../../view/menu/JVIDA_HJRV_view_menu.h"
+#include "../../view/utilidades/JVIDA_HJRV_view_utilidades.h"
 
 void iniciar_simulacao()
     {
