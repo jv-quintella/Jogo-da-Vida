@@ -56,3 +56,9 @@ dkms.conf
 
 #VS code 
 .vscode/
+
+.idea
+
+.win
+.dev
+.layout
