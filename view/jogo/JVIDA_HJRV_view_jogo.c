@@ -19,7 +19,7 @@ void imprimir_mundo(int tamanho, char mundo[60][60])
     {
         int i, j;
         
-        //printa coluna/apto
+        //printa coluna
             for(j = 0; j < tamanho; j++)
         {
             printf("%4d ", j+1);
@@ -27,11 +27,11 @@ void imprimir_mundo(int tamanho, char mundo[60][60])
         
         printf("\n");
         
-        //printa linha/andar 
+        //printa linha
         for(i = tamanho; i >= 1; i--)
         {
             printf("  %2d ", i+1);
-            for(j = 0; j < 14; j++)
+            for(j = 0; j < tamanho; j++)
             {
                 printf(" %3c ", mundo[i][j]);
             }	
