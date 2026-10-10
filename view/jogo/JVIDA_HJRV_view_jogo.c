@@ -15,7 +15,7 @@
 **      mundo   - a matriz bidimensional contendo o estado das celulas
 */
 //implementar indicacao visual de cada linha/coluna
-void imprimir_mundo(int tamanho, char mundo[60][60])
+void imprimir_mundo(int tamanho, struct Mundo *mundo)
     {
         int i, j;
         
@@ -28,12 +28,22 @@ void imprimir_mundo(int tamanho, char mundo[60][60])
         printf("\n");
         
         //printa linha
-        for(i = tamanho; i >= 1; i--)
+        for(i = 0; i < tamanho; i++)
         {
             printf("  %2d ", i+1);
             for(j = 0; j < tamanho; j++)
             {
-                printf(" %3c ", mundo[i][j]);
+                if ((mundo->celulas[i][j] == '.') && (verificar_vizinho(mundo, i, j) == 1) && (mostrarvizinho == 1))
+                {
+                    printf("  +  ");
+                }
+                else
+                {
+                    printf("  %c  ", mundo->celulas[i][j]);
+                }
+                {
+                    
+                }
             }	
             printf("\n");
         }

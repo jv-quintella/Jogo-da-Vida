@@ -23,3 +23,29 @@ void criar_mundo(struct Mundo *mundo, int tamanho)
                 }
             }
     }
+
+/*
+** Verifica se uma celula tem vizinhos vivos.
+** Parametros:
+**      mundo - o ponteiro para a estrutura do mundo
+**      linha - a linha da celula a ser verificada
+**      coluna - a coluna da celula a ser verificada
+*/
+int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
+    {
+        int resultvizinho = 0;
+        for (int i = linha - 1; i <= linha + 1; i++)
+        {
+            for (int j = coluna - 1; j <= coluna + 1; j++)
+            {
+                if (i >= 0 && i < mundo->tamanho && j >= 0 && j < mundo->tamanho)
+                {
+                    if (mundo->celulas[i][j] == 'O')
+                    {
+                        resultvizinho = 1;
+                    }
+                }
+            }
+        }
+        return resultvizinho; // retorna 0 se não encontrar vizinhos vivos
+    }

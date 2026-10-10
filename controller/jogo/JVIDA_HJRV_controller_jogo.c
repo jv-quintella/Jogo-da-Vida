@@ -22,6 +22,24 @@ void iniciar_simulacao()
 void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 {	
     char continuar = 's';
+    int mostrarvizinho = 0;
+
+    mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]:");
+    obter_input(entrada, tamanho);
+    if(entrada[0] == 's')
+    {
+        mostrarvizinho = 1;
+    }
+    else if(entrada[0] == 'n')
+    {
+        mostrarvizinho = 0;
+    }
+    else
+    {
+        mostrarMensagem("Opcao invalida");
+        return;
+    }
+    
     do
     {
 
@@ -37,7 +55,7 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 	
 	    if(mundo->celulas[temp_alt][temp_lar] == 'O')
 	    {
-	    	mostrarMensagem("Deseja excluir esta celula? [s][n]:");
+	    	mostrarMensagem("Deseja excluir esta celula? [s/n]:");
 		    excluir = obter_input(entrada, tamanho);
 
 		    if(excluir == 's')
@@ -45,7 +63,7 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
                 mostrarMensagem("Celula excluida");
 			    mundo->celulas[temp_alt][temp_lar] = '.';
 
-                mostrarMensagem("Deseja adicionar ou excluir outra celula? [s][n]:");
+                mostrarMensagem("Deseja adicionar ou excluir outra celula? [s/n]:");
                 continuar = obter_input(entrada, tamanho);
 
                 if(continuar == 's')

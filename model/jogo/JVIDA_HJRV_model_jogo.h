@@ -5,3 +5,4 @@
 #include "JVIDA_HJRV_model_struct.h"
 
 void criar_mundo(struct Mundo *mundo, int tamanho);
+int verificar_vizinho(struct Mundo *mundo, int linha, int coluna);
