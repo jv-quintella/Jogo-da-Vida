@@ -19,7 +19,8 @@ void iniciar_simulacao()
     {
         struct Mundo mundo;
         int tamanho = obter_tamanho();
-        int mostrarvizinho = 0;
+        char entrada[10];
+        int mostrarvizinho = mostrar_mortos(&mundo, tamanho, entrada);
         //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
         criar_mundo(&mundo, tamanho);
         imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
@@ -32,7 +33,7 @@ void iniciar_simulacao()
 **      tamanho - o tamanho utilizado na leitura das entradas
 **      entrada - o vetor utilizado para armazenar as entradas do usuario
 */
-void mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
+int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
 {
     mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]:");
     obter_input(entrada, tamanho);
@@ -47,7 +48,7 @@ void mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
     else
     {
         mostrarMensagem("Opcao invalida");
-        return;
+        return 0;
     }
 }
 /*

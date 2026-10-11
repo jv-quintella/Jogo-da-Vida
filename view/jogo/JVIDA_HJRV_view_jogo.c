@@ -22,7 +22,8 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
         int i, j;
         
         //printa coluna
-            for(j = 0; j < tamanho; j++)
+        printf("    ");
+        for(j = 0; j < tamanho; j++)
         {
             printf("%4d ", j+1);
         }
