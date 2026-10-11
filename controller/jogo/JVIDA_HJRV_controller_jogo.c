@@ -9,6 +9,12 @@
 #include "../../view/menu/JVIDA_HJRV_view_menu.h"
 #include "../../view/utilidades/JVIDA_HJRV_view_utilidades.h"
 
+/*
+** Inicia a simulacao do Jogo da Vida, obtendo o tamanho do mundo,
+** inicializando a matriz e exibindo seu estado inicial.
+** Parametros:
+**      Nenhum.
+*/
 void iniciar_simulacao()
     {
         struct Mundo mundo;
@@ -20,6 +26,15 @@ void iniciar_simulacao()
 
     }
 
+/*
+** Permite adicionar ou excluir celulas vivas do mundo, a partir
+** das posicoes informadas pelo usuario. Tambem permite escolher
+** se os vizinhos mortos devem ser exibidos.
+** Parametros:
+**      mundo - o ponteiro para a estrutura do mundo
+**      tamanho - o tamanho utilizado na leitura das entradas
+**      entrada - o vetor utilizado para armazenar as entradas do usuario
+*/
 void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 {	
     char continuar = 's';
@@ -115,6 +130,13 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
     }while(continuar != 'n');
 }
 
+/*
+** Limpa todas as celulas do mundo, preenchendo a matriz com
+** celulas mortas e exibindo o mundo atualizado.
+** Parametros:
+**      mundo - o ponteiro para a estrutura do mundo
+**      tamanho - parametro recebido pela funcao, atualmente nao utilizado
+*/
 void limpar_celula(struct Mundo *mundo, int tamanho)
     {
 	    int mostrarvizinho = 0;
