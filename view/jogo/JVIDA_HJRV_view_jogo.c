@@ -7,6 +7,7 @@
 #include <string.h>
 #include "JVIDA_HJRV_view_jogo.h"
 #include "../utilidades/JVIDA_HJRV_view_utilidades.h"
+#include "../../model/jogo/JVIDA_HJRV_model_jogo.h"
 
 /*
 ** Imprime o mundo atual no terminal.
@@ -16,7 +17,7 @@
 **      mundo   - a matriz bidimensional contendo o estado das celulas
 */
 //implementar indicacao visual de cada linha/coluna
-void imprimir_mundo(int tamanho, struct Mundo *mundo)
+void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
     {
         int i, j;
         
