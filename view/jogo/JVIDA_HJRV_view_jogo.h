@@ -5,8 +5,9 @@
 #ifndef JVIDA_HJRV_VIEW_JOGO_H
 #define JVIDA_HJRV_VIEW_JOGO_H
 
-void imprimir_mundo(int tamanho, struct Mundo *mundo);
+#include "../../model/struct/JVIDA_HJRV_model_struct.h"
 
+void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho);
 int obter_tamanho(void);
 
 #endif

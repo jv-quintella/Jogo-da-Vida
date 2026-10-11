@@ -13,9 +13,10 @@ void iniciar_simulacao()
     {
         struct Mundo mundo;
         int tamanho = obter_tamanho();
+        int mostrarvizinho = 0;
         //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
         criar_mundo(&mundo, tamanho);
-        imprimir_mundo(mundo.tamanho, mundo.celulas);
+        imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
 
     }
 
@@ -110,14 +111,14 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 		    mundo->celulas[temp_alt][temp_lar] = 'O';
 	    }
 
-        imprimir_mundo(mundo->tamanho, mundo->celulas);
+        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
     }while(continuar != 'n');
 }
 
 void limpar_celula(struct Mundo *mundo, int tamanho)
     {
-	memset(mundo->celulas, '.', sizeof(mundo->celulas));
-				
-    imprimir_mundo(mundo->tamanho, mundo->celulas);
+	    int mostrarvizinho = 0;
+        memset(mundo->celulas, '.', sizeof(mundo->celulas));	
+        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
     }
     
