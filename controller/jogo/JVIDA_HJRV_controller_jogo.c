@@ -25,11 +25,34 @@ void iniciar_simulacao()
         imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
 
     }
-
+/*
+** Permite ao usuario escolher se deseja mostrar os vizinhos mortos das celulas vivas do mundo.
+** Parametros:
+**      mundo - o ponteiro para a estrutura do mundo
+**      tamanho - o tamanho utilizado na leitura das entradas
+**      entrada - o vetor utilizado para armazenar as entradas do usuario
+*/
+void mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
+{
+    mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]:");
+    obter_input(entrada, tamanho);
+    if(entrada[0] == 's')
+    {
+        return 1;
+    }
+    else if(entrada[0] == 'n')
+    {
+        return 0;
+    }
+    else
+    {
+        mostrarMensagem("Opcao invalida");
+        return;
+    }
+}
 /*
 ** Permite adicionar ou excluir celulas vivas do mundo, a partir
-** das posicoes informadas pelo usuario. Tambem permite escolher
-** se os vizinhos mortos devem ser exibidos.
+** das posicoes informadas pelo usuario.
 ** Parametros:
 **      mundo - o ponteiro para a estrutura do mundo
 **      tamanho - o tamanho utilizado na leitura das entradas
@@ -37,31 +60,10 @@ void iniciar_simulacao()
 */
 void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 {	
-    char continuar = 's';
-    int mostrarvizinho = 0;
-
-    mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]:");
-    obter_input(entrada, tamanho);
-    if(entrada[0] == 's')
-    {
-        mostrarvizinho = 1;
-    }
-    else if(entrada[0] == 'n')
-    {
-        mostrarvizinho = 0;
-    }
-    else
-    {
-        mostrarMensagem("Opcao invalida");
-        return;
-    }
-    
-    do
     {
 
-        int temp_alt = obter_input(entrada, tamanho) - 1;	
-        int temp_lar = obter_input(entrada, tamanho) - 1;	
-        char excluir;
+        int temp_alt = obter_input(entrada, tamanho) - 1;
+        int temp_lar = obter_input(entrada, tamanho) - 1;
 
         if(temp_alt < 1 || temp_alt > mundo->tamanho || temp_lar < 1 || temp_lar > mundo->tamanho)
 	    {
@@ -72,62 +74,27 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 	    if(mundo->celulas[temp_alt][temp_lar] == 'O')
 	    {
 	    	mostrarMensagem("Deseja excluir esta celula? [s/n]:");
-		    excluir = obter_input(entrada, tamanho);
+		    obter_input(entrada, tamanho);
 
-		    if(excluir == 's')
+		    if(entrada[0] == 's')
             {
                 mostrarMensagem("Celula excluida");
 			    mundo->celulas[temp_alt][temp_lar] = '.';
-
-                mostrarMensagem("Deseja adicionar ou excluir outra celula? [s/n]:");
-                continuar = obter_input(entrada, tamanho);
-
-                if(continuar == 's')
-                {
-                    continue;
-                }
-                if(continuar == 'n')
-                {
-                    break;
-                }
-                else
-                {
-                    mostrarMensagem("Opcao invalida");
-                    break;
-                }
 		    }
-            else if(excluir == 'n')
+            else if(entrada[0] == 'n')
             {
                 mostrarMensagem("Celula mantida");
-                mostrarMensagem("Deseja adicionar ou excluir outra celula? [s][n]:");
-                continuar = obter_input(entrada, tamanho);
-                if(continuar == 's')
-                {
-                    continue;
-                }
-                if(continuar == 'n')
-                {
-                    break;
-                }
-                else
-                {
-                    mostrarMensagem("Opcao invalida");
-                    break;
-                }
             }
             else
             {
                 mostrarMensagem("Opcao invalida");
-                break;
             }
 	    }
 	    else
 	    {
 		    mundo->celulas[temp_alt][temp_lar] = 'O';
 	    }
-
-        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
-    }while(continuar != 'n');
+    }
 }
 
 /*
