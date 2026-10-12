@@ -44,9 +44,6 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
                 {
                     printf("  %c  ", mundo->celulas[i][j]);
                 }
-                {
-                    
-                }
             }	
             printf("\n");
         }
@@ -70,7 +67,7 @@ int obter_tamanho()
             // Indica um erro se houver falha na leitura.
             if (obter_input(entrada, sizeof entrada) == 0)
                 {
-                    mostrarMensagem("Valor invalido, insira um numero inteiro entre 10 e 60 ");
+                    mostrarMensagem("Valor invalido!\n");
                     valido = 0;
                     continue;
                 }
@@ -84,7 +81,7 @@ int obter_tamanho()
             O valor esta fora dos limites (10 a 60) */
             if(fim == entrada || *fim != '\0' || (valor < 10 || valor > 60))
                 {
-                    mostrarMensagem("Valor invalido, insira um numero inteiro entre 10 e 60 ");
+                    mostrarMensagem("Valor invalido!\n");
                     valido = 0;
                 }
             else 
