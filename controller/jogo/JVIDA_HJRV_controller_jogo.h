@@ -10,6 +10,6 @@
 void iniciar_simulacao(void);
 int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[]);
 void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[]);
-void limpar_celula(struct Mundo *mundo, int tamanho);
+void limpar_celula(struct Mundo *mundo);
 
 #endif

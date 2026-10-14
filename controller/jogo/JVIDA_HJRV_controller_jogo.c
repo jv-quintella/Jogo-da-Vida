@@ -16,16 +16,49 @@
 **      Nenhum.
 */
 void iniciar_simulacao()
-    {
-        struct Mundo mundo;
-        int tamanho = obter_tamanho();
-        char entrada[10];
-        int mostrarvizinho = mostrar_mortos(&mundo, tamanho, entrada);
-        //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
-        criar_mundo(&mundo, tamanho);
-        imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+{
+    struct Mundo mundo;
+    int tamanho;
+    char entrada[10];
+    int mostrarvizinho;
+    int valido = 0;
 
-    }
+    tamanho = obter_tamanho();
+
+    //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
+    criar_mundo(&mundo, tamanho);
+
+    mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
+    primeira_celula(&mundo, sizeof entrada, entrada);
+    imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+
+    //IMPLEMENTAR MENU AMANHA (TESTE)
+
+    do {
+        mostrarMensagem("Deseja limpar o mundo? [s/n]: ");
+
+        if (obter_input(entrada, sizeof entrada) == 0) 
+        {
+            mostrarMensagem("Valor invalido.\n");
+            valido = 0;
+        }
+        else if (entrada[0] == 's' || entrada[0] == 'S') 
+        {
+            limpar_celula(&mundo);
+            valido = 1;
+        }
+        else if (entrada[0] == 'n' || entrada[0] == 'N') 
+        {
+            valido = 1;
+        }
+        else 
+        {
+            mostrarMensagem("Opcao invalida.\n");
+            valido = 0;
+        }
+    } while (valido == 0);
+}
+
 /*
 ** Permite ao usuario escolher se deseja mostrar os vizinhos mortos das celulas vivas do mundo.
 ** Parametros:
@@ -37,11 +70,11 @@ int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
 {
     mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]:");
     obter_input(entrada, tamanho);
-    if(entrada[0] == 's')
+    if(entrada[0] == 's' || entrada[0] == 'S')
     {
         return 1;
     }
-    else if(entrada[0] == 'n')
+    else if(entrada[0] == 'n' || entrada[0] == 'N')
     {
         return 0;
     }
@@ -51,6 +84,8 @@ int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
         return 0;
     }
 }
+
+
 /*
 ** Permite adicionar ou excluir celulas vivas do mundo, a partir
 ** das posicoes informadas pelo usuario.
@@ -60,41 +95,52 @@ int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
 **      entrada - o vetor utilizado para armazenar as entradas do usuario
 */
 void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
-{	
+{
+    int temp_alt;
+    int temp_lar;
+    int valido = 0;
+
+    mostrarMensagem("Informe a linha:\n");
+    temp_alt = obter_posicao(mundo->tamanho, tamanho, entrada);
+
+    mostrarMensagem("Informe a coluna:\n");
+    temp_lar = obter_posicao(mundo->tamanho, tamanho, entrada);
+
+    //Ajusta as coordenadas para os indices da matriz.
+    temp_alt--;
+    temp_lar--;
+
+    if (mundo->celulas[temp_alt][temp_lar] == 'O') {
+        do {
+            mostrarMensagem("Deseja excluir esta celula? [s/n]: ");
+
+            if (obter_input(entrada, tamanho) == 0) 
+            {
+                mostrarMensagem("Valor invalido.\n");
+                valido = 0;
+            }
+            else if (entrada[0] == 's' || entrada[0] == 'S') 
+            {
+                mundo->celulas[temp_alt][temp_lar] = '.';
+                mostrarMensagem("Celula excluida.\n");
+                valido = 1;
+            }
+            else if (entrada[0] == 'n' || entrada[0] == 'N') 
+            {
+                mostrarMensagem("Celula mantida.\n");
+                valido = 1;
+            }
+            else 
+            {
+                mostrarMensagem("Opcao invalida.\n");
+                valido = 0;
+            }
+        } while (valido == 0);
+    }
+    else 
     {
-
-        int temp_alt = obter_input(entrada, tamanho) - 1;
-        int temp_lar = obter_input(entrada, tamanho) - 1;
-
-        if(temp_alt < 1 || temp_alt > mundo->tamanho || temp_lar < 1 || temp_lar > mundo->tamanho)
-	    {
-		    mostrarMensagem("Posicao invalida");
-            return;
-	    }
-	
-	    if(mundo->celulas[temp_alt][temp_lar] == 'O')
-	    {
-	    	mostrarMensagem("Deseja excluir esta celula? [s/n]:");
-		    obter_input(entrada, tamanho);
-
-		    if(entrada[0] == 's')
-            {
-                mostrarMensagem("Celula excluida");
-			    mundo->celulas[temp_alt][temp_lar] = '.';
-		    }
-            else if(entrada[0] == 'n')
-            {
-                mostrarMensagem("Celula mantida");
-            }
-            else
-            {
-                mostrarMensagem("Opcao invalida");
-            }
-	    }
-	    else
-	    {
-		    mundo->celulas[temp_alt][temp_lar] = 'O';
-	    }
+        mundo->celulas[temp_alt][temp_lar] = 'O';
+        mostrarMensagem("Celula adicionada.\n");
     }
 }
 
@@ -103,9 +149,8 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 ** celulas mortas e exibindo o mundo atualizado.
 ** Parametros:
 **      mundo - o ponteiro para a estrutura do mundo
-**      tamanho - parametro recebido pela funcao, atualmente nao utilizado
 */
-void limpar_celula(struct Mundo *mundo, int tamanho)
+void limpar_celula(struct Mundo *mundo)
     {
 	    int mostrarvizinho = 0;
         memset(mundo->celulas, '.', sizeof(mundo->celulas));	

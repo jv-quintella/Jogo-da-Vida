@@ -52,42 +52,72 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
 /*
 ** Solicita, le e valida o tamanho do mundo matricial para a simulacao.
 ** Garante que a entrada seja um numero inteiro valido entre 10 e 60.
+**Funcao baseada em https://github.com/cs50/libcs50/blob/main/src/cs50.c (get_int)
 ** Parametros:
 **      (nenhum)
 */
 int obter_tamanho()
-    {
-        long valor;
-        char *fim;
-        char entrada[100];
-        int valido = 0;
+{
+    int valor;
+    char sobra;
+    char entrada[100];
+    int valido = 0;
 
-        do{
-            mostrarMensagem("Insira o tamanho do mundo para a simulacao (entre 10 e 60): ");
-            // Indica um erro se houver falha na leitura.
-            if (obter_input(entrada, sizeof entrada) == 0)
-                {
-                    mostrarMensagem("Valor invalido!\n");
-                    valido = 0;
-                    continue;
-                }
-            
-            //converte o texto lido para numero. Se 'fim' apontar para o final da string ('\0'), significa que a conversao foi  bem-sucedida. 
-            valor = strtol(entrada, &fim, 10);
+    do {
+        mostrarMensagem("Insira o tamanho do mundo para a simulacao (entre 10 e 60): ");
 
-            /* Valida se: 
-            Nada foi convertido (fim == entrada)
-            O usuario digitou letras junto com numeros (*fim != '\0')
-            O valor esta fora dos limites (10 a 60) */
-            if(fim == entrada || *fim != '\0' || (valor < 10 || valor > 60))
-                {
-                    mostrarMensagem("Valor invalido!\n");
-                    valido = 0;
-                }
-            else 
-                {
-                    valido = 1;
-                }
-        } while(valido !=1);
-        return (int) valor;
-    }
+        //Indica um erro se houver falha na leitura do teclado.
+        if (obter_input(entrada, sizeof entrada) == 0) {
+            mostrarMensagem("Valor invalido!\n");
+            valido = 0;
+        }
+        /* Converte a entrada para numero e rejeita se:
+        O retorno do sscanf for diferente de 1
+        O valor lido estiver fora do intervalo de 10 a 60 */
+        else if (sscanf(entrada, "%d %c", &valor, &sobra) != 1 || valor < 10 || valor > 60) {
+            mostrarMensagem("Valor invalido!\n");
+            valido = 0;
+        }
+        else {
+            valido = 1;
+        }
+    } while (valido == 0);
+
+    return valor;
+}
+
+/*
+**Solicita, le e valida uma posicao (linha ou coluna) para a matriz do mundo.
+**Garante que a entrada seja um numero inteiro valido entre 1 e o limite.
+**Funcao baseada em https://github.com/cs50/libcs50/blob/main/src/cs50.c (get_int)
+**Parametros:
+**      limite - o valor maximo aceito (tamanho do mundo)
+**      tamanho - a capacidade do vetor de entrada
+**      entrada - o vetor utilizado para armazenar a entrada do usuario
+*/
+int obter_posicao(int limite, int tamanho, char entrada[])
+{
+    int valor;
+    char sobra;
+    int valido = 0;
+
+    do {
+        //Indica um erro se houver falha na leitura do teclado.
+        if (obter_input(entrada, tamanho) == 0) {
+            mostrarMensagem("Valor invalido.\n");
+            valido = 0;
+        }
+        /* Converte a entrada para numero e rejeita se:
+        O retorno do sscanf for diferente de 1
+        O valor lido estiver fora do intervalo de 1 ate o limite */
+        else if (sscanf(entrada, "%d %c", &valor, &sobra) != 1 || valor < 1 || valor > limite) {
+            mostrarMensagem("Posicao invalida.\n");
+            valido = 0;
+        }
+        else {
+            valido = 1;
+        }
+    } while (valido == 0);
+
+    return valor;
+}

@@ -9,5 +9,5 @@
 
 void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho);
 int obter_tamanho(void);
-
+int obter_posicao(int limite, int tamanho, char entrada[]);
 #endif
