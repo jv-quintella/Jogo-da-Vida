@@ -68,7 +68,7 @@ void iniciar_simulacao()
 */
 int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
 {
-    mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]:");
+    mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]: ");
     obter_input(entrada, tamanho);
     if(entrada[0] == 's' || entrada[0] == 'S')
     {
@@ -80,7 +80,7 @@ int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
     }
     else
     {
-        mostrarMensagem("Opcao invalida");
+        mostrarMensagem("Opcao invalida\n");
         return 0;
     }
 }
@@ -100,10 +100,10 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
     int temp_lar;
     int valido = 0;
 
-    mostrarMensagem("Informe a linha:\n");
+    mostrarMensagem("Informe a linha: ");
     temp_alt = obter_posicao(mundo->tamanho, tamanho, entrada);
 
-    mostrarMensagem("Informe a coluna:\n");
+    mostrarMensagem("Informe a coluna: ");
     temp_lar = obter_posicao(mundo->tamanho, tamanho, entrada);
 
     //Ajusta as coordenadas para os indices da matriz.
