@@ -64,18 +64,18 @@ int obter_tamanho()
     int valido = 0;
 
     do {
-        mostrarMensagem("Insira o tamanho do mundo para a simulacao (entre 10 e 60): ");
+        printf("Insira o tamanho do mundo para a simulacao (entre 10 e 60): ");
 
         //Indica um erro se houver falha na leitura do teclado.
         if (obter_input(entrada, sizeof entrada) == 0) {
-            mostrarMensagem("Valor invalido!\n");
+            printf("Valor invalido!\n");
             valido = 0;
         }
         /* Converte a entrada para numero e rejeita se:
         O retorno do sscanf for diferente de 1
         O valor lido estiver fora do intervalo de 10 a 60 */
         else if (sscanf(entrada, "%d %c", &valor, &sobra) != 1 || valor < 10 || valor > 60) {
-            mostrarMensagem("Valor invalido!\n");
+            printf("Valor invalido!\n");
             valido = 0;
         }
         else {
@@ -104,14 +104,14 @@ int obter_posicao(int limite, int tamanho, char entrada[])
     do {
         //Indica um erro se houver falha na leitura do teclado.
         if (obter_input(entrada, tamanho) == 0) {
-            mostrarMensagem("Valor invalido.\n");
+            printf("Valor invalido.\n");
             valido = 0;
         }
         /* Converte a entrada para numero e rejeita se:
         O retorno do sscanf for diferente de 1
         O valor lido estiver fora do intervalo de 1 ate o limite */
         else if (sscanf(entrada, "%d %c", &valor, &sobra) != 1 || valor < 1 || valor > limite) {
-            mostrarMensagem("Posicao invalida.\n");
+            printf("Posicao invalida.\n");
             valido = 0;
         }
         else {
