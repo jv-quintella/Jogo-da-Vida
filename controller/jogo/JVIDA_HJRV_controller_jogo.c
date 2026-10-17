@@ -32,8 +32,6 @@ void iniciar_simulacao()
     primeira_celula(&mundo, sizeof entrada, entrada);
     imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
 
-    //IMPLEMENTAR MENU AMANHA (TESTE)
-
     do {
         mostrarMensagem("Deseja limpar o mundo? [s/n]: ");
 
@@ -68,21 +66,28 @@ void iniciar_simulacao()
 */
 int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
 {
-    mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]: ");
-    obter_input(entrada, tamanho);
-    if(entrada[0] == 's' || entrada[0] == 'S')
+    int valido = 0;
+
+    do
     {
-        return 1;
-    }
-    else if(entrada[0] == 'n' || entrada[0] == 'N')
-    {
-        return 0;
-    }
-    else
-    {
-        mostrarMensagem("Opcao invalida\n");
-        return 0;
-    }
+        mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]: ");
+        obter_input(entrada, tamanho);
+        if(entrada[0] == 's' || entrada[0] == 'S')
+        {
+            valido = 1;
+            return 1;
+        }
+        else if(entrada[0] == 'n' || entrada[0] == 'N')
+        {
+            valido = 1;
+            return 0;
+        }
+        else
+        {
+            mostrarMensagem("Opcao invalida. Tente novamente.\n\n");
+            valido = 0;
+        }
+    } while (valido == 0);
 }
 
 
@@ -152,6 +157,7 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 */
 void limpar_celula(struct Mundo *mundo)
     {
+        //limpar_tela(); como usa?
 	    int mostrarvizinho = 0;
         memset(mundo->celulas, '.', sizeof(mundo->celulas));	
         imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
