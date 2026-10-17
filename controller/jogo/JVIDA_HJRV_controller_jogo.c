@@ -31,6 +31,8 @@ void iniciar_simulacao()
     mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
     primeira_celula(&mundo, sizeof entrada, entrada);
     imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+    
+    //IMPLEMENTAR MENU AMANHA (TESTE)
 
     do {
         mostrarMensagem("Deseja limpar o mundo? [s/n]: ");
@@ -138,6 +140,7 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
             else 
             {
                 mostrarMensagem("Opcao invalida.\n");
+                primeira_celula();
                 valido = 0;
             }
         } while (valido == 0);
