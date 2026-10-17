@@ -18,7 +18,7 @@ int mostrar_Menu(int id) {
     printf("[2] - Continuar simulacao\n");
     printf("[0] - Sair\n");
 
-    obter_input(&id, sizeof id);
+    //obter_input(&id, sizeof id);
 
     switch(id) {
         case 1:
