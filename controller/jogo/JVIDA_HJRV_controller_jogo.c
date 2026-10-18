@@ -86,7 +86,7 @@ int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
         }
         else
         {
-            mostrarMensagem("Opcao invalida. Tente novamente.\n\n");
+            mostrarMensagem("Opcao invalida.\n\n");
             valido = 0;
         }
     } while (valido == 0);
@@ -140,7 +140,6 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
             else 
             {
                 mostrarMensagem("Opcao invalida.\n");
-                primeira_celula();
                 valido = 0;
             }
         } while (valido == 0);
@@ -160,7 +159,7 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 */
 void limpar_celula(struct Mundo *mundo)
     {
-        //limpar_tela(); como usa?
+        limpar_tela();
 	    int mostrarvizinho = 0;
         memset(mundo->celulas, '.', sizeof(mundo->celulas));	
         imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
