@@ -146,6 +146,7 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
     }
     else 
     {
+        limparTela();
         mundo->celulas[temp_alt][temp_lar] = 'O';
         mostrarMensagem("Celula adicionada.\n");
     }
@@ -159,7 +160,7 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 */
 void limpar_celula(struct Mundo *mundo)
     {
-        //limpar_tela();
+        limparTela();
 	    int mostrarvizinho = 0;
         memset(mundo->celulas, '.', sizeof(mundo->celulas));	
         imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
