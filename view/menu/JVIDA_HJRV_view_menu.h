@@ -2,4 +2,9 @@
 //30/09/2026
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
-int mostrar_Menu(int id);
+#ifndef JVIDA_HJRV_view_menu.h
+#define JVIDA_HJRV_view_menu.h
+
+int mostrar_Menu(void);
+
+#endif
