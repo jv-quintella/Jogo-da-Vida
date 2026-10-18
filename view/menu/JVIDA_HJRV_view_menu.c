@@ -12,13 +12,13 @@
 **      id - escolha do usuario para navegar no menu
 */
 
-int mostrar_Menu(int id) {
+int mostrar_Menu(char id) {
 
     printf("\n[1] - Nova simulacao\n");
     printf("[2] - Continuar simulacao\n");
     printf("[0] - Sair\n");
 
-    //obter_input(&id, sizeof id);
+    obter_input(&id, sizeof id);
 
     switch(id) {
         case 1:
