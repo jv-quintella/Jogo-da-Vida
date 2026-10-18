@@ -56,3 +56,22 @@ dkms.conf
 
 #VS code 
 .vscode/
+
+.idea
+
+.win
+.dev
+.layout
+
+# Dev-C++ files
+*.dev
+*.layout
+Makefile.win
+
+# VS Code files & Runner garbage
+.vscode/
+output/
+
+# Executables
+*.exe
+jogo_da_vida
