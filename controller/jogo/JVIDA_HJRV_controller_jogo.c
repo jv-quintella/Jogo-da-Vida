@@ -31,8 +31,6 @@ void iniciar_simulacao()
     mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
     primeira_celula(&mundo, sizeof entrada, entrada);
     imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-    
-    //IMPLEMENTAR MENU AMANHA (TESTE)
 
     do {
         mostrarMensagem("Deseja limpar o mundo? [s/n]: ");

@@ -64,7 +64,7 @@ int obter_tamanho()
     int valido = 0;
 
     do {
-        printf("Insira o tamanho do mundo para a simulacao (entre 10 e 60): ");
+        printf("\nInsira o tamanho do mundo para a simulacao (entre 10 e 60): ");
 
         //Indica um erro se houver falha na leitura do teclado.
         if (obter_input(entrada, sizeof entrada) == 0) {
