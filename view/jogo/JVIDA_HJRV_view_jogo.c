@@ -104,14 +104,14 @@ int obter_posicao(int limite, int tamanho, char entrada[])
     do {
         //Indica um erro se houver falha na leitura do teclado.
         if (obter_input(entrada, tamanho) == 0) {
-            printf("Valor invalido.\n");
+            printf("Valor invalido.\nTente novamente: ");
             valido = 0;
         }
         /* Converte a entrada para numero e rejeita se:
         O retorno do sscanf for diferente de 1
         O valor lido estiver fora do intervalo de 1 ate o limite */
         else if (sscanf(entrada, "%d %c", &valor, &sobra) != 1 || valor < 1 || valor > limite) {
-            printf("Posicao invalida.\n");
+            printf("Posicao invalida.\nTente novamente: ");
             valido = 0;
         }
         else {
