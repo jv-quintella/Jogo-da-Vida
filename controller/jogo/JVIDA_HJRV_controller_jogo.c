@@ -159,7 +159,7 @@ void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
 */
 void limpar_celula(struct Mundo *mundo)
     {
-        limpar_tela();
+        //limpar_tela();
 	    int mostrarvizinho = 0;
         memset(mundo->celulas, '.', sizeof(mundo->celulas));	
         imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
