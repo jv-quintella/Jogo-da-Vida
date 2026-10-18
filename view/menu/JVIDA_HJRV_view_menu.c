@@ -41,7 +41,7 @@ int mostrar_Menu(void) {
             // Implementar a funcao de continuar simulacao
             break;
         case 0:
-            printf("Saindo do programa...\n");
+            printf("\nSaindo do programa...\n");
             break;
         default:
             printf("Opcao invalida. Tente novamente.\n");
