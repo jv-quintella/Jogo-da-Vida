@@ -12,9 +12,12 @@ int mostrar_Menu(void) {
     
     do
     {
+        printf("\n| MENU\n");
         printf("\n[1] - Nova simulacao\n");
         printf("[2] - Continuar simulacao\n");
         printf("[0] - Sair\n");
+        printf("---------------------------\n");
+        printf("Digite uma opcao: ");
 	
         if (!obter_input(entrada, sizeof entrada)) {
             return 0;
