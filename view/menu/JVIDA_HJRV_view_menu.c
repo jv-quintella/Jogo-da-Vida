@@ -12,13 +12,22 @@
 **      id - escolha do usuario para navegar no menu
 */
 
-int mostrar_Menu(char id) {
+int mostrar_Menu(void) {
 
+    char entrada[10];
+    int id;
+
+    if (!obter_input(entrada, sizeof entrada)) {
+        return 0;
+    }
+
+    id = atoi(entrada);
+    
     printf("\n[1] - Nova simulacao\n");
     printf("[2] - Continuar simulacao\n");
     printf("[0] - Sair\n");
 
-    obter_input(&id, sizeof id);
+    id = obter_input();
 
     switch(id) {
         case 1:
@@ -34,4 +43,6 @@ int mostrar_Menu(char id) {
             printf("Opcao invalida. Tente novamente.\n");
             break;
     }
+    
+    return id;
 }
