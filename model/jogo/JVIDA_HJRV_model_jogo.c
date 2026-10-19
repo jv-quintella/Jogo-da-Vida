@@ -66,7 +66,7 @@ int contar_celulas(struct Mundo *mundo, int qtdvivos, int qtdmortos)
                 {
                     (qtdvivos)++;
                 }
-                else if (mundo->celulas[i][j] != '.')
+                else if (mundo->celulas[i][j] != '+')
                 {
                     (qtdmortos)++;
                 }
