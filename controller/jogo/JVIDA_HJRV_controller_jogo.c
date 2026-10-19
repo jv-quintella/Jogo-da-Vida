@@ -22,8 +22,7 @@ void iniciar_simulacao()
     char entrada[10];
     int mostrarvizinho;
     int valido = 0;
-    char opcao[10];
-
+    
     tamanho = obter_tamanho();
 
     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
