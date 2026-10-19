@@ -9,6 +9,6 @@
 
 void criar_mundo(struct Mundo *mundo, int tamanho);
 int verificar_vizinho(struct Mundo *mundo, int linha, int coluna);
-int contar_celulas(struct Mundo *mundo, int qtdvivos, int qtdmortos);
+void contar_celulas(struct Mundo *mundo, int *qtdvivos, int *qtdmortos);
 
 #endif
