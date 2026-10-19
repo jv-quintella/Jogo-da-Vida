@@ -33,6 +33,9 @@ void criar_mundo(struct Mundo *mundo, int tamanho)
 int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
     {
         int resultvizinho = 0;
+        int qtdvivos = 0;
+        int qtdmortos = 0;
+
         for (int i = linha - 1; i <= linha + 1; i++)
         {
             for (int j = coluna - 1; j <= coluna + 1; j++)
@@ -46,5 +49,27 @@ int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
                 }
             }
         }
+
         return resultvizinho; // retorna 0 se não encontrar vizinhos vivos
+    }
+
+int contar_celulas(struct Mundo *mundo, int qtdvivos, int qtdmortos)
+    {
+        qtdvivos = 0;
+        qtdmortos = 0;
+
+        for (int i = 0; i < mundo->tamanho; i++)
+        {
+            for (int j = 0; j < mundo->tamanho; j++)
+            {
+                if (mundo->celulas[i][j] == 'O')
+                {
+                    (qtdvivos)++;
+                }
+                else if (mundo->celulas[i][j] != '.')
+                {
+                    (qtdmortos)++;
+                }
+            }
+        }
     }
