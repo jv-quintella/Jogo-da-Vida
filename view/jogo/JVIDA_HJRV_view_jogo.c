@@ -19,6 +19,7 @@
 //implementar indicacao visual de cada linha/coluna
 void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
     {
+        int qtdvivos, qtdmortos; //não sei se isso deveria existir, mas nao funciona sem
         int i, j;
         
         //printa coluna
@@ -48,6 +49,8 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
             printf("\n");
         }
         printf("\n");
+        printf("Quantidade de celulas vivas: %d\n", qtdvivos);
+        printf("Quantidade de celulas mortas: %d\n", qtdmortos);
     }
 
 /*
