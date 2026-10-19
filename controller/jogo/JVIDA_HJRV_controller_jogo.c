@@ -22,6 +22,7 @@ void iniciar_simulacao()
     char entrada[10];
     int mostrarvizinho;
     int valido = 0;
+    char opcao[10];
 
     tamanho = obter_tamanho();
 
@@ -51,7 +52,7 @@ void iniciar_simulacao()
             valido = 0;
         } 
       
-    } while ((entrada[0] == 'S' || entrada[0] == 's') || (valido == 0));
+    } while ((entrada[0] != 'N' && entrada[0] != 'n') || (valido == 0));
 
     imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
 
