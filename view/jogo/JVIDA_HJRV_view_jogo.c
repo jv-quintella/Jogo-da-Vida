@@ -47,6 +47,7 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
             }	
             printf("\n");
         }
+        printf("\n");
     }
 
 /*
