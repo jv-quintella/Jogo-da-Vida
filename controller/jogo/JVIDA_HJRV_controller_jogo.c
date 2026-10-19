@@ -29,7 +29,30 @@ void iniciar_simulacao()
     criar_mundo(&mundo, tamanho);
 
     mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
-    primeira_celula(&mundo, sizeof entrada, entrada);
+    colocar_celula(&mundo, sizeof entrada, entrada);
+
+    do {
+        mostrarMensagem("\nDeseja adicionar mais uma celula? [s/n]: ");
+        obter_input(entrada, sizeof entrada);
+
+        if (entrada[0] == 'S' || entrada[0] == 's') 
+        {
+            colocar_celula(&mundo, sizeof entrada, entrada);
+            valido = 1;
+        }
+        else if (entrada[0] == 'n' || entrada[0] == 'N') 
+        {
+            mostrarMensagem("Encerrando a adicao de celulas.\n");
+            valido = 1;
+        }
+        else 
+        {
+            mostrarMensagem("Opcao invalida.\n");
+            valido = 0;
+        } 
+      
+    } while ((entrada[0] == 'S' || entrada[0] == 's') || (valido == 0));
+
     imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
 
     do {
@@ -99,7 +122,7 @@ int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
 **      tamanho - o tamanho utilizado na leitura das entradas
 **      entrada - o vetor utilizado para armazenar as entradas do usuario
 */
-void primeira_celula(struct Mundo *mundo, int tamanho, char entrada[])
+void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
 {
     int temp_alt;
     int temp_lar;
