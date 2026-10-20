@@ -51,8 +51,11 @@ int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
         return resultvizinho; // retorna 0 se não encontrar vizinhos vivos
     }
 
-void contar_celulas(struct Mundo *mundo)
+void contar_celulas(struct Mundo *mundo, int mostrarvizinho)
     {
+        mundo->qtdvivos = 0;
+        mundo->qtdmortos = 0;
+
         for (int i = 0; i < mundo->tamanho; i++)
         {
             for (int j = 0; j < mundo->tamanho; j++)
@@ -61,10 +64,10 @@ void contar_celulas(struct Mundo *mundo)
                 {
                     mundo->qtdvivos++;
                 }
-                else if (mundo->celulas[i][j] == '+')
+                else if (mundo->celulas[i][j] == '.' && verificar_vizinho(mundo, i, j) == 1 && mostrarvizinho == 1) 
                 {
                     mundo->qtdmortos++;
                 }
             }
-       }
+        }
     }
