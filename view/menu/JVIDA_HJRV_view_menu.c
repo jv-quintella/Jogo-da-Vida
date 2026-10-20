@@ -4,6 +4,14 @@
 #include "../../controller/jogo/JVIDA_HJRV_controller_jogo.h"
 #include "../utilidades/JVIDA_HJRV_view_utilidades.h"
 
+/*
+** Exibe o menu principal, le e valida a opcao escolhida.
+** Parametros:
+**      (nenhum)
+** Retorno:
+**      a opcao escolhida (0 = sair, 1 = nova simulacao, 2 = continuar);
+**      0 tambem em caso de EOF na entrada.
+*/
 int mostrar_Menu(void) {
     char entrada[10];
     char *fim;
