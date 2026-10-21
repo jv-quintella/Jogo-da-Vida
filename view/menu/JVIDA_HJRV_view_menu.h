@@ -5,8 +5,6 @@
 #ifndef JVIDA_HJRV_VIEW_MENU_H
 #define JVIDA_HJRV_VIEW_MENU_H
 
-#include "../../model/struct/JVIDA_HJRV_model_struct.h"
-
-int mostrar_Menu(struct Mundo *mundo, int mostrarvizinho);
+int mostrar_Menu(void);
 
 #endif
