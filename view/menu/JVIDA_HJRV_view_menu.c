@@ -3,14 +3,15 @@
 #include "JVIDA_HJRV_view_menu.h"
 #include "../../controller/jogo/JVIDA_HJRV_controller_jogo.h"
 #include "../utilidades/JVIDA_HJRV_view_utilidades.h"
+#include "../../model/struct/JVIDA_HJRV_model_struct.h"
 
 /*
-** Exibe o menu principal, le e valida a opcao escolhida.
+** Exibe os menus, le e valida a opcao escolhida.
 ** Parametros:
-**      (nenhum)
+**      - mundo - o ponteiro para a estrutura do mundo
+**      - mostrarvizinho - indica se as celulas mortas com vizinhos vivos devem
 ** Retorno:
-**      a opcao escolhida (0 = sair, 1 = nova simulacao, 2 = continuar);
-**      0 tambem em caso de EOF na entrada.
+**      
 */
 int mostrar_Menu(struct Mundo *mundo, int mostrarvizinho) {
     char entrada[10];
@@ -59,7 +60,7 @@ int mostrar_Menu(struct Mundo *mundo, int mostrarvizinho) {
                     printf("Opcao invalida. Tente novamente.\n");
                     break;
             }
-            return (int)id;
+            // return (int)id;
             break;
         case 2: //menu interno da simulaçao
             do
@@ -88,13 +89,13 @@ int mostrar_Menu(struct Mundo *mundo, int mostrarvizinho) {
 
             switch (id) {
                 case 1: // adicionar celula
-                    colocar_celula(&mundo, sizeof entrada, entrada);                
+                    colocar_celula(mundo, sizeof entrada, entrada);                
                     break;
                 case 2: //funcao de limpar mundo
-                    limpar_celula(&mundo);
+                    limpar_celula(mundo);
                     break;
                 case 3: //menu de evoluções
-                    evoluir_geracoes(&mundo, mostrarvizinho);
+                    evoluir_geracoes(mundo, mostrarvizinho);
                     break;
                 case 0:
                     printf("\nSaindo do programa...\n");

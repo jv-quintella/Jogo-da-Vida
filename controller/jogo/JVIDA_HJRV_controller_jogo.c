@@ -28,59 +28,12 @@
         //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
         criar_mundo(&mundo, tamanho);
 
-        mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
-        colocar_celula(&mundo, sizeof entrada, entrada);
-
-        do {
-            mostrarMensagem("\nDeseja adicionar mais uma celula? [s/n]: ");
-            obter_input(entrada, sizeof entrada);
-
-            if (entrada[0] == 'S' || entrada[0] == 's') 
-            {
-                colocar_celula(&mundo, sizeof entrada, entrada);
-                valido = 1;
-            }
-            else if (entrada[0] == 'n' || entrada[0] == 'N') 
-            {
-                mostrarMensagem("Encerrando a adicao de celulas.\n");
-                valido = 1;
-            }
-            else 
-            {
-                mostrarMensagem("Opcao invalida.\n");
-                valido = 0;
-            } 
-        
-        } while ((entrada[0] != 'N' && entrada[0] != 'n') || (valido == 0));
-
-        contar_celulas(&mundo, mostrarvizinho);
-
         imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
 
-        do {
-            mostrarMensagem("Deseja limpar o mundo? [s/n]: ");
-
-            if (obter_input(entrada, sizeof entrada) == 0) 
-            {
-                mostrarMensagem("Valor invalido.\n");
-                valido = 0;
-            }
-            else if (entrada[0] == 's' || entrada[0] == 'S') 
-            {
-                limpar_celula(&mundo);
-                valido = 1;
-            }
-            else if (entrada[0] == 'n' || entrada[0] == 'N') 
-            {
-                valido = 1;
-            }
-            else 
-            {
-                mostrarMensagem("Opcao invalida.\n");
-                valido = 0;
-            }
-        } while (valido == 0);
-        evoluir_geracoes(&mundo, mostrarvizinho);
+        mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
+        colocar_celula(&mundo, sizeof entrada, entrada);
+        contar_celulas(&mundo, mostrarvizinho);
+        imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
     }
 
 /*
