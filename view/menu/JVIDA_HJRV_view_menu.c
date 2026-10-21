@@ -12,7 +12,7 @@
 **      a opcao escolhida (0 = sair, 1 = nova simulacao, 2 = continuar);
 **      0 tambem em caso de EOF na entrada.
 */
-int mostrar_Menu(void) {
+int mostrar_Menu(struct Mundo *mundo, int mostrarvizinho) {
     char entrada[10];
     char *fim;
     int id;
@@ -87,11 +87,14 @@ int mostrar_Menu(void) {
             } while (!valido);
 
             switch (id) {
-                case 1: //funcao de adicionar celula
+                case 1: // adicionar celula
+                    colocar_celula(&mundo, sizeof entrada, entrada);                
                     break;
                 case 2: //funcao de limpar mundo
+                    limpar_celula(&mundo);
                     break;
                 case 3: //menu de evoluções
+                    evoluir_geracoes(&mundo, mostrarvizinho);
                     break;
                 case 0:
                     printf("\nSaindo do programa...\n");
@@ -102,6 +105,4 @@ int mostrar_Menu(void) {
             }
             break;
     }
-    
-
 }

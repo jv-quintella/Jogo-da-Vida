@@ -4,11 +4,6 @@
 
 #include "view/menu/JVIDA_HJRV_view_menu.h"
 
-/*
-** repete o menu principal ate o usuario escolher sair.
-** Parametros:
-**      (nenhum)
-*/
 int main(void)
     {
         int id;
@@ -18,4 +13,4 @@ int main(void)
         } while (id != 0);
         
         return 0;
-    }
+    }   
