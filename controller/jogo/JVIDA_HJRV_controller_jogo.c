@@ -190,3 +190,55 @@ void limpar_celula(struct Mundo *mundo)
         imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
     }
     
+/*
+** Evolui o mundo geracao por geracao, usando uma matriz auxiliar.
+** A cada volta calcula a proxima geracao, torna-a a atual e a exibe,
+** perguntando ao usuario se deseja continuar.
+** Parametros:
+**      mundo - o ponteiro para a estrutura do mundo atual (lido e atualizado)
+**      mostrarvizinho - 1 para exibir as vizinhas-mortas ('+'), 0 caso contrario
+*/
+void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
+    {
+        struct Mundo mundo_auxiliar;
+        char entrada[10];
+        int continuar = 1;
+        int valido;
+
+        // A auxiliar tem o mesmo tamanho do mundo atual
+        criar_mundo(&mundo_auxiliar, mundo->tamanho);
+
+        do {
+            // Preenche a auxiliar inteira lendo apenas a geracao atual
+            calcular_geracao(mundo, &mundo_auxiliar);
+            *mundo = mundo_auxiliar;
+
+            imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
+
+            valido = 0;
+            do {
+                mostrarMensagem("Mostrar a proxima geracao? [s/n]: ");
+
+                if (obter_input(entrada, sizeof entrada) == 0)
+                {
+                    continuar = 0;
+                    valido = 1;
+                }
+                else if (entrada[0] == 's' || entrada[0] == 'S')
+                {
+                    continuar = 1;
+                    valido = 1;
+                }
+                else if (entrada[0] == 'n' || entrada[0] == 'N')
+                {
+                    continuar = 0;
+                    valido = 1;
+                }
+                else
+                {
+                    mostrarMensagem("Opcao invalida.\n");
+                }
+            } while (valido == 0);
+
+        } while (continuar == 1);
+    }
