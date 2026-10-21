@@ -13,11 +13,12 @@
 ** Retorno:
 **      
 */
-int mostrar_Menu(struct Mundo *mundo, int mostrarvizinho, int opcao) {
+int mostrar_Menu(struct Mundo *mundo, int mostrarvizinho) {
     char entrada[10];
     char *fim;
     int id;
     int valido;
+    int opcao;
 
     switch(opcao)
     {
@@ -59,7 +60,7 @@ int mostrar_Menu(struct Mundo *mundo, int mostrarvizinho, int opcao) {
                     printf("Opcao invalida. Tente novamente.\n");
                     break;
             }
-            return (int)id;
+            // return (int)id;
             break;
         case 2: //menu interno da simulaçao
             do

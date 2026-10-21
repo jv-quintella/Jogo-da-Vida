@@ -24,14 +24,14 @@
         int valido = 0;
         
         tamanho = obter_tamanho();
+
         //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
         criar_mundo(&mundo, tamanho);
+
         imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
 
-        //adicionar o menu de jogadas
-        mostrar_Menu(&mundo, mostrarvizinho, 2);
-
         mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
+        colocar_celula(&mundo, sizeof entrada, entrada);
         contar_celulas(&mundo, mostrarvizinho);
         imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
     }
