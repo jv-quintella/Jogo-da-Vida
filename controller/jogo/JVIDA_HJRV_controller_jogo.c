@@ -80,6 +80,7 @@
                 valido = 0;
             }
         } while (valido == 0);
+        evoluir_geracoes(&mundo, mostrarvizinho);
     }
 
 /*
