@@ -62,44 +62,10 @@ int mostrar_Menu(void) {
             return (int)id;
             break;
         case 2: //menu interno da simulaçao
-            do
-            {
-                printf("\n| MENU\n");
-                printf("\n[1] - Adicionar celula\n");
-                printf("[2] - Limpar mundo\n");
-                printf("[3] - Evoluir geracoes\n");
-                printf("[0] - Sair\n");
-                printf("---------------------------\n");
-                printf("Digite uma opcao: ");
-            
-                if (!obter_input(entrada, sizeof entrada)) {
-                    return 0;
-                }
 
-                id = strtol(entrada, &fim, 10);
+            break;
+        case 3: //menu de evoluções
 
-                valido = (fim != entrada && *fim == '\0' && (id == 0 || id == 1 || id == 2 || id == 3));
-
-                if (!valido) {
-                    limparTela();
-                    printf("Opcao invalida.\n");
-                }
-            } while (!valido);
-
-            switch (id) {
-                case 1: //funcao de adicionar celula
-                    break;
-                case 2: //funcao de limpar mundo
-                    break;
-                case 3: //menu de evoluções
-                    break;
-                case 0:
-                    printf("\nSaindo do programa...\n");
-                    break;
-                default:
-                    printf("Opcao invalida. Tente novamente.\n");
-                    break;
-            }
             break;
     }
     
