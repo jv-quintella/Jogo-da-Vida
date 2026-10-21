@@ -93,8 +93,12 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
             {
                 for(int j = coluna - 1; j <= coluna + 1; j++)
                 {
+                    // Validacoes antes de acessar a matriz:
+                    // (>= 0 e < tamanho) impede acesso a lixo de memoria.
+                    // (i != linha || j != coluna) garante que a celula nao conte a si mesma.
                     if((i >= 0 && i < mundo-> tamanho) && (j >= 0 && j < mundo -> tamanho) && (i != linha || j != coluna))
                         {
+                            // Verifica se a posicao vizinha valida contem o caractere de celula viva
                             if(mundo-> celulas[i][j] == 'O')
                                 {
                                     count++;
@@ -105,21 +109,31 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
         return count;
     }
 
+/*
+** Calcula a proxima geracao e armazena no mundo auxiliar.
+** Parametros:
+**      mundo - o ponteiro para a estrutura do mundo atual (leitura)
+**      mundo_auxiliar - o ponteiro para a estrutura do mundo futuro (escrita)
+*/
 void calcular_geracao(struct Mundo *mundo, struct Mundo *mundo_auxiliar)
     {
         for(int i = 0; i < mundo -> tamanho; i++)
             {
                 for(int j = 0; j < mundo -> tamanho; j++)
                     {
+                        // Obtem a quantidade exata de vizinhos vivos da celula atual
                         int qtd = contar_vizinhos(mundo, i, j);
+                        // Celula viva com 2 ou 3 vizinhos continua viva
                         if(mundo -> celulas[i][j] == 'O' && (qtd == 2 || qtd == 3))
                             {
                                 mundo_auxiliar -> celulas[i][j] = 'O';
                             }
+                        // Celula morta com exatamente 3 vizinhos nasce
                         else if (mundo -> celulas[i][j] == '.' && qtd == 3)
                             {
                                     mundo_auxiliar -> celulas[i][j] = 'O';
                             }
+                        // Morte por solidao (0 ou 1) ou superpopulacao (4 ou mais)   
                         else
                             {
                                 mundo_auxiliar -> celulas[i][j] = '.';
