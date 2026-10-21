@@ -7,6 +7,6 @@
 
 #include "../../model/struct/JVIDA_HJRV_model_struct.h"
 
-int mostrar_Menu(struct Mundo *mundo, int mostrarvizinho);
+int mostrar_Menu(struct Mundo *mundo, int mostrarvizinho, int opcao);
 
 #endif
