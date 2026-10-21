@@ -51,6 +51,13 @@ int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
         return resultvizinho; // retorna 0 se não encontrar vizinhos vivos
     }
 
+/*
+** Conta as celulas vivas e, quando solicitado, as celulas mortas com vizinhos vivos.
+** Atualiza os campos qtdvivos e qtdmortos da estrutura do mundo.
+** Parametros:
+**      mundo - o ponteiro para a estrutura do mundo
+**      mostrarvizinho - indica se as celulas mortas com vizinhos vivos devem ser contadas (1 para contar)
+*/
 void contar_celulas(struct Mundo *mundo, int mostrarvizinho)
     {
         mundo->qtdvivos = 0;
