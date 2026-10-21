@@ -10,5 +10,7 @@
 void criar_mundo(struct Mundo *mundo, int tamanho);
 int verificar_vizinho(struct Mundo *mundo, int linha, int coluna);
 void contar_celulas(struct Mundo *mundo, int mostrarvizinho);
+int contar_vizinhos(struct Mundo *mundo, int linha, int coluna);
+void calcular_geracao(struct Mundo *mundo, struct Mundo *mundo_auxiliar);
 
 #endif
