@@ -93,7 +93,7 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
             {
                 for(int j = coluna - 1; j <= coluna + 1; j++)
                 {
-                    if((i >= 0 && i < mundo->tamanho) && (j >= 0 && j < mundo -> tamanho) && (i != linha || j != coluna))
+                    if((i >= 0 && i < mundo-> tamanho) && (j >= 0 && j < mundo -> tamanho) && (i != linha || j != coluna))
                         {
                             if(mundo-> celulas[i][j] == 'O')
                                 {
@@ -105,4 +105,27 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
         return count;
     }
 
+void calcular_geracao(struct Mundo *mundo, struct Mundo *mundo_auxiliar)
+    {
+        for(int i = 0; i < mundo -> tamanho; i++)
+            {
+                for(int j = 0; j < mundo -> tamanho; j++)
+                    {
+                        int qtd = contar_vizinhos(mundo, i, j);
+                        if(mundo -> celulas[i][j] == 'O' && (qtd == 2 || qtd == 3))
+                            {
+                                mundo_auxiliar -> celulas[i][j] = 'O';
+                            }
+                        else if (mundo -> celulas[i][j] == '.' && qtd == 3)
+                            {
+                                    mundo_auxiliar -> celulas[i][j] = 'O';
+                            }
+                        else
+                            {
+                                mundo_auxiliar -> celulas[i][j] = '.';
+                            }
+                        
 
+                    }
+            }
+    }
