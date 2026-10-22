@@ -33,9 +33,11 @@
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
                     criar_mundo(&mundo, tamanho);
                     mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
+                    contar_celulas(&mundo, mostrarvizinho);
 
                     do{
                         limparTela();
+                        // FIX: fazer uma opcao no menu pra ligar e desligar vizinhos
                         imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
                         contar_celulas(&mundo, mostrarvizinho);
 
@@ -47,19 +49,20 @@
                             contar_celulas(&mundo, mostrarvizinho);
                             limparTela();
                             imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-                            return;
+                            continue;
                         }
                         else if(menu2 == 2)
                         {
                             evoluir_geracoes(&mundo, mostrarvizinho);
-                            return;
+                            continue;
                         }
                         else if(menu2 == 3)
                         {
                             limpar_celula(&mundo);
                             limparTela();
+                            contar_celulas(&mundo, mostrarvizinho);
                             imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-                            return;
+                            continue;
                         }
                         else if (menu2 == 0)
                         {
@@ -68,9 +71,11 @@
                         }
                         else
                         {
+                            // FIX: ou nao aparece o mundo ou nao imprime NADA e zera o mundo
                             contar_celulas(&mundo, mostrarvizinho);
                             imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-                            mostrarMensagem("Opcao invalida. Tente novamente.\n");
+                            mostrarMensagem("Opcao invalida");
+                            pause();
                             return;
                         }
                     }while(menu2 != 0); 
