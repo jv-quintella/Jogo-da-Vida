@@ -22,6 +22,7 @@
         char entrada[10];
         int mostrarvizinho;
         int valido = 0;
+        int menu2;
 
         do{
             limparTela();
@@ -34,35 +35,45 @@
                     mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
 
                     do{
-                        // FIX: para de imprimir o mundo e contar celulas depois do segundo loop
                         limparTela();
                         imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
                         contar_celulas(&mundo, mostrarvizinho);
 
-                        switch(mostrar_Menu(2)) // Executa a escolha do usuario no menu de simulacao
+                        menu2 = mostrar_Menu(2); // Exibe o menu de simulacao e armazena a escolha do usuario
+
+                        if(menu2 == 1)
                         {
-                            case 1:
-                                colocar_celula(&mundo, sizeof entrada, entrada);
-                                contar_celulas(&mundo, mostrarvizinho);
-                                limparTela();
-                                imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-                                break;
-                            case 2:
-                                evoluir_geracoes(&mundo, mostrarvizinho);
-                                break;
-                            case 3:
-                                limpar_celula(&mundo);
-                                limparTela();
-                                imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-                                break;
-                            case 0: 
-                                mostrarMensagem("Saindo da simulacao...\n");
-                                return (iniciar_simulacao());
-                            default:
-                                mostrarMensagem("Opcao invalida. Tente novamente.\n");
-                                return;
+                            colocar_celula(&mundo, sizeof entrada, entrada);
+                            contar_celulas(&mundo, mostrarvizinho);
+                            limparTela();
+                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                            return;
                         }
-                    }while(mostrar_Menu(2) != 0 && mostrar_Menu(1) != 0); 
+                        else if(menu2 == 2)
+                        {
+                            evoluir_geracoes(&mundo, mostrarvizinho);
+                            return;
+                        }
+                        else if(menu2 == 3)
+                        {
+                            limpar_celula(&mundo);
+                            limparTela();
+                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                            return;
+                        }
+                        else if (menu2 == 0)
+                        {
+                            mostrarMensagem("Saindo da simulacao...\n");
+                            return (iniciar_simulacao());
+                        }
+                        else
+                        {
+                            contar_celulas(&mundo, mostrarvizinho);
+                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                            mostrarMensagem("Opcao invalida. Tente novamente.\n");
+                            return;
+                        }
+                    }while(menu2 != 0); 
                 case 2:
                     return;
                 case 0:

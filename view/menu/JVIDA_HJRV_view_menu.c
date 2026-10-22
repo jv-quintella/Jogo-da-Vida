@@ -15,7 +15,7 @@
 int mostrar_Menu(int opcao) {
     char entrada[10];
     char *fim;
-    int id;
+    int id, id2;
     int valido;
     
     switch(opcao){
@@ -59,9 +59,9 @@ int mostrar_Menu(int opcao) {
                     return 0;
         		}
             
-                id = strtol(entrada, &fim, 10);
+                id2 = strtol(entrada, &fim, 10);
             
-                valido = (fim != entrada && *fim == '\0' && (id == 0 || id == 1 || id == 2 || id == 3));
+                valido = (fim != entrada && *fim == '\0' && (id2 == 0 || id2 == 1 || id2 == 2 || id2 == 3));
             
                 if (!valido) {
                     limparTela();
@@ -69,6 +69,6 @@ int mostrar_Menu(int opcao) {
                 }
             } while (!valido);
         
-            return (int)id;
+            return (int)id2;
     }
 }
