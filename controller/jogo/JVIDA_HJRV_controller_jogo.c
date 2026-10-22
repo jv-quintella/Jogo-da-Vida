@@ -32,9 +32,11 @@
                 mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
 
                 do{
+                    // FIX: para de imprimir o mundo e contar celulas depois do segundo loop
                     limparTela();
                     imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
                     contar_celulas(&mundo, mostrarvizinho);
+
                     switch(mostrar_Menu(2)) // Executa a escolha do usuario no menu de simulacao
                     {
                         case 1:
@@ -46,7 +48,7 @@
                         case 3:
                             limpar_celula(&mundo);
                             break;
-                        case 0:
+                        case 0: // FIX: saindo direto, provavelmente problema com o menu inicial, por ser um dentro do outro
                             mostrarMensagem("Saindo do programa...\n");
                             return;
                         default:
