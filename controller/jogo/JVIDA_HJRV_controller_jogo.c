@@ -43,12 +43,17 @@
                         {
                             case 1:
                                 colocar_celula(&mundo, sizeof entrada, entrada);
+                                contar_celulas(&mundo, mostrarvizinho);
+                                limparTela();
+                                imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
                                 break;
                             case 2:
                                 evoluir_geracoes(&mundo, mostrarvizinho);
                                 break;
                             case 3:
                                 limpar_celula(&mundo);
+                                limparTela();
+                                imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
                                 break;
                             case 0: 
                                 mostrarMensagem("Saindo da simulacao...\n");
@@ -201,6 +206,8 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
             calcular_geracao(mundo, &mundo_auxiliar);
             *mundo = mundo_auxiliar;
 
+            limparTela();
+            contar_celulas(mundo, mostrarvizinho);
             imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
 
             valido = 0;
