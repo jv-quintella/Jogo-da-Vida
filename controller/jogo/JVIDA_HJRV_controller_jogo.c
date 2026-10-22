@@ -24,6 +24,7 @@
         int valido = 0;
 
         do{
+            limparTela();
             switch(mostrar_Menu(1)) // Executa a escolha do usuario no menu inicial
             {
                 case 1:
@@ -49,14 +50,14 @@
                             case 3:
                                 limpar_celula(&mundo);
                                 break;
-                            case 0: // FIX: saindo direto, provavelmente problema com o menu inicial, por ser um dentro do outro
-                                mostrarMensagem("Saindo do programa...\n");
-                                return;
+                            case 0: 
+                                mostrarMensagem("Saindo da simulacao...\n");
+                                return (iniciar_simulacao());
                             default:
                                 mostrarMensagem("Opcao invalida. Tente novamente.\n");
                                 return;
                         }
-                    }while(mostrar_Menu(2) != 0); 
+                    }while(mostrar_Menu(2) != 0 && mostrar_Menu(1) != 0); 
                 case 2:
                     return;
                 case 0:
