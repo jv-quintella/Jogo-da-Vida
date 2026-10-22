@@ -70,7 +70,6 @@
                         else if (menu2 == 0)
                         {
                             mostrarMensagem("Saindo da simulacao...\n");
-                            // FIX: esse return a propria funcao ta feio e pode dar problema na situação de salvamento, entao tinha que trocar de alguma forma
                         }
                         else
                         {
