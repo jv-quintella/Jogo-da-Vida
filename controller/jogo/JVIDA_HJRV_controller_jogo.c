@@ -22,11 +22,14 @@
         char entrada[10];
         int mostrarvizinho;
         int valido = 0;
-        int menu2;
+        int menu2, menu1;
 
         do{
             limparTela();
-            switch(mostrar_Menu(1)) // Executa a escolha do usuario no menu inicial
+
+            menu1 = mostrar_Menu(1);
+
+            switch(menu1) // Executa a escolha do usuario no menu inicial
             {
                 case 1:
                     tamanho = obter_tamanho();
@@ -67,18 +70,14 @@
                         else if (menu2 == 0)
                         {
                             mostrarMensagem("Saindo da simulacao...\n");
-                            return (iniciar_simulacao());
+                            // FIX: esse return a propria funcao ta feio e pode dar problema na situação de salvamento, entao tinha que trocar de alguma forma
                         }
                         else
                         {
-                            // FIX: ou nao aparece o mundo ou nao imprime NADA e zera o mundo
-                            contar_celulas(&mundo, mostrarvizinho);
-                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-                            mostrarMensagem("Opcao invalida");
-                            pause();
-                            return;
+                            continue;
                         }
                     }while(menu2 != 0); 
+                    break;
                 case 2:
                     return;
                 case 0:
@@ -86,9 +85,9 @@
                     return;
                 default:
                     mostrarMensagem("Opcao invalida. Tente novamente.\n");
-                    return;
+                    break;
             }
-        } while(mostrar_Menu(1) != 0);
+        } while(menu1 != 0);
     }
 
 /*

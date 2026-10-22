@@ -64,7 +64,8 @@ int mostrar_Menu(int opcao) {
                 valido = (fim != entrada && *fim == '\0' && (id2 == 0 || id2 == 1 || id2 == 2 || id2 == 3));
             
                 if (!valido) {
-                    return 3;
+                    limparTela();
+                    printf("Opcao invalida.\n");
                 }
             } while (!valido);
         
