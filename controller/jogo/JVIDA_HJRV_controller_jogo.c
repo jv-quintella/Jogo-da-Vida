@@ -22,65 +22,47 @@
         char entrada[10];
         int mostrarvizinho;
         int valido = 0;
-        
-        tamanho = obter_tamanho();
 
-        //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
-        criar_mundo(&mundo, tamanho);
+        switch(mostrar_Menu(1)) // Executa a escolha do usuario no menu inicial
+        {
+            case 1:
+                tamanho = obter_tamanho();
+                //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
+                criar_mundo(&mundo, tamanho);
+                mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
 
-        mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
-        colocar_celula(&mundo, sizeof entrada, entrada);
-
-        do {
-            mostrarMensagem("\nDeseja adicionar mais uma celula? [s/n]: ");
-            obter_input(entrada, sizeof entrada);
-
-            if (entrada[0] == 'S' || entrada[0] == 's') 
-            {
-                colocar_celula(&mundo, sizeof entrada, entrada);
-                valido = 1;
-            }
-            else if (entrada[0] == 'n' || entrada[0] == 'N') 
-            {
-                mostrarMensagem("Encerrando a adicao de celulas.\n");
-                valido = 1;
-            }
-            else 
-            {
-                mostrarMensagem("Opcao invalida.\n");
-                valido = 0;
-            } 
-        
-        } while ((entrada[0] != 'N' && entrada[0] != 'n') || (valido == 0));
-
-        contar_celulas(&mundo, mostrarvizinho);
-
-        imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-
-        do {
-            mostrarMensagem("Deseja limpar o mundo? [s/n]: ");
-
-            if (obter_input(entrada, sizeof entrada) == 0) 
-            {
-                mostrarMensagem("Valor invalido.\n");
-                valido = 0;
-            }
-            else if (entrada[0] == 's' || entrada[0] == 'S') 
-            {
-                limpar_celula(&mundo);
-                valido = 1;
-            }
-            else if (entrada[0] == 'n' || entrada[0] == 'N') 
-            {
-                valido = 1;
-            }
-            else 
-            {
-                mostrarMensagem("Opcao invalida.\n");
-                valido = 0;
-            }
-        } while (valido == 0);
-        evoluir_geracoes(&mundo, mostrarvizinho);
+                do{
+                    limparTela();
+                    imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                    contar_celulas(&mundo, mostrarvizinho);
+                    switch(mostrar_Menu(2)) // Executa a escolha do usuario no menu de simulacao
+                    {
+                        case 1:
+                            colocar_celula(&mundo, sizeof entrada, entrada);
+                            break;
+                        case 2:
+                            evoluir_geracoes(&mundo, mostrarvizinho);
+                            break;
+                        case 3:
+                            limpar_celula(&mundo);
+                            break;
+                        case 0:
+                            mostrarMensagem("Saindo do programa...\n");
+                            return;
+                        default:
+                            mostrarMensagem("Opcao invalida. Tente novamente.\n");
+                            return;
+                    }
+                }while(mostrar_Menu(2) != 0); 
+            case 2:
+                return;
+            case 0:
+                mostrarMensagem("Saindo do programa...\n");
+                return;
+            default:
+                mostrarMensagem("Opcao invalida. Tente novamente.\n");
+                return;
+        }
     }
 
 /*

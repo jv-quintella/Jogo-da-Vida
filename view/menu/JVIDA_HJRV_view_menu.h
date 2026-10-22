@@ -5,6 +5,6 @@
 #ifndef JVIDA_HJRV_VIEW_MENU_H
 #define JVIDA_HJRV_VIEW_MENU_H
 
-int mostrar_Menu(void);
+int mostrar_Menu(int opcao);
 
 #endif
