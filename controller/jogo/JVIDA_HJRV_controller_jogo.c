@@ -23,48 +23,50 @@
         int mostrarvizinho;
         int valido = 0;
 
-        switch(mostrar_Menu(1)) // Executa a escolha do usuario no menu inicial
-        {
-            case 1:
-                tamanho = obter_tamanho();
-                //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
-                criar_mundo(&mundo, tamanho);
-                mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
+        do{
+            switch(mostrar_Menu(1)) // Executa a escolha do usuario no menu inicial
+            {
+                case 1:
+                    tamanho = obter_tamanho();
+                    //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
+                    criar_mundo(&mundo, tamanho);
+                    mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
 
-                do{
-                    // FIX: para de imprimir o mundo e contar celulas depois do segundo loop
-                    limparTela();
-                    imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-                    contar_celulas(&mundo, mostrarvizinho);
+                    do{
+                        // FIX: para de imprimir o mundo e contar celulas depois do segundo loop
+                        limparTela();
+                        imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                        contar_celulas(&mundo, mostrarvizinho);
 
-                    switch(mostrar_Menu(2)) // Executa a escolha do usuario no menu de simulacao
-                    {
-                        case 1:
-                            colocar_celula(&mundo, sizeof entrada, entrada);
-                            break;
-                        case 2:
-                            evoluir_geracoes(&mundo, mostrarvizinho);
-                            break;
-                        case 3:
-                            limpar_celula(&mundo);
-                            break;
-                        case 0: // FIX: saindo direto, provavelmente problema com o menu inicial, por ser um dentro do outro
-                            mostrarMensagem("Saindo do programa...\n");
-                            return;
-                        default:
-                            mostrarMensagem("Opcao invalida. Tente novamente.\n");
-                            return;
-                    }
-                }while(mostrar_Menu(2) != 0); 
-            case 2:
-                return;
-            case 0:
-                mostrarMensagem("Saindo do programa...\n");
-                return;
-            default:
-                mostrarMensagem("Opcao invalida. Tente novamente.\n");
-                return;
-        }
+                        switch(mostrar_Menu(2)) // Executa a escolha do usuario no menu de simulacao
+                        {
+                            case 1:
+                                colocar_celula(&mundo, sizeof entrada, entrada);
+                                break;
+                            case 2:
+                                evoluir_geracoes(&mundo, mostrarvizinho);
+                                break;
+                            case 3:
+                                limpar_celula(&mundo);
+                                break;
+                            case 0: // FIX: saindo direto, provavelmente problema com o menu inicial, por ser um dentro do outro
+                                mostrarMensagem("Saindo do programa...\n");
+                                return;
+                            default:
+                                mostrarMensagem("Opcao invalida. Tente novamente.\n");
+                                return;
+                        }
+                    }while(mostrar_Menu(2) != 0); 
+                case 2:
+                    return;
+                case 0:
+                    mostrarMensagem("Saindo do programa...\n");
+                    return;
+                default:
+                    mostrarMensagem("Opcao invalida. Tente novamente.\n");
+                    return;
+            }
+        } while(mostrar_Menu(1) != 0);
     }
 
 /*
