@@ -107,7 +107,7 @@ int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
 
     do
     {
-        mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]: ");
+        mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? Nao e possivel desativar durante o jogo [s/n]: ");
         obter_input(entrada, tamanho);
         if(entrada[0] == 's' || entrada[0] == 'S')
         {
@@ -142,7 +142,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
     int temp_lar;
     int valido = 0;
 
-    mostrarMensagem("Informe a linha: ");
+    mostrarMensagem("\nInforme a linha: ");
     temp_alt = obter_posicao(mundo->tamanho, tamanho, entrada);
 
     mostrarMensagem("Informe a coluna: ");
@@ -154,7 +154,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
 
     if (mundo->celulas[temp_alt][temp_lar] == 'O') {
         do {
-            mostrarMensagem("Deseja excluir esta celula? [s/n]: ");
+            mostrarMensagem("\nDeseja excluir esta celula? [s/n]: ");
 
             if (obter_input(entrada, tamanho) == 0) 
             {
@@ -164,12 +164,10 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
             else if (entrada[0] == 's' || entrada[0] == 'S') 
             {
                 mundo->celulas[temp_alt][temp_lar] = '.';
-                mostrarMensagem("Celula excluida.\n");
                 valido = 1;
             }
             else if (entrada[0] == 'n' || entrada[0] == 'N') 
             {
-                mostrarMensagem("Celula mantida.\n");
                 valido = 1;
             }
             else 
@@ -181,9 +179,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
     }
     else 
     {
-        limparTela();
         mundo->celulas[temp_alt][temp_lar] = 'O';
-        mostrarMensagem("Celula adicionada.\n");
     }
 }
 
