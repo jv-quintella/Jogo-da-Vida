@@ -73,7 +73,11 @@
                         }
                         else
                         {
-                            // FIX: nao reemprime o mundo, apenas mostra a mensagem de opcao invalida
+                            limparTela();
+                            contar_celulas(&mundo, mostrarvizinho);
+                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                            mostrarMensagem("\nOpcao invalida! Tente novamente.");
+                            pause();
                             continue;
                         }
                     }while(menu2 != 0); 

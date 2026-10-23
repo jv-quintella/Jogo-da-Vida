@@ -3,7 +3,6 @@
 #include "JVIDA_HJRV_view_menu.h"
 #include "../../controller/jogo/JVIDA_HJRV_controller_jogo.h"
 #include "../utilidades/JVIDA_HJRV_view_utilidades.h"
-
 /*
 ** Exibe o menu principal, le e valida a opcao escolhida.
 ** Parametros:
@@ -45,8 +44,8 @@ int mostrar_Menu(int opcao) {
         
             return (int)id;
         case 2:
-            do
-            {
+//            do
+//            {
                 printf("\n| MENU\n");
                 printf("\n[1] - Adicionar celula\n");
                 printf("[2] - Simular evolucao\n");
@@ -64,10 +63,9 @@ int mostrar_Menu(int opcao) {
                 valido = (fim != entrada && *fim == '\0' && (id2 == 0 || id2 == 1 || id2 == 2 || id2 == 3));
             
                 if (!valido) {
-                    limparTela();
-                    printf("Opcao invalida.\n");
+                    return -1;  
                 }
-            } while (!valido);
+//            } while (!valido);
         
             return (int)id2;
     }
