@@ -74,7 +74,7 @@
                             limparTela();
                             contar_celulas(&mundo, mostrarvizinho);
                             imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-                            mostrarMensagem("\nOpcao invalida! Tente novamente.");
+                            mostrarMensagem("\nOpcao invalida. Tente novamente.");
                             pause();
                             continue;
                         }
@@ -225,7 +225,7 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
             valido = 0;
             do {
-                mostrarMensagem("Mostrar a proxima geracao? [s/n]: ");
+                mostrarMensagem("\nMostrar a proxima geracao? [s/n]: ");
 
                 if (obter_input(entrada, sizeof entrada) == 0)
                 {
