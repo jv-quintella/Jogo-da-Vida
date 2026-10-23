@@ -47,7 +47,7 @@ int mostrar_Menu(int opcao) {
 //            do
 //            {
                 printf("\n| MENU\n");
-                printf("\n[1] - Adicionar celula\n");
+                printf("\n[1] - Adicionar/excluir celula\n");
                 printf("[2] - Simular evolucao\n");
                 printf("[3] - Limpar mundo\n");
                 printf("[0] - Sair\n");
