@@ -26,7 +26,6 @@
 
         do{
             limparTela();
-
             menu1 = mostrar_Menu(1);
 
             switch(menu1) // Executa a escolha do usuario no menu inicial
@@ -40,7 +39,6 @@
 
                     do{
                         limparTela();
-                        // FIX: fazer uma opcao no menu pra ligar e desligar vizinhos
                         imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
                         contar_celulas(&mundo, mostrarvizinho);
 
