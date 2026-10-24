@@ -22,65 +22,74 @@
         char entrada[10];
         int mostrarvizinho;
         int valido = 0;
-        
-        tamanho = obter_tamanho();
+        int menu2, menu1;
 
-        //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
-        criar_mundo(&mundo, tamanho);
+        do{
+            limparTela();
+            menu1 = mostrar_Menu(1);
 
-        mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
-        colocar_celula(&mundo, sizeof entrada, entrada);
-
-        do {
-            mostrarMensagem("\nDeseja adicionar mais uma celula? [s/n]: ");
-            obter_input(entrada, sizeof entrada);
-
-            if (entrada[0] == 'S' || entrada[0] == 's') 
+            switch(menu1) // Executa a escolha do usuario no menu inicial
             {
-                colocar_celula(&mundo, sizeof entrada, entrada);
-                valido = 1;
+                case 1:
+                    tamanho = obter_tamanho();
+                    //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
+                    criar_mundo(&mundo, tamanho);
+                    mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
+                    contar_celulas(&mundo, mostrarvizinho);
+
+                    do{
+                        limparTela();
+                        imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                        contar_celulas(&mundo, mostrarvizinho);
+
+                        menu2 = mostrar_Menu(2); // Exibe o menu de simulacao e armazena a escolha do usuario
+
+                        if(menu2 == 1)
+                        {
+                            colocar_celula(&mundo, sizeof entrada, entrada);
+                            contar_celulas(&mundo, mostrarvizinho);
+                            limparTela();
+                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                            continue;
+                        }
+                        else if(menu2 == 2)
+                        {
+                            evoluir_geracoes(&mundo, mostrarvizinho);
+                            continue;
+                        }
+                        else if(menu2 == 3)
+                        {
+                            limpar_celula(&mundo);
+                            limparTela();
+                            contar_celulas(&mundo, mostrarvizinho);
+                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                            continue;
+                        }
+                        else if (menu2 == 0)
+                        {
+                            mostrarMensagem("Saindo da simulacao...\n");
+                        }
+                        else
+                        {
+                            limparTela();
+                            contar_celulas(&mundo, mostrarvizinho);
+                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                            mostrarMensagem("\nOpcao invalida. Tente novamente.");
+                            pause();
+                            continue;
+                        }
+                    }while(menu2 != 0); 
+                    break;
+                case 2:
+                    return;
+                case 0:
+                    mostrarMensagem("Saindo do programa...\n");
+                    return;
+                default:
+                    mostrarMensagem("Opcao invalida. Tente novamente.\n");
+                    break;
             }
-            else if (entrada[0] == 'n' || entrada[0] == 'N') 
-            {
-                mostrarMensagem("Encerrando a adicao de celulas.\n");
-                valido = 1;
-            }
-            else 
-            {
-                mostrarMensagem("Opcao invalida.\n");
-                valido = 0;
-            } 
-        
-        } while ((entrada[0] != 'N' && entrada[0] != 'n') || (valido == 0));
-
-        contar_celulas(&mundo, mostrarvizinho);
-
-        imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
-
-        do {
-            mostrarMensagem("Deseja limpar o mundo? [s/n]: ");
-
-            if (obter_input(entrada, sizeof entrada) == 0) 
-            {
-                mostrarMensagem("Valor invalido.\n");
-                valido = 0;
-            }
-            else if (entrada[0] == 's' || entrada[0] == 'S') 
-            {
-                limpar_celula(&mundo);
-                valido = 1;
-            }
-            else if (entrada[0] == 'n' || entrada[0] == 'N') 
-            {
-                valido = 1;
-            }
-            else 
-            {
-                mostrarMensagem("Opcao invalida.\n");
-                valido = 0;
-            }
-        } while (valido == 0);
-        evoluir_geracoes(&mundo, mostrarvizinho);
+        } while(menu1 != 0);
     }
 
 /*
@@ -96,7 +105,7 @@ int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
 
     do
     {
-        mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? [s/n]: ");
+        mostrarMensagem("Deseja mostrar os vizinhos mortos das celulas? Nao e possivel desativar durante o jogo [s/n]: ");
         obter_input(entrada, tamanho);
         if(entrada[0] == 's' || entrada[0] == 'S')
         {
@@ -131,7 +140,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
     int temp_lar;
     int valido = 0;
 
-    mostrarMensagem("Informe a linha: ");
+    mostrarMensagem("\nInforme a linha: ");
     temp_alt = obter_posicao(mundo->tamanho, tamanho, entrada);
 
     mostrarMensagem("Informe a coluna: ");
@@ -143,7 +152,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
 
     if (mundo->celulas[temp_alt][temp_lar] == 'O') {
         do {
-            mostrarMensagem("Deseja excluir esta celula? [s/n]: ");
+            mostrarMensagem("\nDeseja excluir esta celula? [s/n]: ");
 
             if (obter_input(entrada, tamanho) == 0) 
             {
@@ -153,12 +162,10 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
             else if (entrada[0] == 's' || entrada[0] == 'S') 
             {
                 mundo->celulas[temp_alt][temp_lar] = '.';
-                mostrarMensagem("Celula excluida.\n");
                 valido = 1;
             }
             else if (entrada[0] == 'n' || entrada[0] == 'N') 
             {
-                mostrarMensagem("Celula mantida.\n");
                 valido = 1;
             }
             else 
@@ -170,9 +177,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
     }
     else 
     {
-        limparTela();
         mundo->celulas[temp_alt][temp_lar] = 'O';
-        mostrarMensagem("Celula adicionada.\n");
     }
 }
 
@@ -214,11 +219,13 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
             calcular_geracao(mundo, &mundo_auxiliar);
             *mundo = mundo_auxiliar;
 
+            limparTela();
+            contar_celulas(mundo, mostrarvizinho);
             imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
 
             valido = 0;
             do {
-                mostrarMensagem("Mostrar a proxima geracao? [s/n]: ");
+                mostrarMensagem("\nMostrar a proxima geracao? [s/n]: ");
 
                 if (obter_input(entrada, sizeof entrada) == 0)
                 {
