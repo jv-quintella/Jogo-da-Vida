@@ -124,3 +124,30 @@ int obter_posicao(int limite, int tamanho, char entrada[])
 
     return valor;
 }
+
+//FIX
+int obter_qtdgeracoes(char entrada[])
+{
+    char entrada;
+    int valido;
+    int quantidade;
+
+    printf("Quantidade de geracoes a serem simuladas: ");
+
+    do {
+        //Indica um erro se houver falha na leitura do teclado.
+        if (obter_input(entrada, sizeof entrada) == 0) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        else if (!obter_input(entrada, sizeof entrada)) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        else {
+            valido = 1;
+        }
+    } while (valido == 0);
+
+    return quantidade;
+}
