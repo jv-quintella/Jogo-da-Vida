@@ -10,6 +10,7 @@ struct Mundo {
     int tamanho;
     int qtdvivos;
     int qtdmortos;
+    int qtdgeracoes;//FIX
 };
 
 #endif

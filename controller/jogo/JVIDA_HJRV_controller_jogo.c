@@ -34,6 +34,7 @@
                     tamanho = obter_tamanho();
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
                     criar_mundo(&mundo, tamanho);
+                    obter_qtdgeracoes(); //FIX
                     mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
                     contar_celulas(&mundo, mostrarvizinho);
 
