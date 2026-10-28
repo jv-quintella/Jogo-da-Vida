@@ -136,9 +136,9 @@ int obter_posicao(int limite, int tamanho, char entrada[])
 //FIX
 int obter_qtdgeracoes(char entrada[])
 {
-    char entrada;
     int valido;
     int quantidade;
+    char sobra;
 
     printf("Quantidade de geracoes a serem simuladas: ");
 
@@ -148,7 +148,7 @@ int obter_qtdgeracoes(char entrada[])
             printf("Opcao invalida.\nTente novamente: ");
             valido = 0;
         }
-        else if (!obter_input(entrada, sizeof entrada)) {
+        else if (sscanf(entrada, "%d %c", &quantidade, &sobra) != 1 || quantidade < 1) {
             printf("Opcao invalida.\nTente novamente: ");
             valido = 0;
         }
