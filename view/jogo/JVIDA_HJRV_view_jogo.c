@@ -126,6 +126,15 @@ int obter_posicao(int limite, int tamanho, char entrada[])
     return valor;
 }
 
+/*
+** Solicita, le e valida a quantidade de geracoes a serem simuladas.
+** Repete a leitura enquanto a entrada for invalida ou o valor for menor que 1.
+** Parametros:
+**      tamanho - capacidade do vetor de entrada
+**      entrada - vetor utilizado para armazenar a entrada do usuario
+** Retorno:
+**      quantidade de geracoes informada pelo usuario, maior ou igual a 1
+*/
 int obter_qtdgeracoes(int tamanho, char entrada[])
 {
     int valido;
