@@ -19,7 +19,6 @@
 //implementar indicacao visual de cada linha/coluna
 void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
     {
-        int quantidade = 0;
         int i, j;
         
         //printa coluna
