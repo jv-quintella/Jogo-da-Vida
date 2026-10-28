@@ -17,7 +17,7 @@
 **      mundo   - a matriz bidimensional contendo o estado das celulas
 */
 //implementar indicacao visual de cada linha/coluna
-void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho, int qtdgeracoes)
+void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
     {
         int quantidade = 0;
         int i, j;
@@ -49,7 +49,7 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho, int qt
             printf("\n");
         }
         printf("\n");
-        printf("Geracao: %d/%d\n", quantidade, mundo->qtdgeracoes);//fix
+        printf("Geracao: %d/%d\n", mundo->geracaoAtual, mundo->qtdgeracoes);//fix
         printf("Quantidade de celulas vivas: %d\n", mundo->qtdvivos);
         printf("Quantidade de celulas mortas: %d\n", mundo->qtdmortos);
     }

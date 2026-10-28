@@ -206,48 +206,60 @@ void limpar_celula(struct Mundo *mundo, int qtdgeracoes)
 **      mostrarvizinho - 1 para exibir as vizinhas-mortas ('+'), 0 caso contrario
 */
 void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho, int qtdgeracoes)
-    {
-        struct Mundo mundo_auxiliar;
-        char entrada[10];
-        int continuar = 1;
-        int valido;
+{
+    struct Mundo mundo_auxiliar;
+    char entrada[10];
+    int continuar = 1;
+    int valido;
+    int total = mundo->qtdgeracoes;
+    int atual = mundo->geracaoAtual;
 
-        // A auxiliar tem o mesmo tamanho do mundo atual
-        criar_mundo(&mundo_auxiliar, mundo->tamanho);
+    criar_mundo(&mundo_auxiliar, mundo->tamanho);
 
+    do {
+        calcular_geracao(mundo, &mundo_auxiliar);
+        *mundo = mundo_auxiliar;
+
+        // restaura os campos sobrescritos pela copia
+        atual++;
+        mundo->qtdgeracoes = total;
+        mundo->geracaoAtual = atual;
+
+        limparTela();
+        contar_celulas(mundo, mostrarvizinho);
+        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho, qtdgeracoes);
+
+        if (atual >= total)
+        {
+            mostrarMensagem("\nQuantidade de geracoes atingida.\n");
+            pause();
+            break;
+        }
+
+        valido = 0;
         do {
-            // Preenche a auxiliar inteira lendo apenas a geracao atual
-            calcular_geracao(mundo, &mundo_auxiliar);
-            *mundo = mundo_auxiliar;
+            mostrarMensagem("\nMostrar a proxima geracao? [s/n]: ");
 
-            limparTela();
-            contar_celulas(mundo, mostrarvizinho);
-            imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho, qtdgeracoes);
+            if (obter_input(entrada, sizeof entrada) == 0)
+            {
+                continuar = 0;
+                valido = 1;
+            }
+            else if (entrada[0] == 's' || entrada[0] == 'S')
+            {
+                continuar = 1;
+                valido = 1;
+            }
+            else if (entrada[0] == 'n' || entrada[0] == 'N')
+            {
+                continuar = 0;
+                valido = 1;
+            }
+            else
+            {
+                mostrarMensagem("Opcao invalida.\n");
+            }
+        } while (valido == 0);
 
-            valido = 0;
-            do {
-                mostrarMensagem("\nMostrar a proxima geracao? [s/n]: ");
-
-                if (obter_input(entrada, sizeof entrada) == 0)
-                {
-                    continuar = 0;
-                    valido = 1;
-                }
-                else if (entrada[0] == 's' || entrada[0] == 'S')
-                {
-                    continuar = 1;
-                    valido = 1;
-                }
-                else if (entrada[0] == 'n' || entrada[0] == 'N')
-                {
-                    continuar = 0;
-                    valido = 1;
-                }
-                else
-                {
-                    mostrarMensagem("Opcao invalida.\n");
-                }
-            } while (valido == 0);
-
-        } while (continuar == 1);
-    }
+    } while (continuar == 1);
+}

@@ -11,6 +11,7 @@ struct Mundo {
     int qtdvivos;
     int qtdmortos;
     int qtdgeracoes;//FIX
+    int geracaoAtual;
 };
 
 #endif
