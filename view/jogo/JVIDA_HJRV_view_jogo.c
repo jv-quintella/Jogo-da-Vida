@@ -19,7 +19,7 @@
 //implementar indicacao visual de cada linha/coluna
 void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
     {
-        int i, j;
+        int i, j, k, quantidade;
         
         //printa coluna
         printf("    ");
@@ -50,6 +50,14 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
         printf("\n");
         printf("Quantidade de celulas vivas: %d\n", mundo->qtdvivos);
         printf("Quantidade de celulas mortas: %d\n", mundo->qtdmortos);
+
+        //IMPLEMENT
+        /*for (k = 0; i < qtdgeracoes; i++)
+        {
+            printf("Geracao: %d", quantidade);
+            quantidade++;
+        }*/
+        
     }
 
 /*
