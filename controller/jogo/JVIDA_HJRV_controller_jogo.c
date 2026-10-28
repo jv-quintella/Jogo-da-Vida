@@ -35,7 +35,7 @@
                     criar_mundo(&mundo, tamanho);
                     mundo.geracaoAtual = 0;
                     mundo.qtdgeracoes = obter_qtdgeracoes(sizeof entrada, entrada);
-                    mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
+                    mostrarvizinho = mostrar_mortos(sizeof entrada, entrada);
                     contar_celulas(&mundo, mostrarvizinho);
 
                     do{
