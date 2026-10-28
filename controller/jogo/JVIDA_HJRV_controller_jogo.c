@@ -23,6 +23,7 @@
         int mostrarvizinho;
         int valido = 0;
         int menu2, menu1;
+        int *qtdgeracoes;
 
         do{
             limparTela();
@@ -34,7 +35,7 @@
                     tamanho = obter_tamanho();
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
                     criar_mundo(&mundo, tamanho);
-                    obter_qtdgeracoes(entrada); //FIX
+                    qtdgeracoes = obter_qtdgeracoes(entrada); //FIX
                     mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
                     contar_celulas(&mundo, mostrarvizinho);
 
