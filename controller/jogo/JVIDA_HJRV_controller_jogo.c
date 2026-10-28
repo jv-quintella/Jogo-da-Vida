@@ -35,7 +35,7 @@
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
                     criar_mundo(&mundo, tamanho);
                     mundo.geracaoAtual = 0;
-                    mundo.qtdgeracoes = obter_qtdgeracoes(sizeof entrada, entrada); //FIX
+                    mundo.qtdgeracoes = obter_qtdgeracoes(sizeof entrada, entrada);
                     mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
                     contar_celulas(&mundo, mostrarvizinho);
 
@@ -61,7 +61,7 @@
                         }
                         else if(menu2 == 3)
                         {
-                            limpar_celula(&mundo);//FIX
+                            limpar_celula(&mundo);
                             limparTela();
                             contar_celulas(&mundo, mostrarvizinho);
                             imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
