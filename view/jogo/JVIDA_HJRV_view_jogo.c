@@ -48,7 +48,7 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
             printf("\n");
         }
         printf("\n");
-        printf("Geracao: %d/%d\n", mundo->geracaoAtual, mundo->qtdgeracoes);//fix
+        printf("Geracao: %d/%d\n", mundo->geracaoAtual, mundo->qtdgeracoes);
         printf("Quantidade de celulas vivas: %d\n", mundo->qtdvivos);
         printf("Quantidade de celulas mortas: %d\n", mundo->qtdmortos);
     }
@@ -126,7 +126,6 @@ int obter_posicao(int limite, int tamanho, char entrada[])
     return valor;
 }
 
-//FIX
 int obter_qtdgeracoes(int tamanho, char entrada[])
 {
     int valido;
