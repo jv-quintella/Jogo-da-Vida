@@ -10,5 +10,5 @@
 void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho,  int qtdgeracoes);
 int obter_tamanho(void);
 int obter_posicao(int limite, int tamanho, char entrada[]);
-int obter_qtdgeracoes(char entrada[]);
+int obter_qtdgeracoes(int tamanho, char entrada[]);
 #endif

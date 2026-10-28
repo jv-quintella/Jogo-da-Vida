@@ -49,16 +49,9 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho, int qt
             printf("\n");
         }
         printf("\n");
+        printf("Geracao: %d/%d\n", quantidade, mundo->qtdgeracoes);//fix
         printf("Quantidade de celulas vivas: %d\n", mundo->qtdvivos);
         printf("Quantidade de celulas mortas: %d\n", mundo->qtdmortos);
-
-        
-        for (i = 0; i < mundo->qtdgeracoes; i++)
-        {
-            printf("Geracao: %d", quantidade);
-            quantidade++;
-        }
-        
     }
 
 /*
@@ -135,7 +128,7 @@ int obter_posicao(int limite, int tamanho, char entrada[])
 }
 
 //FIX
-int obter_qtdgeracoes(char entrada[])
+int obter_qtdgeracoes(int tamanho, char entrada[])
 {
     int valido;
     int quantidade;
@@ -145,7 +138,7 @@ int obter_qtdgeracoes(char entrada[])
 
     do {
         //Indica um erro se houver falha na leitura do teclado.
-        if (obter_input(entrada, sizeof entrada) == 0) {
+        if (obter_input(entrada, tamanho) == 0) {
             printf("Opcao invalida.\nTente novamente: ");
             valido = 0;
         }
