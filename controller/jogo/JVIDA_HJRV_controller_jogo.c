@@ -23,7 +23,6 @@
         int mostrarvizinho;
         int valido = 0;
         int menu2, menu1;
-        int *qtdgeracoes;
 
         do{
             limparTela();
@@ -35,13 +34,13 @@
                     tamanho = obter_tamanho();
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
                     criar_mundo(&mundo, tamanho);
-                    qtdgeracoes = obter_qtdgeracoes(entrada); //FIX
+                    mundo.qtdgeracoes = obter_qtdgeracoes(sizeof entrada, entrada); //FIX
                     mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
                     contar_celulas(&mundo, mostrarvizinho);
 
                     do{
                         limparTela();
-                        imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                        imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho, mundo.qtdgeracoes);
                         contar_celulas(&mundo, mostrarvizinho);
 
                         menu2 = mostrar_Menu(2); // Exibe o menu de simulacao e armazena a escolha do usuario
@@ -51,20 +50,20 @@
                             colocar_celula(&mundo, sizeof entrada, entrada);
                             contar_celulas(&mundo, mostrarvizinho);
                             limparTela();
-                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho, mundo.qtdgeracoes);
                             continue;
                         }
                         else if(menu2 == 2)
                         {
-                            evoluir_geracoes(&mundo, mostrarvizinho);
+                            evoluir_geracoes(&mundo, mostrarvizinho, mundo.qtdgeracoes);
                             continue;
                         }
                         else if(menu2 == 3)
                         {
-                            limpar_celula(&mundo);
+                            limpar_celula(&mundo, mundo.qtdgeracoes);
                             limparTela();
                             contar_celulas(&mundo, mostrarvizinho);
-                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho, mundo.qtdgeracoes);
                             continue;
                         }
                         else if (menu2 == 0)
@@ -75,7 +74,7 @@
                         {
                             limparTela();
                             contar_celulas(&mundo, mostrarvizinho);
-                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho);
+                            imprimir_mundo(mundo.tamanho, &mundo, mostrarvizinho, mundo.qtdgeracoes);
                             mostrarMensagem("\nOpcao invalida. Tente novamente.");
                             pause();
                             continue;
@@ -189,13 +188,13 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
 ** Parametros:
 **      mundo - o ponteiro para a estrutura do mundo
 */
-void limpar_celula(struct Mundo *mundo)
+void limpar_celula(struct Mundo *mundo, int qtdgeracoes)
     {
         limparTela();
 	    int mostrarvizinho = 0;
         memset(mundo->celulas, '.', sizeof(mundo->celulas));
         contar_celulas(mundo, mostrarvizinho);
-        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
+        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho, qtdgeracoes);
     }
     
 /*
@@ -206,7 +205,7 @@ void limpar_celula(struct Mundo *mundo)
 **      mundo - o ponteiro para a estrutura do mundo atual (lido e atualizado)
 **      mostrarvizinho - 1 para exibir as vizinhas-mortas ('+'), 0 caso contrario
 */
-void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
+void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho, int qtdgeracoes)
     {
         struct Mundo mundo_auxiliar;
         char entrada[10];
@@ -223,7 +222,7 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
             limparTela();
             contar_celulas(mundo, mostrarvizinho);
-            imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
+            imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho, qtdgeracoes);
 
             valido = 0;
             do {
