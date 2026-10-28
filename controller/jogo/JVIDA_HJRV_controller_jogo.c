@@ -21,7 +21,6 @@
         int tamanho;
         char entrada[10];
         int mostrarvizinho;
-        int valido = 0;
         int menu2, menu1;
 
         do{
@@ -101,7 +100,7 @@
 **      tamanho - o tamanho utilizado na leitura das entradas
 **      entrada - o vetor utilizado para armazenar as entradas do usuario
 */
-int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
+int mostrar_mortos(int tamanho, char entrada[])
 {
     int valido = 0;
 
@@ -193,7 +192,6 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
 void limpar_celula(struct Mundo *mundo)
     {
         limparTela();
-	    int mostrarvizinho = 0;
         memset(mundo->celulas, '.', sizeof(mundo->celulas));
         //contar_celulas(mundo, mostrarvizinho); check
         //imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho, qtdgeracoes);
