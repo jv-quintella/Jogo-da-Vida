@@ -10,18 +10,19 @@
 #include "../../model/jogo/JVIDA_HJRV_model_jogo.h"
 
 /*
-** Imprime o mundo atual no terminal.
-** Imprime os caracteres linha por linha e realiza a quebra para formar a matriz.
+** Exibe o mundo atual, as coordenadas e os contadores da simulacao.
+** Quando solicitado, representa com '+' as celulas mortas com vizinhos vivos.
 ** Parametros:
 **      tamanho - dimensao da matriz a ser exibida
-**      mundo   - a matriz bidimensional contendo o estado das celulas
+**      mundo - ponteiro para a estrutura que armazena o mundo e seus contadores
+**      mostrarvizinho - 1 para destacar as celulas mortas com vizinhos vivos;
+**                       0 para exibir os caracteres armazenados na matriz
 */
-//implementar indicacao visual de cada linha/coluna
 void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
     {
         int i, j;
         
-        //printa coluna
+        //Exibe os numeros das colunas a partir de 1.
         printf("    ");
         for(j = 0; j < tamanho; j++)
         {
@@ -30,7 +31,7 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
         
         printf("\n");
         
-        //printa linha
+        //Exibe cada linha da matriz a partir de 1.
         for(i = 0; i < tamanho; i++)
         {
             printf("  %2d ", i+1);

@@ -94,11 +94,13 @@
     }
 
 /*
-** Permite ao usuario escolher se deseja mostrar os vizinhos mortos das celulas vivas do mundo.
+** Solicita ao usuario se deseja destacar as celulas mortas com vizinhos vivos.
+** Aceita 's' ou 'S' para mostrar e 'n' ou 'N' para ocultar.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
-**      tamanho - o tamanho utilizado na leitura das entradas
-**      entrada - o vetor utilizado para armazenar as entradas do usuario
+**      tamanho - capacidade do vetor de entrada
+**      entrada - vetor utilizado para armazenar a resposta do usuario
+** Retorno:
+**      1 para mostrar as celulas mortas com vizinhos vivos; 0 para ocultar
 */
 int mostrar_mortos(int tamanho, char entrada[])
 {
@@ -184,10 +186,9 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
 }
 
 /*
-** Limpa todas as celulas do mundo, preenchendo a matriz com
-** celulas mortas e exibindo o mundo atualizado.
+** Limpa a tela e preenche toda a matriz de celulas com pontos.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
+**      mundo - ponteiro para a estrutura cuja matriz sera preenchida
 */
 void limpar_celula(struct Mundo *mundo)
     {
@@ -217,10 +218,12 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
     criar_mundo(&mundo_auxiliar, mundo->tamanho);
 
     do {
+        //Calcula toda a proxima geracao no mundo auxiliar, preservando o mundo atual.
         calcular_geracao(mundo, &mundo_auxiliar);
+        //Copia a estrutura inteira, tornando a geracao calculada o novo mundo atual.
         *mundo = mundo_auxiliar;
 
-        // restaura os campos sobrescritos pela copia
+        //Avanca o contador e restaura os campos de sobrescritos pela copia.
         atual++;
         mundo->qtdgeracoes = total;
         mundo->geracaoAtual = atual;
