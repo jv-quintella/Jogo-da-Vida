@@ -148,6 +148,9 @@ int obter_qtdgeracoes(char entrada[])
             printf("Opcao invalida.\nTente novamente: ");
             valido = 0;
         }
+        /* Converte a entrada para numero e rejeita se:
+        O retorno do sscanf for diferente de 1
+        O valor lido estiver fora do intervalo de 1 ate o limite */
         else if (sscanf(entrada, "%d %c", &quantidade, &sobra) != 1 || quantidade < 1) {
             printf("Opcao invalida.\nTente novamente: ");
             valido = 0;
