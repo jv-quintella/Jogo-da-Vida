@@ -35,6 +35,7 @@
                     criar_mundo(&mundo, tamanho);
                     mundo.geracaoAtual = 0;
                     mundo.qtdgeracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+                    mundo.velocidade = obter_velocidade(&mundo, sizeof entrada, entrada);
                     mostrarvizinho = mostrar_mortos(sizeof entrada, entrada);
                     contar_celulas(&mundo, mostrarvizinho);
 
@@ -268,5 +269,5 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
         } while (valido == 0);
 
     } while (continuar == 1);
-
+}
   

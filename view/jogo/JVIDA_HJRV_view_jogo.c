@@ -165,9 +165,31 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
     return quantidade;
 }
 
-int velocidade_evolucao(struct Mundo *mundo, int tamanho, char entrada[])//FIX
+int obter_velocidade(struct Mundo *mundo, int tamanho, char entrada[])
 {
     int velocidade;
-    printf("/nQual sera a velocidade de evolucao? ");
-    velocidade = obter_input(mundo->velocidade, velocidade);
+    int valido;
+    char sobra;
+
+    printf("Velocidade de simulacao(0 para passo-a-passo): ");
+
+    do {
+        //Indica um erro se houver falha na leitura do teclado.
+        if (obter_input(entrada, tamanho) == 0) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        /* Converte a entrada para numero e rejeita se:
+        O retorno do sscanf for diferente de 1
+        O valor lido estiver fora do intervalo de 1 ate o limite */
+        else if (sscanf(entrada, "%d %c", &velocidade, &sobra) != 1 || velocidade < 0) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        else {
+            valido = 1;
+        }
+    } while (valido == 0);
+
+    return velocidade;
 }
