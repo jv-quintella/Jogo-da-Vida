@@ -117,30 +117,72 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
 */
 void calcular_geracao(struct Mundo *mundo, struct Mundo *mundo_auxiliar)
     {
-        for(int i = 0; i < mundo -> tamanho; i++)
-            {
-                for(int j = 0; j < mundo -> tamanho; j++)
-                    {
-                        // Obtem a quantidade exata de vizinhos vivos da celula atual
-                        int qtd = contar_vizinhos(mundo, i, j);
-                        // Celula viva com 2 ou 3 vizinhos continua viva
-                        if(mundo -> celulas[i][j] == 'O' && (qtd == 2 || qtd == 3))
-                            {
-                                mundo_auxiliar -> celulas[i][j] = 'O';
-                            }
-                        // Celula morta com exatamente 3 vizinhos nasce
-                        else if (mundo -> celulas[i][j] == '.' && qtd == 3)
-                            {
+        // Para velocidade 0 a evolução sera passo-a-passo.
+        if(mundo->velocidade == 0)
+        {
+            for(int i = 0; i < mundo -> tamanho; i++)
+                {
+                    for(int j = 0; j < mundo -> tamanho; j++)
+                        {
+                            // Obtem a quantidade exata de vizinhos vivos da celula atual
+                            int qtd = contar_vizinhos(mundo, i, j);
+                            // Celula viva com 2 ou 3 vizinhos continua viva
+                            if(mundo -> celulas[i][j] == 'O' && (qtd == 2 || qtd == 3))
+                                {
                                     mundo_auxiliar -> celulas[i][j] = 'O';
-                            }
-                        // Morte por solidao (0 ou 1) ou superpopulacao (4 ou mais)   
-                        else
-                            {
-                                mundo_auxiliar -> celulas[i][j] = '.';
-                            }
+                                }
+                            // Celula morta com exatamente 3 vizinhos nasce
+                            else if (mundo -> celulas[i][j] == '.' && qtd == 3)
+                                {
+                                        mundo_auxiliar -> celulas[i][j] = 'O';
+                                }
+                            // Morte por solidao (0 ou 1) ou superpopulacao (4 ou mais)   
+                            else
+                                {
+                                    mundo_auxiliar -> celulas[i][j] = '.';
+                                }
                         
 
+                        }
+                }
+        }
+        else
+        {
+            // Loop da velocidade, simula varias gerações antes de mostrar na tela.
+            for(int v = 0; v < mundo->velocidade; v++)
+            {
+                for(int i = 0; i < mundo -> tamanho; i++)
+                    {
+                        for(int j = 0; j < mundo -> tamanho; j++)
+                            {
+                                // Obtem a quantidade exata de vizinhos vivos da celula atual
+                                int qtd = contar_vizinhos(mundo, i, j);
+                                // Celula viva com 2 ou 3 vizinhos continua viva
+                                if(mundo -> celulas[i][j] == 'O' && (qtd == 2 || qtd == 3))
+                                    {
+                                        mundo_auxiliar -> celulas[i][j] = 'O';
+                                    }
+                                // Celula morta com exatamente 3 vizinhos nasce
+                                else if (mundo -> celulas[i][j] == '.' && qtd == 3)
+                                    {
+                                            mundo_auxiliar -> celulas[i][j] = 'O';
+                                    }
+                                // Morte por solidao (0 ou 1) ou superpopulacao (4 ou mais)   
+                                else
+                                    {
+                                        mundo_auxiliar -> celulas[i][j] = '.';
+                                    }
+                            }
                     }
-            }
+                //copia o conteúdo de mundo_auxiliar para mundo logo após o término dos loop i e j:
+                for (int i = 0; i < mundo->tamanho; i++)
+                    {
+                        for (int j = 0; j < mundo->tamanho; j++)
+                            {
+                                mundo->celulas[i][j] = mundo_auxiliar->celulas[i][j];
+                            }
+                    }
+            }        
+        }
     }
     //
