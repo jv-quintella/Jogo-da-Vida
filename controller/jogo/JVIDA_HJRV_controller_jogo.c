@@ -218,6 +218,7 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
     int valido;
     int total = mundo->qtdgeracoes;
     int atual = mundo->geracaoAtual;
+    int velocidade = mundo->velocidade;
 
     criar_mundo(&mundo_auxiliar, mundo->tamanho);
 
@@ -230,6 +231,7 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
         //Avanca o contador e restaura os campos de sobrescritos pela copia.
         atual++;
         mundo->qtdgeracoes = total;
+        mundo->velocidade = velocidade;
         mundo->geracaoAtual = atual;
 
         limparTela();

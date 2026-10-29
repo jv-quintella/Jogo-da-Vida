@@ -13,6 +13,7 @@ void criar_mundo(struct Mundo *mundo, int tamanho)
     {
         int i, j;
         mundo->tamanho = tamanho;
+        mundo->velocidade = 0;
         //Percorre cada linha (i) e cada coluna (j) da matriz, preenchendo com '.' 
         for(i = 0; i < tamanho; i++)
             {
