@@ -164,3 +164,10 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
 
     return quantidade;
 }
+
+int velocidade_evolucao(struct Mundo *mundo, int tamanho, char entrada[])//FIX
+{
+    int velocidade;
+    printf("/nQual sera a velocidade de evolucao? ");
+    velocidade = obter_input(mundo->velocidade, velocidade);
+}

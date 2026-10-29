@@ -268,4 +268,5 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
         } while (valido == 0);
 
     } while (continuar == 1);
-}
+
+  
