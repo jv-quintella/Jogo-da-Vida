@@ -171,7 +171,7 @@ int obter_velocidade(int tamanho, char entrada[])
     int valido;
     char sobra;
 
-    printf("Velocidade de simulacao(0 para passo-a-passo): ");
+    printf("Velocidade de simulacao (0 para passo a passo): ");
 
     do {
         //Indica um erro se houver falha na leitura do teclado.
