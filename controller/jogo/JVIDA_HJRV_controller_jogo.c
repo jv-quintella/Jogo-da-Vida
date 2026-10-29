@@ -143,6 +143,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
     int temp_alt;
     int temp_lar;
     int valido = 0;
+    mundo->geracaoAtual = 0;
 
     mostrarMensagem("\nInforme a linha: ");
     temp_alt = obter_posicao(mundo->tamanho, tamanho, entrada);
@@ -193,9 +194,11 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
 void limpar_celula(struct Mundo *mundo)
     {
         limparTela();
+        int mostrarvizinho = 0;
         memset(mundo->celulas, '.', sizeof(mundo->celulas));
-        //contar_celulas(mundo, mostrarvizinho); check
-        //imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho, qtdgeracoes);
+        contar_celulas(mundo, mostrarvizinho);
+        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
+        mundo->geracaoAtual = 0;
     }
     
 /*
