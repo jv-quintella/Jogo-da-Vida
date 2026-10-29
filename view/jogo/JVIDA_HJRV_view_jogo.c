@@ -165,7 +165,7 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
     return quantidade;
 }
 
-int obter_velocidade(struct Mundo *mundo, int tamanho, char entrada[])
+int obter_velocidade(int tamanho, char entrada[])
 {
     int velocidade;
     int valido;
