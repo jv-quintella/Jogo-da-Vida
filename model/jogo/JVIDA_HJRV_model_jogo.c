@@ -143,3 +143,4 @@ void calcular_geracao(struct Mundo *mundo, struct Mundo *mundo_auxiliar)
                     }
             }
     }
+    //
