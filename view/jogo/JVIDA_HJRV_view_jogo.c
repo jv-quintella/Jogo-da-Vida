@@ -49,7 +49,7 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
             printf("\n");
         }
         printf("\n");
-        printf("Geracoes: %d\n", mundo->qtdgeracoes);
+        printf("Geracoes: %d/%d\n",  mundo->geracaoAtual, mundo->qtdgeracoes);
         printf("Quantidade de celulas vivas: %d\n", mundo->qtdvivos);
         printf("Quantidade de celulas mortas: %d\n", mundo->qtdmortos);
     }
