@@ -7,6 +7,7 @@
 /*
 ** Inicializa o mundo com celulas vazias, representadas por pontos.
 ** Parametros:
+**      mundo - o ponteiro para a estrutura do mundo a ser inicializado
 **      tamanho - dimensao da matriz quadrada a ser preenchida
 */
 void criar_mundo(struct Mundo *mundo, int tamanho)
@@ -52,13 +53,12 @@ int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
     }
 
 /*
-** Conta as celulas vivas e, quando solicitado, as celulas mortas com vizinhos vivos.
+** Conta as celulas vivas e as celulas mortas com vizinhos vivos (vizinhas-mortas).
 ** Atualiza os campos qtdvivos e qtdmortos da estrutura do mundo.
 ** Parametros:
 **      mundo - o ponteiro para a estrutura do mundo
-**      mostrarvizinho - indica se as celulas mortas com vizinhos vivos devem ser contadas (1 para contar)
 */
-void contar_celulas(struct Mundo *mundo, int mostrarvizinho)
+void contar_celulas(struct Mundo *mundo)
     {
         mundo->qtdvivos = 0;
         mundo->qtdmortos = 0;
@@ -71,7 +71,7 @@ void contar_celulas(struct Mundo *mundo, int mostrarvizinho)
                 {
                     mundo->qtdvivos++;
                 }
-                else if (mundo->celulas[i][j] == '.' && verificar_vizinho(mundo, i, j) == 1 && mostrarvizinho == 1) 
+                else if (mundo->celulas[i][j] == '.' && verificar_vizinho(mundo, i, j) == 1) 
                 {
                     mundo->qtdmortos++;
                 }

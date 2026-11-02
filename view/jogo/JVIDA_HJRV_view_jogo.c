@@ -51,7 +51,7 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
         printf("\n");
         printf("Geracao: %d/%d\n", mundo->geracaoAtual, mundo->qtdgeracoes);
         printf("Quantidade de celulas vivas: %d\n", mundo->qtdvivos);
-        printf("Quantidade de celulas mortas: %d\n", mundo->qtdmortos);
+        printf("Quantidade de celulas vizinhas-mortas: %d\n", mundo->qtdmortos);
     }
 
 /*
@@ -163,4 +163,109 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
     } while (valido == 0);
 
     return quantidade;
+}
+
+/*
+** Solicita, le e valida a velocidade de sucessao das geracoes.
+** A velocidade indica quantas geracoes sao puladas a cada tela exibida;
+** o valor 0 indica simulacao passo a passo (uma geracao por vez).
+** Repete a leitura enquanto a entrada for invalida ou o valor for menor que 0.
+** Parametros:
+**      tamanho - capacidade do vetor de entrada
+**      entrada - vetor utilizado para armazenar a entrada do usuario
+** Retorno:
+**      velocidade informada pelo usuario, maior ou igual a 0
+*/
+int obter_velocidade(int tamanho, char entrada[])
+{
+    int velocidade;
+    int valido;
+    char sobra;
+
+    printf("Velocidade de simulacao (0 para passo a passo): ");
+
+    do {
+        //Indica um erro se houver falha na leitura do teclado.
+        if (obter_input(entrada, tamanho) == 0) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        /* Converte a entrada para numero e rejeita se:
+        O retorno do sscanf for diferente de 1
+        O valor lido for menor que 0 */
+        else if (sscanf(entrada, "%d %c", &velocidade, &sobra) != 1 || velocidade < 0) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        else {
+            valido = 1;
+        }
+    } while (valido == 0);
+
+    return velocidade;
+}
+
+/*
+** Solicita, le e valida uma coordenada (linha e coluna) do mundo, digitadas na mesma linha.
+** A entrada -1 -1 indica que o usuario deseja parar de informar coordenadas.
+** Se a entrada for invalida ou estiver fora do mundo, exibe uma mensagem de erro e repete a leitura.
+** Parametros:
+**      limite - o valor maximo aceito para linha e coluna (tamanho do mundo)
+**      tamanho - a capacidade do vetor de entrada
+**      entrada - o vetor utilizado para armazenar a entrada do usuario
+**      linha - ponteiro que recebe a linha informada
+**      coluna - ponteiro que recebe a coluna informada
+** Retorno:
+**      1 se uma coordenada valida foi lida; 0 se o usuario digitou -1 -1 ou houve EOF na entrada
+*/
+int obter_coordenada(int limite, int tamanho, char entrada[], int *linha, int *coluna)
+{
+    char sobra;
+
+    while (1) {
+        //Encerra a leitura se houver falha na leitura do teclado.
+        if (obter_input(entrada, tamanho) == 0) {
+            return 0;
+        }
+        else if (sscanf(entrada, "%d %d %c", linha, coluna, &sobra) != 2) {
+            printf("Entrada invalida. Digite linha e coluna separadas por espaco (ex: 5 4) ou -1 -1 para parar.\nTente novamente: ");
+        }
+        else if (*linha == -1 && *coluna == -1) {
+            return 0;
+        }
+        else if (*linha < 1 || *linha > limite || *coluna < 1 || *coluna > limite) {
+            printf("Coordenada fora do mundo. Use valores de 1 a %d ou -1 -1 para parar.\nTente novamente: ", limite);
+        }
+        else {
+            return 1;
+        }
+    }
+}
+
+/*
+** Exibe os valores atuais da configuracao da simulacao.
+** Parametros:
+**      mundo - ponteiro para a estrutura que armazena a configuracao do mundo
+**      mostrarvizinho - 1 se as vizinhas-mortas estao sendo exibidas; 0 caso contrario
+*/
+void mostrar_configuracoes(struct Mundo *mundo, int mostrarvizinho)
+{
+    printf("\n| CONFIGURACOES ATUAIS\n\n");
+    printf("Quantidade de geracoes: %d\n", mundo->qtdgeracoes);
+    if (mundo->velocidade == 0)
+    {
+        printf("Velocidade: 0 (passo a passo)\n");
+    }
+    else
+    {
+        printf("Velocidade: %d (geracoes por tela)\n", mundo->velocidade);
+    }
+    if (mostrarvizinho == 1)
+    {
+        printf("Vizinhas-mortas: sim\n");
+    }
+    else
+    {
+        printf("Vizinhas-mortas: nao\n");
+    }
 }

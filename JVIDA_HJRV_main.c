@@ -5,7 +5,8 @@
 #include "JVIDA_HJRV_controller_jogo.h"
 
 /*
-** repete o menu principal ate o usuario escolher sair.
+** Inicia o programa chamando iniciar_simulacao(), que exibe o menu principal
+** e conduz toda a interacao com o usuario, e retorna 0 ao seu termino.
 ** Parametros:
 **      (nenhum)
 */
