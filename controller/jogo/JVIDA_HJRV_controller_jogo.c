@@ -35,6 +35,7 @@
                     criar_mundo(&mundo, tamanho);
                     mundo.geracaoAtual = 0;
                     mundo.qtdgeracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+                    mundo.velocidade = obter_velocidade(sizeof entrada, entrada);
                     mostrarvizinho = mostrar_mortos(sizeof entrada, entrada);
                     contar_celulas(&mundo, mostrarvizinho);
 
@@ -217,6 +218,7 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
     int valido;
     int total = mundo->qtdgeracoes;
     int atual = mundo->geracaoAtual;
+    int velocidade = mundo->velocidade;
 
     criar_mundo(&mundo_auxiliar, mundo->tamanho);
 
@@ -229,6 +231,7 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
         //Avanca o contador e restaura os campos de sobrescritos pela copia.
         atual++;
         mundo->qtdgeracoes = total;
+        mundo->velocidade = velocidade;
         mundo->geracaoAtual = atual;
 
         limparTela();
@@ -269,3 +272,4 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
     } while (continuar == 1);
 }
+  
