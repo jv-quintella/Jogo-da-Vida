@@ -10,18 +10,19 @@
 #include "../../model/jogo/JVIDA_HJRV_model_jogo.h"
 
 /*
-** Imprime o mundo atual no terminal.
-** Imprime os caracteres linha por linha e realiza a quebra para formar a matriz.
+** Exibe o mundo atual, as coordenadas e os contadores da simulacao.
+** Quando solicitado, representa com '+' as celulas mortas com vizinhos vivos.
 ** Parametros:
 **      tamanho - dimensao da matriz a ser exibida
-**      mundo   - a matriz bidimensional contendo o estado das celulas
+**      mundo - ponteiro para a estrutura que armazena o mundo e seus contadores
+**      mostrarvizinho - 1 para destacar as celulas mortas com vizinhos vivos;
+**                       0 para exibir os caracteres armazenados na matriz
 */
-//implementar indicacao visual de cada linha/coluna
 void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
     {
         int i, j;
         
-        //printa coluna
+        //Exibe os numeros das colunas a partir de 1.
         printf("    ");
         for(j = 0; j < tamanho; j++)
         {
@@ -30,7 +31,7 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
         
         printf("\n");
         
-        //printa linha
+        //Exibe cada linha da matriz a partir de 1.
         for(i = 0; i < tamanho; i++)
         {
             printf("  %2d ", i+1);
@@ -48,6 +49,7 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
             printf("\n");
         }
         printf("\n");
+        printf("Geracoes: %d/%d\n",  mundo->geracaoAtual, mundo->qtdgeracoes);
         printf("Quantidade de celulas vivas: %d\n", mundo->qtdvivos);
         printf("Quantidade de celulas mortas: %d\n", mundo->qtdmortos);
     }
@@ -123,4 +125,42 @@ int obter_posicao(int limite, int tamanho, char entrada[])
     } while (valido == 0);
 
     return valor;
+}
+
+/*
+** Solicita, le e valida a quantidade de geracoes a serem simuladas.
+** Repete a leitura enquanto a entrada for invalida ou o valor for menor que 1.
+** Parametros:
+**      tamanho - capacidade do vetor de entrada
+**      entrada - vetor utilizado para armazenar a entrada do usuario
+** Retorno:
+**      quantidade de geracoes informada pelo usuario, maior ou igual a 1
+*/
+int obter_qtdgeracoes(int tamanho, char entrada[])
+{
+    int valido;
+    int quantidade;
+    char sobra;
+
+    printf("Quantidade de geracoes a serem simuladas: ");
+
+    do {
+        //Indica um erro se houver falha na leitura do teclado.
+        if (obter_input(entrada, tamanho) == 0) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        /* Converte a entrada para numero e rejeita se:
+        O retorno do sscanf for diferente de 1
+        O valor lido estiver fora do intervalo de 1 ate o limite */
+        else if (sscanf(entrada, "%d %c", &quantidade, &sobra) != 1 || quantidade < 1) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        else {
+            valido = 1;
+        }
+    } while (valido == 0);
+
+    return quantidade;
 }

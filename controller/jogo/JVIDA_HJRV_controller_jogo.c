@@ -21,7 +21,6 @@
         int tamanho;
         char entrada[10];
         int mostrarvizinho;
-        int valido = 0;
         int menu2, menu1;
 
         do{
@@ -34,7 +33,9 @@
                     tamanho = obter_tamanho();
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
                     criar_mundo(&mundo, tamanho);
-                    mostrarvizinho = mostrar_mortos(&mundo, sizeof entrada, entrada);
+                    mundo.geracaoAtual = 0;
+                    mundo.qtdgeracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+                    mostrarvizinho = mostrar_mortos(sizeof entrada, entrada);
                     contar_celulas(&mundo, mostrarvizinho);
 
                     do{
@@ -93,13 +94,15 @@
     }
 
 /*
-** Permite ao usuario escolher se deseja mostrar os vizinhos mortos das celulas vivas do mundo.
+** Solicita ao usuario se deseja destacar as celulas mortas com vizinhos vivos.
+** Aceita 's' ou 'S' para mostrar e 'n' ou 'N' para ocultar.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
-**      tamanho - o tamanho utilizado na leitura das entradas
-**      entrada - o vetor utilizado para armazenar as entradas do usuario
+**      tamanho - capacidade do vetor de entrada
+**      entrada - vetor utilizado para armazenar a resposta do usuario
+** Retorno:
+**      1 para mostrar as celulas mortas com vizinhos vivos; 0 para ocultar
 */
-int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
+int mostrar_mortos(int tamanho, char entrada[])
 {
     int valido = 0;
 
@@ -123,6 +126,7 @@ int mostrar_mortos(struct Mundo *mundo, int tamanho, char entrada[])
             valido = 0;
         }
     } while (valido == 0);
+    return 0;
 }
 
 
@@ -139,6 +143,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
     int temp_alt;
     int temp_lar;
     int valido = 0;
+    mundo->geracaoAtual = 0;
 
     mostrarMensagem("\nInforme a linha: ");
     temp_alt = obter_posicao(mundo->tamanho, tamanho, entrada);
@@ -182,18 +187,18 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[])
 }
 
 /*
-** Limpa todas as celulas do mundo, preenchendo a matriz com
-** celulas mortas e exibindo o mundo atualizado.
+** Limpa a tela e preenche toda a matriz de celulas com pontos.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
+**      mundo - ponteiro para a estrutura cuja matriz sera preenchida
 */
 void limpar_celula(struct Mundo *mundo)
     {
         limparTela();
-	    int mostrarvizinho = 0;
+        int mostrarvizinho = 0;
         memset(mundo->celulas, '.', sizeof(mundo->celulas));
         contar_celulas(mundo, mostrarvizinho);
         imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
+        mundo->geracaoAtual = 0;
     }
     
 /*
@@ -205,48 +210,62 @@ void limpar_celula(struct Mundo *mundo)
 **      mostrarvizinho - 1 para exibir as vizinhas-mortas ('+'), 0 caso contrario
 */
 void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
-    {
-        struct Mundo mundo_auxiliar;
-        char entrada[10];
-        int continuar = 1;
-        int valido;
+{
+    struct Mundo mundo_auxiliar;
+    char entrada[10];
+    int continuar = 1;
+    int valido;
+    int total = mundo->qtdgeracoes;
+    int atual = mundo->geracaoAtual;
 
-        // A auxiliar tem o mesmo tamanho do mundo atual
-        criar_mundo(&mundo_auxiliar, mundo->tamanho);
+    criar_mundo(&mundo_auxiliar, mundo->tamanho);
 
+    do {
+        //Calcula toda a proxima geracao no mundo auxiliar, preservando o mundo atual.
+        calcular_geracao(mundo, &mundo_auxiliar);
+        //Copia a estrutura inteira, tornando a geracao calculada o novo mundo atual.
+        *mundo = mundo_auxiliar;
+
+        //Avanca o contador e restaura os campos de sobrescritos pela copia.
+        atual++;
+        mundo->qtdgeracoes = total;
+        mundo->geracaoAtual = atual;
+
+        limparTela();
+        contar_celulas(mundo, mostrarvizinho);
+        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
+
+        if (atual >= total)
+        {
+            mostrarMensagem("\nQuantidade de geracoes atingida.\n");
+            pause();
+            break;
+        }
+
+        valido = 0;
         do {
-            // Preenche a auxiliar inteira lendo apenas a geracao atual
-            calcular_geracao(mundo, &mundo_auxiliar);
-            *mundo = mundo_auxiliar;
+            mostrarMensagem("\nMostrar a proxima geracao? [s/n]: ");
 
-            limparTela();
-            contar_celulas(mundo, mostrarvizinho);
-            imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
+            if (obter_input(entrada, sizeof entrada) == 0)
+            {
+                continuar = 0;
+                valido = 1;
+            }
+            else if (entrada[0] == 's' || entrada[0] == 'S')
+            {
+                continuar = 1;
+                valido = 1;
+            }
+            else if (entrada[0] == 'n' || entrada[0] == 'N')
+            {
+                continuar = 0;
+                valido = 1;
+            }
+            else
+            {
+                mostrarMensagem("Opcao invalida.\n");
+            }
+        } while (valido == 0);
 
-            valido = 0;
-            do {
-                mostrarMensagem("\nMostrar a proxima geracao? [s/n]: ");
-
-                if (obter_input(entrada, sizeof entrada) == 0)
-                {
-                    continuar = 0;
-                    valido = 1;
-                }
-                else if (entrada[0] == 's' || entrada[0] == 'S')
-                {
-                    continuar = 1;
-                    valido = 1;
-                }
-                else if (entrada[0] == 'n' || entrada[0] == 'N')
-                {
-                    continuar = 0;
-                    valido = 1;
-                }
-                else
-                {
-                    mostrarMensagem("Opcao invalida.\n");
-                }
-            } while (valido == 0);
-
-        } while (continuar == 1);
-    }
+    } while (continuar == 1);
+}

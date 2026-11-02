@@ -66,7 +66,9 @@ int mostrar_Menu(int opcao) {
                     return -1;  
                 }
 //            } while (!valido);
-        
             return (int)id2;
+
+        default:
+            return -1;
     }
 }
