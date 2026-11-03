@@ -34,7 +34,7 @@
             {
                 case 1:
                     tamanho = obter_tamanho();
-                    geracoes = obter_qtdgeracoes(tamanho, entrada);
+                    geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
                     criar_mundo(&mundo, tamanho);
                     mundo.geracaoAtual = 0;
