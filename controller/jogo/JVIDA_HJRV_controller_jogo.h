@@ -8,9 +8,12 @@
 #include "../../model/struct/JVIDA_HJRV_model_struct.h"
 
 void iniciar_simulacao(void);
+void menu_regras(void);
+void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho);
+void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho);
 int mostrar_mortos(int tamanho, char entrada[]);
-void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[]);
-void limpar_celula(struct Mundo *mundo);
+void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostrarvizinho);
+void limpar_mapa(struct Mundo *mundo);
 void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho);
 
 #endif

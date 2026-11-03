@@ -7,13 +7,13 @@
 /*
 ** Inicializa o mundo com celulas vazias, representadas por pontos.
 ** Parametros:
+**      mundo - o ponteiro para a estrutura do mundo a ser inicializado
 **      tamanho - dimensao da matriz quadrada a ser preenchida
 */
 void criar_mundo(struct Mundo *mundo, int tamanho)
     {
         int i, j;
         mundo->tamanho = tamanho;
-        mundo->velocidade = 0;
         //Percorre cada linha (i) e cada coluna (j) da matriz, preenchendo com '.' 
         for(i = 0; i < tamanho; i++)
             {
@@ -25,11 +25,14 @@ void criar_mundo(struct Mundo *mundo, int tamanho)
     }
 
 /*
-** Verifica se uma celula tem vizinhos vivos.
+** Verifica se a celula informada possui pelo menos um vizinho vivo,
+** sem incluir a propria celula e respeitando os limites do mundo.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
-**      linha - a linha da celula a ser verificada
-**      coluna - a coluna da celula a ser verificada
+**      mundo - ponteiro para a estrutura do mundo consultado
+**      linha - indice da linha da celula, de 0 a tamanho - 1
+**      coluna - indice da coluna da celula, de 0 a tamanho - 1
+** Retorno:
+**      1 se existir pelo menos um vizinho vivo; 0 caso contrario
 */
 int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
     {
@@ -53,13 +56,13 @@ int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
     }
 
 /*
-** Conta as celulas vivas e, quando solicitado, as celulas mortas com vizinhos vivos.
-** Atualiza os campos qtdvivos e qtdmortos da estrutura do mundo.
+** Conta as celulas vivas e as celulas vizinhas-mortas do mundo.
+** Atualiza os campos qtdvivos e qtdmortos da estrutura.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
-**      mostrarvizinho - indica se as celulas mortas com vizinhos vivos devem ser contadas (1 para contar)
+**      mundo - ponteiro para a estrutura cujo mapa sera percorrido
+**              e cujos contadores serao atualizados
 */
-void contar_celulas(struct Mundo *mundo, int mostrarvizinho)
+void contar_celulas(struct Mundo *mundo)
     {
         mundo->qtdvivos = 0;
         mundo->qtdmortos = 0;
@@ -72,7 +75,7 @@ void contar_celulas(struct Mundo *mundo, int mostrarvizinho)
                 {
                     mundo->qtdvivos++;
                 }
-                else if (mundo->celulas[i][j] == '.' && verificar_vizinho(mundo, i, j) == 1 && mostrarvizinho == 1) 
+                else if (mundo->celulas[i][j] == '.' && verificar_vizinho(mundo, i, j) == 1) 
                 {
                     mundo->qtdmortos++;
                 }
@@ -81,11 +84,14 @@ void contar_celulas(struct Mundo *mundo, int mostrarvizinho)
     }
 
 /*
-** Conta os vizinhos vivos de uma celula, sem incluir a propria celula.
+** Conta os vizinhos vivos da celula informada, sem incluir a propria
+** celula e sem considerar posicoes fora dos limites do mundo.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
-**      linha - a linha da celula a ser verificada
-**      coluna - a coluna da celula a ser verificada
+**      mundo - ponteiro para a estrutura do mundo consultado
+**      linha - indice da linha da celula, de 0 a tamanho - 1
+**      coluna - indice da coluna da celula, de 0 a tamanho - 1
+** Retorno:
+**      quantidade de vizinhos vivos, entre 0 e 8
 */
 int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
     {
@@ -118,71 +124,29 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
 */
 void calcular_geracao(struct Mundo *mundo, struct Mundo *mundo_auxiliar)
     {
-        // Para velocidade 0 a evolução sera passo-a-passo.
-        if(mundo->velocidade == 0)
-        {
-            for(int i = 0; i < mundo -> tamanho; i++)
-                {
-                    for(int j = 0; j < mundo -> tamanho; j++)
-                        {
-                            // Obtem a quantidade exata de vizinhos vivos da celula atual
-                            int qtd = contar_vizinhos(mundo, i, j);
-                            // Celula viva com 2 ou 3 vizinhos continua viva
-                            if(mundo -> celulas[i][j] == 'O' && (qtd == 2 || qtd == 3))
-                                {
+        for(int i = 0; i < mundo -> tamanho; i++)
+            {
+                for(int j = 0; j < mundo -> tamanho; j++)
+                    {
+                        // Obtem a quantidade exata de vizinhos vivos da celula atual
+                        int qtd = contar_vizinhos(mundo, i, j);
+                        // Celula viva com 2 ou 3 vizinhos continua viva
+                        if(mundo -> celulas[i][j] == 'O' && (qtd == 2 || qtd == 3))
+                            {
+                                mundo_auxiliar -> celulas[i][j] = 'O';
+                            }
+                        // Celula morta com exatamente 3 vizinhos nasce
+                        else if (mundo -> celulas[i][j] == '.' && qtd == 3)
+                            {
                                     mundo_auxiliar -> celulas[i][j] = 'O';
-                                }
-                            // Celula morta com exatamente 3 vizinhos nasce
-                            else if (mundo -> celulas[i][j] == '.' && qtd == 3)
-                                {
-                                        mundo_auxiliar -> celulas[i][j] = 'O';
-                                }
-                            // Morte por solidao (0 ou 1) ou superpopulacao (4 ou mais)   
-                            else
-                                {
-                                    mundo_auxiliar -> celulas[i][j] = '.';
-                                }
+                            }
+                        // Morte por solidao (0 ou 1) ou superpopulacao (4 ou mais)   
+                        else
+                            {
+                                mundo_auxiliar -> celulas[i][j] = '.';
+                            }
                         
 
-                        }
-                }
-        }
-        else
-        {
-            // Loop da velocidade, simula varias gerações antes de mostrar na tela.
-            for(int v = 0; v < mundo->velocidade; v++)
-            {
-                for(int i = 0; i < mundo -> tamanho; i++)
-                    {
-                        for(int j = 0; j < mundo -> tamanho; j++)
-                            {
-                                // Obtem a quantidade exata de vizinhos vivos da celula atual
-                                int qtd = contar_vizinhos(mundo, i, j);
-                                // Celula viva com 2 ou 3 vizinhos continua viva
-                                if(mundo -> celulas[i][j] == 'O' && (qtd == 2 || qtd == 3))
-                                    {
-                                        mundo_auxiliar -> celulas[i][j] = 'O';
-                                    }
-                                // Celula morta com exatamente 3 vizinhos nasce
-                                else if (mundo -> celulas[i][j] == '.' && qtd == 3)
-                                    {
-                                            mundo_auxiliar -> celulas[i][j] = 'O';
-                                    }
-                                // Morte por solidao (0 ou 1) ou superpopulacao (4 ou mais)   
-                                else
-                                    {
-                                        mundo_auxiliar -> celulas[i][j] = '.';
-                                    }
-                            }
                     }
-                //copia o conteúdo de mundo_auxiliar para mundo logo após o término dos loop i e j:
-                for (int i = 0; i < mundo->tamanho; i++)
-                    {
-                        for (int j = 0; j < mundo->tamanho; j++)
-                            {
-                                mundo->celulas[i][j] = mundo_auxiliar->celulas[i][j];
-                            }
-                    }
-            }        
-        }
+            }
     }

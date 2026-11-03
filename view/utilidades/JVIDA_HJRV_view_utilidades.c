@@ -12,6 +12,9 @@
 ** Parametros:
 **      entrada - vetor que recebe o texto
 **      tamanho - capacidade do vetor
+** Retorno:
+**      1 se a linha completa foi armazenada
+**      0 em caso de falha de leitura
 */
 int obter_input(char entrada[], int tamanho)
 {
