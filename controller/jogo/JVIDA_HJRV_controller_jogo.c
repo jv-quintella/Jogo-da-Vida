@@ -325,9 +325,11 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
             }
         }
 
+        limparTela();
+
         for (k = 0; k < passo; k++)
         {
-            //Calcula toda a proxima geracao no mundo auxiliar, preservando o mundo atual.
+            //Calcula toda a proxima geracao no mundo auxiliar, preservando o mundo atua
             calcular_geracao(mundo, &mundo_auxiliar);
             //Copia a geracao calculada para o mundo atual somente apos a varredura completa.
             for (i = 0; i < mundo->tamanho; i++)
@@ -337,15 +339,13 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
                     mundo->celulas[i][j] = mundo_auxiliar.celulas[i][j];
                 }
             }
+
+            atual++;
+            mundo->geracaoAtual = atual;
+
+            contar_celulas(mundo);
+            imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
         }
-
-        //Avanca o contador pela quantidade real de geracoes calculadas.
-        atual += passo;
-        mundo->geracaoAtual = atual;
-
-        limparTela();
-        contar_celulas(mundo);
-        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
 
         if (atual >= total)
         {
