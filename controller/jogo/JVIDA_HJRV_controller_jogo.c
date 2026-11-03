@@ -286,13 +286,17 @@ void limpar_mapa(struct Mundo *mundo)
     }
     
 /*
-** Evolui o mundo, usando uma matriz auxiliar, e exibe o resultado a cada tela.
-** Com velocidade 0 avanca uma geracao por tela (passo a passo); com velocidade N
-** maior que 0 avanca N geracoes por tela, sem ultrapassar a quantidade total.
-** Apos cada tela, pergunta ao usuario se deseja continuar.
+** Calcula as geracoes sucessivas usando uma matriz auxiliar,
+** atualizando os contadores e exibindo cada geracao calculada.
+** Com velocidade 0, avanca uma geracao por confirmacao.
+** Com velocidade positiva, avanca um grupo de geracoes por confirmacao,
+** sem ultrapassar a quantidade total configurada.
+** Solicita confirmacao para continuar enquanto restarem geracoes.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo atual (lido e atualizado)
-**      mostrarvizinho - 1 para exibir as vizinhas-mortas ('+'), 0 caso contrario
+**      mundo - ponteiro para a estrutura do mundo, cuja matriz
+**              e cujos contadores serao atualizados
+**      mostrarvizinho - 1 para exibir as vizinhas-mortas como '+';
+**                       0 para representa-las como pontos
 */
 void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 {

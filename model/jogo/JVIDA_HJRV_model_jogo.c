@@ -84,11 +84,14 @@ void contar_celulas(struct Mundo *mundo)
     }
 
 /*
-** Conta os vizinhos vivos de uma celula, sem incluir a propria celula.
+** Conta os vizinhos vivos da celula informada, sem incluir a propria
+** celula e sem considerar posicoes fora dos limites do mundo.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
-**      linha - a linha da celula a ser verificada
-**      coluna - a coluna da celula a ser verificada
+**      mundo - ponteiro para a estrutura do mundo consultado
+**      linha - indice da linha da celula, de 0 a tamanho - 1
+**      coluna - indice da coluna da celula, de 0 a tamanho - 1
+** Retorno:
+**      quantidade de vizinhos vivos, entre 0 e 8
 */
 int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
     {

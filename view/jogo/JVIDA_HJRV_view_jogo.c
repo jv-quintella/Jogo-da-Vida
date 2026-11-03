@@ -170,13 +170,13 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
 }
 
 /*
-** Solicita, le e valida a velocidade de sucessao das geracoes.
-** A velocidade indica quantas geracoes sao puladas a cada tela exibida;
-** o valor 0 indica simulacao passo a passo (uma geracao por vez).
-** Repete a leitura enquanto a entrada for invalida ou o valor for menor que 0.
+** Solicita, le e valida a velocidade da simulacao.
+** Um valor positivo define quantas geracoes serao calculadas e exibidas
+** antes da proxima confirmacao; 0 indica uma geracao por confirmacao.
+** Repete a leitura enquanto a entrada for invalida ou negativa.
 ** Parametros:
 **      tamanho - capacidade do vetor de entrada
-**      entrada - vetor utilizado para armazenar a entrada do usuario
+**      entrada - vetor utilizado para armazenar o texto digitado
 ** Retorno:
 **      velocidade informada pelo usuario, maior ou igual a 0
 */
