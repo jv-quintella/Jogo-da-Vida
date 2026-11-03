@@ -20,6 +20,8 @@
     {
         struct Mundo mundo;
         int tamanho;
+        int geracoes;
+        char entrada[10];
         int mostrarvizinho = 0;
         int simulacao_ativa = 0;
         int menu1;
@@ -32,10 +34,11 @@
             {
                 case 1:
                     tamanho = obter_tamanho();
+                    geracoes = obter_qtdgeracoes(tamanho, entrada);
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
                     criar_mundo(&mundo, tamanho);
                     mundo.geracaoAtual = 0;
-                    mundo.qtdgeracoes = 10;
+                    mundo.qtdgeracoes = geracoes;
                     mundo.velocidade = 0;
                     mostrarvizinho = 0;
                     simulacao_ativa = 1;
