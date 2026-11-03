@@ -56,13 +56,11 @@ int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
     }
 
 /*
-** Conta os vizinhos vivos da celula informada, sem considerar posicoes fora dos limites do mundo.
+** Conta as celulas vivas e as celulas vizinhas-mortas do mundo.
+** Atualiza os campos qtdvivos e qtdmortos da estrutura.
 ** Parametros:
-**      mundo - ponteiro para a estrutura do mundo consultado
-**      linha - indice da linha da celula, de 0 a tamanho - 1
-**      coluna - indice da coluna da celula, de 0 a tamanho - 1
-** Retorno:
-**      quantidade de vizinhos vivos, entre 0 e 8
+**      mundo - ponteiro para a estrutura cujo mapa sera percorrido
+**              e cujos contadores serao atualizados
 */
 void contar_celulas(struct Mundo *mundo)
     {
