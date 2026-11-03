@@ -25,11 +25,14 @@ void criar_mundo(struct Mundo *mundo, int tamanho)
     }
 
 /*
-** Verifica se uma celula tem vizinhos vivos.
+** Verifica se a celula informada possui pelo menos um vizinho vivo,
+** sem incluir a propria celula e respeitando os limites do mundo.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
-**      linha - a linha da celula a ser verificada
-**      coluna - a coluna da celula a ser verificada
+**      mundo - ponteiro para a estrutura do mundo consultado
+**      linha - indice da linha da celula, de 0 a tamanho - 1
+**      coluna - indice da coluna da celula, de 0 a tamanho - 1
+** Retorno:
+**      1 se existir pelo menos um vizinho vivo; 0 caso contrario
 */
 int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
     {
@@ -53,10 +56,13 @@ int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
     }
 
 /*
-** Conta as celulas vivas e as celulas mortas com vizinhos vivos (vizinhas-mortas).
-** Atualiza os campos qtdvivos e qtdmortos da estrutura do mundo.
+** Conta os vizinhos vivos da celula informada, sem considerar posicoes fora dos limites do mundo.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
+**      mundo - ponteiro para a estrutura do mundo consultado
+**      linha - indice da linha da celula, de 0 a tamanho - 1
+**      coluna - indice da coluna da celula, de 0 a tamanho - 1
+** Retorno:
+**      quantidade de vizinhos vivos, entre 0 e 8
 */
 void contar_celulas(struct Mundo *mundo)
     {

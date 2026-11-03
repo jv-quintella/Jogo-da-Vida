@@ -60,6 +60,8 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
 **Funcao baseada em https://github.com/cs50/libcs50/blob/main/src/cs50.c (get_int)
 ** Parametros:
 **      (nenhum)
+** Retorno:
+**      dimensao do mundo, entre 10 e 60
 */
 int obter_tamanho()
 {
@@ -99,6 +101,8 @@ int obter_tamanho()
 **      limite - o valor maximo aceito (tamanho do mundo)
 **      tamanho - a capacidade do vetor de entrada
 **      entrada - o vetor utilizado para armazenar a entrada do usuario
+** Retorno:
+**      posicao validada, entre 1 e limite
 */
 int obter_posicao(int limite, int tamanho, char entrada[])
 {
