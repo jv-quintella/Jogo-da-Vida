@@ -8,6 +8,11 @@
 struct Mundo {
     char celulas[60][60];
     int tamanho;
+    int qtdvivos;
+    int qtdmortos;
+    int qtdgeracoes;
+    int geracaoAtual;
+    int velocidade;
 };
 
 #endif

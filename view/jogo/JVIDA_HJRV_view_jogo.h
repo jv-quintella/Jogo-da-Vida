@@ -10,4 +10,9 @@
 void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho);
 int obter_tamanho(void);
 int obter_posicao(int limite, int tamanho, char entrada[]);
+int obter_qtdgeracoes(int tamanho, char entrada[]);
+int obter_velocidade(int tamanho, char entrada[]);
+int obter_coordenada(int limite, int tamanho, char entrada[], int *linha, int *coluna);
+void mostrar_configuracoes(struct Mundo *mundo, int mostrarvizinho);
+void mostrar_regra(int topico);
 #endif
