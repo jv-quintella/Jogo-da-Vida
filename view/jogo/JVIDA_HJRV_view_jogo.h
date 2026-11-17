@@ -15,4 +15,5 @@ int obter_velocidade(int tamanho, char entrada[]);
 int obter_coordenada(int limite, int tamanho, char entrada[], int *linha, int *coluna);
 void mostrar_configuracoes(struct Mundo *mundo, int mostrarvizinho);
 void mostrar_regra(int topico);
+int obter_intervalo(int tamanho, char entrada[]);
 #endif

@@ -25,6 +25,8 @@
         int mostrarvizinho = 0;
         int simulacao_ativa = 0;
         int menu1;
+        mundo.velocidade = 0;
+        mundo.intervalo = 0;
 
         do{
             limparTela();
@@ -40,6 +42,7 @@
                     mundo.geracaoAtual = 0;
                     mundo.qtdgeracoes = geracoes;
                     mundo.velocidade = 0;
+                    mundo.intervalo = 0;
                     mostrarvizinho = 0;
                     simulacao_ativa = 1;
                     menu_simulacao(&mundo, &mostrarvizinho);
@@ -161,6 +164,10 @@ void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         else if(menu3 == 3)
         {
             *mostrarvizinho = mostrar_mortos(sizeof entrada, entrada);
+        }
+        else if(menu3 == 4)
+        {
+            mundo->intervalo = obter_intervalo(sizeof entrada, entrada);
         }
     }while(menu3 != 0);
 }
@@ -288,10 +295,10 @@ void limpar_mapa(struct Mundo *mundo)
 /*
 ** Calcula as geracoes sucessivas usando uma matriz auxiliar,
 ** atualizando os contadores e exibindo cada geracao calculada.
-** Com velocidade 0, avanca uma geracao por confirmacao.
-** Com velocidade positiva, avanca um grupo de geracoes por confirmacao,
+** Com velocidade 0, pede confirmacao a cada passo; com velocidade positiva,
+** espera esse numero de segundos e segue automaticamente.
+** O intervalo define quantas geracoes sao exibidas a cada passo,
 ** sem ultrapassar a quantidade total configurada.
-** Solicita confirmacao para continuar enquanto restarem geracoes.
 ** Parametros:
 **      mundo - ponteiro para a estrutura do mundo, cuja matriz
 **              e cujos contadores serao atualizados
@@ -320,9 +327,9 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
     do {
         passo = 1;
-        if (mundo->velocidade > 0)
+        if (mundo->intervalo > 0)
         {
-            passo = mundo->velocidade;
+            passo = mundo->intervalo;
             if (passo > total - atual)
             {
                 passo = total - atual;
@@ -333,9 +340,7 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
         for (k = 0; k < passo; k++)
         {
-            //Calcula toda a proxima geracao no mundo auxiliar, preservando o mundo atua
             calcular_geracao(mundo, &mundo_auxiliar);
-            //Copia a geracao calculada para o mundo atual somente apos a varredura completa.
             for (i = 0; i < mundo->tamanho; i++)
             {
                 for (j = 0; j < mundo->tamanho; j++)
@@ -358,30 +363,47 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
             break;
         }
 
-        valido = 0;
-        do {
-            mostrarMensagem("\nMostrar a proxima geracao? [s/n]: ");
+        if (mundo->qtdvivos == 0)
+        {
+            mostrarMensagem("\n0 CELULAS VIVAS - FIM DA SIMULACAO\n");
+            pause();
+            break;
+        }
 
-            if (obter_input(entrada, sizeof entrada) == 0)
-            {
-                continuar = 0;
-                valido = 1;
-            }
-            else if (entrada[0] == 's' || entrada[0] == 'S')
-            {
-                continuar = 1;
-                valido = 1;
-            }
-            else if (entrada[0] == 'n' || entrada[0] == 'N')
-            {
-                continuar = 0;
-                valido = 1;
-            }
-            else
-            {
-                mostrarMensagem("Opcao invalida.\n");
-            }
-        } while (valido == 0);
+        if (mundo->velocidade > 0)
+        {
+            //Automatico: espera N segundos e segue direto, sem perguntar
+            tempo(mundo->velocidade);
+            continuar = 1;
+        }
+        else
+        {
+            //Manual: pergunta somente neste caminho
+            valido = 0;
+            do {
+                mostrarMensagem("\nMostrar a proxima geracao? [s/n]: ");
+
+                if (obter_input(entrada, sizeof entrada) == 0)
+                {
+                    continuar = 0;
+                    valido = 1;
+                }
+                else if (entrada[0] == 's' || entrada[0] == 'S')
+                {
+                    continuar = 1;
+                    valido = 1;
+                }
+                else if (entrada[0] == 'n' || entrada[0] == 'N')
+                {
+                    continuar = 0;
+                    valido = 1;
+                }
+                else
+                {
+                    mostrarMensagem("Opcao invalida.\n");
+                }
+            } while (valido == 0);
+        }
 
     } while (continuar == 1);
 }

@@ -171,14 +171,13 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
 
 /*
 ** Solicita, le e valida a velocidade da simulacao.
-** Um valor positivo define quantas geracoes serao calculadas e exibidas
-** antes da proxima confirmacao; 0 indica uma geracao por confirmacao.
-** Repete a leitura enquanto a entrada for invalida ou negativa.
+** Um valor de 1 a 10 define quantos segundos esperar entre as geracoes
+** (modo automatico); 0 indica confirmacao manual a cada geracao.
 ** Parametros:
 **      tamanho - capacidade do vetor de entrada
 **      entrada - vetor utilizado para armazenar o texto digitado
 ** Retorno:
-**      velocidade informada pelo usuario, maior ou igual a 0
+**      velocidade informada pelo usuario, entre 0 e 10
 */
 int obter_velocidade(int tamanho, char entrada[])
 {
@@ -186,7 +185,7 @@ int obter_velocidade(int tamanho, char entrada[])
     int valido;
     char sobra;
 
-    printf("Velocidade de simulacao (0 para passo a passo): ");
+    printf("Velocidade: segundos entre geracoes (1 a 10, 0 para manual): ");
 
     do {
         //Indica um erro se houver falha na leitura do teclado.
@@ -197,7 +196,7 @@ int obter_velocidade(int tamanho, char entrada[])
         /* Converte a entrada para numero e rejeita se:
         O retorno do sscanf for diferente de 1
         O valor lido for menor que 0 */
-        else if (sscanf(entrada, "%d %c", &velocidade, &sobra) != 1 || velocidade < 0) {
+        else if (sscanf(entrada, "%d %c", &velocidade, &sobra) != 1 || velocidade < 0 || velocidade > 10) {
             printf("Opcao invalida.\nTente novamente: ");
             valido = 0;
         }
@@ -258,11 +257,11 @@ void mostrar_configuracoes(struct Mundo *mundo, int mostrarvizinho)
     printf("Quantidade de geracoes: %d\n", mundo->qtdgeracoes);
     if (mundo->velocidade == 0)
     {
-        printf("Velocidade: 0 (passo a passo)\n");
+        printf("Velocidade: 0 (manual, confirmacao a cada geracao)\n");
     }
     else
     {
-        printf("Velocidade: %d (geracoes por tela)\n", mundo->velocidade);
+        printf("Velocidade: %d segundo(s) entre geracoes\n", mundo->velocidade);
     }
     if (mostrarvizinho == 1)
     {
@@ -271,6 +270,14 @@ void mostrar_configuracoes(struct Mundo *mundo, int mostrarvizinho)
     else
     {
         printf("Vizinhas-mortas: nao\n");
+    }
+    if (mundo->intervalo == 0)
+    {
+        printf("Intervalo: 0 (uma geracao por vez)\n");
+    }
+    else
+    {
+        printf("Intervalo: %d (geracoes por tela)\n", mundo->intervalo);
     }
 }
 
@@ -337,4 +344,39 @@ void mostrar_regra(int topico)
             printf("O tamanho do mundo vai de 10 a 60.\n");
             break;
     }
+}
+
+/*
+** Solicita, le e valida o intervalo da simulacao.
+** Um valor positivo define quantas geracoes serao calculadas e exibidas
+** antes da proxima espera ou confirmacao; 0 indica uma geracao por vez.
+** Parametros:
+**      tamanho - capacidade do vetor de entrada
+**      entrada - vetor utilizado para armazenar o texto digitado
+** Retorno:
+**      intervalo informado pelo usuario, maior ou igual a 0
+*/
+int obter_intervalo(int tamanho, char entrada[])
+{
+    int intervalo;
+    int valido;
+    char sobra;
+
+    printf("Intervalo: geracoes por tela (0 para uma por vez): ");
+
+    do {
+        if (obter_input(entrada, tamanho) == 0) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        else if (sscanf(entrada, "%d %c", &intervalo, &sobra) != 1 || intervalo < 0) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        else {
+            valido = 1;
+        }
+    } while (valido == 0);
+
+    return intervalo;
 }

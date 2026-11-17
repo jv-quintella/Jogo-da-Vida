@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "JVIDA_HJRV_view_utilidades.h"
 
 /*
@@ -76,4 +77,20 @@ void limparTela() {
 */
 void mostrarMensagem(const char* msg) {
     printf("%s", msg);
+}
+
+/*
+** Pausa a execucao do programa pelo numero de segundos informado,
+** usando espera ocupada (consulta o relogio ate o tempo passar).
+** Parametros:
+**      segundos - tempo de espera, em segundos
+*/
+void tempo(int segundos) {
+    fflush(stdout); //Garante que a tela foi exibida antes da espera
+
+    time_t inicio = time(NULL);
+
+    //Fica no loop ate o tempo decorrido atingir o valor informado
+    while (difftime(time(NULL), inicio) < segundos) {
+    }
 }

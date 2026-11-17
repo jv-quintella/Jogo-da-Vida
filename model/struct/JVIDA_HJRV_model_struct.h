@@ -13,6 +13,7 @@ struct Mundo {
     int qtdgeracoes;
     int geracaoAtual;
     int velocidade;
+    int intervalo;
 };
 
 #endif

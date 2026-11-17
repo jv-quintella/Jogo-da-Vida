@@ -48,10 +48,11 @@ int mostrar_Menu(int opcao) {
             case 3:
                 printf("\n| CONFIGURACOES\n");
                 printf("\n[1] - Quantidade de geracoes\n");
-                printf("[2] - Velocidade (geracoes por tela)\n");
+                printf("[2] - Velocidade (segundos entre geracoes)\n");
                 printf("[3] - Vizinhas-mortas (sim/nao)\n");
+                printf("[4] - Intervalo (geracoes por tela)\n");
                 printf("[0] - Voltar\n");
-                maximo = 3;
+                maximo = 4;
                 break;
             case 4:
                 printf("\n| REGRAS DO JOGO DA VIDA\n");

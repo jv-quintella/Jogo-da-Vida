@@ -6,3 +6,4 @@ int obter_input(char entrada[], int tamanho);
 void pause();
 void limparTela();
 void mostrarMensagem(const char* msg);
+void tempo(int segundos);
