@@ -16,4 +16,10 @@ struct Mundo {
     int intervalo;
 };
 
+struct Celula {
+    int linha;
+    int coluna;
+    struct Celula *proximo;
+};
+
 #endif
