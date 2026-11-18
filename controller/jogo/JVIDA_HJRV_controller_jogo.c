@@ -3,6 +3,7 @@
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
 #include <string.h>
+#include <stdlib.h>
 #include "JVIDA_HJRV_controller_jogo.h"
 #include "../../model/jogo/JVIDA_HJRV_model_jogo.h"
 #include "../../view/jogo/JVIDA_HJRV_view_jogo.h"
@@ -315,6 +316,14 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
     int atual = mundo->geracaoAtual;
     int passo;
     int i, j, k;
+    struct celula *inicio = NULL;
+
+    celula *novo = (celula*)malloc(sizeof(celula));
+    if (novo == NULL)
+    {
+        return;
+    }
+
 
     if (atual >= total)
     {
@@ -322,7 +331,7 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
         pause();
         return;
     }
-
+    novo -> proximo = NULL;
     criar_mundo(&mundo_auxiliar, mundo->tamanho);
 
     do {
@@ -345,7 +354,8 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
             {
                 for (j = 0; j < mundo->tamanho; j++)
                 {
-                    mundo->celulas[i][j] = mundo_auxiliar.celulas[i][j];
+                    novo -> linha = i;
+                    novo -> coluna = j;
                 }
             }
 

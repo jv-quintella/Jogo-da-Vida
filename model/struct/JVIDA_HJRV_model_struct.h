@@ -16,10 +16,10 @@ struct Mundo {
     int intervalo;
 };
 
-struct Celula {
+typedef struct _Celula {
     int linha;
     int coluna;
     struct Celula *proximo;
-};
+}celula;
 
 #endif
