@@ -4,7 +4,7 @@
 
 #ifndef JVIDA_HJRV_MODEL_STRUCT_H
 #define JVIDA_HJRV_MODEL_STRUCT_H
-
+//TODO: comentar
 struct Mundo {
     char celulas[60][60];
     int tamanho;
@@ -15,11 +15,11 @@ struct Mundo {
     int velocidade;
     int intervalo;
 };
-
-typedef struct _Celula {
+//struct para lista ligada
+typedef struct Celula {
     int linha;
     int coluna;
     struct Celula *proximo;
-}celula;
+} celula;
 
 #endif

@@ -3,6 +3,17 @@
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
 #include "JVIDA_HJRV_model_jogo.h"
+#include <stdlib.h>
+
+//ponteiros/variaveis globais
+//TODO:comentar
+celula *pvivo = NULL;
+celula *pmorto = NULL;
+celula *pvivoprox = NULL;
+
+int totvivo = 0;
+int totmorto = 0;
+int totvivoprox = 0;
 
 /*
 ** Inicializa o mundo com celulas vazias, representadas por pontos.
@@ -150,3 +161,31 @@ void calcular_geracao(struct Mundo *mundo, struct Mundo *mundo_auxiliar)
                     }
             }
     }
+//TODO: comentar
+void carregarVivos(int linha, int coluna)
+{
+    celula *aux;
+    aux = (celula*)malloc(sizeof (celula));
+    
+    if (aux == NULL)
+    {
+        return;
+    }
+
+    aux -> linha = linha;
+    aux -> coluna = coluna;
+
+    if (totvivo == 0)
+    {
+        pvivo = aux;
+        aux -> proximo = NULL;
+    }
+
+    else
+    {
+        aux -> proximo = pvivo;
+        pvivo = aux;
+    }
+
+    totvivo++;
+}
