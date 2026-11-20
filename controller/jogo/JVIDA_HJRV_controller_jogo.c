@@ -39,6 +39,7 @@
                     tamanho = obter_tamanho();
                     geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
+                    liberarVivos(void);
                     criar_mundo(&mundo, tamanho);
                     mundo.geracaoAtual = 0;
                     mundo.qtdgeracoes = geracoes;
@@ -63,6 +64,7 @@
                     menu_regras();
                     break;
                 case 0:
+                    liberarVivos(void);
                     mostrarMensagem("Saindo do programa...\n");
                     return;
             }
@@ -289,6 +291,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
 */
 void limpar_mapa(struct Mundo *mundo)
     {
+        liberarVivos(void);
         memset(mundo->celulas, '.', sizeof(mundo->celulas));
         mundo->geracaoAtual = 0;
     }
@@ -316,7 +319,7 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
     int atual = mundo->geracaoAtual;
     int passo;
     int i, j, k;
-    struct celula *inicio = NULL;
+    celula *inicio = NULL;
 
     celula *novo = (celula*)malloc(sizeof(celula));
     if (novo == NULL)

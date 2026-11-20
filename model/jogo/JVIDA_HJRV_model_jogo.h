@@ -14,4 +14,5 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna);
 void calcular_geracao(struct Mundo *mundo, struct Mundo *mundo_auxiliar);
 void carregarVivo(int linha, int coluna);
 celula *buscarVivo(int linha, int coluna);
+void liberarVivos(void);
 #endif

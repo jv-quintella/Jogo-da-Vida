@@ -209,3 +209,19 @@ celula *buscarVivo(int linha, int coluna)
         
     }
 }
+
+//TODO: comentar
+void liberarVivos(void)
+{
+    celula *aux;
+    while(pvivo != NULL)
+    {
+        aux = pvivo;
+        pvivo = aux -> proximo;
+        free(aux);
+        totvivo--;
+    }
+
+    pvivo = NULL;
+    totvivo = 0;
+}
