@@ -225,6 +225,7 @@ int mostrar_mortos(int tamanho, char entrada[])
 **      entrada - o vetor utilizado para armazenar as entradas do usuario
 **      mostrarvizinho - 1 para exibir as vizinhas-mortas ('+') no mapa; 0 caso contrario
 */
+//TODO: comentar (mudei o final da funcao, precisa de uns comentarios in line)
 void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostrarvizinho)
 {
     int temp_alt;
@@ -260,8 +261,18 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                     }
                     else if (entrada[0] == 's' || entrada[0] == 'S') 
                     {
-                        mundo->celulas[temp_alt][temp_lar] = '.';
-                        mundo->geracaoAtual = 0;
+                        if(removerVivo(temp_alt, temp_lar) == 1)
+                        {
+                            mundo->celulas[temp_alt][temp_lar] = '.';
+                            mundo->geracaoAtual = 0;
+                            valido = 1;
+                        }
+
+                        else
+                        {
+                            mostrarMensagem("Celula nao encontrada na lista");
+                            pause();
+                        }
                         valido = 1;
                     }
                     else if (entrada[0] == 'n' || entrada[0] == 'N') 
@@ -271,14 +282,31 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                     else 
                     {
                         mostrarMensagem("Opcao invalida.\n");
+                        pause();
                         valido = 0;
                     }
                 } while (valido == 0);
             }
+
             else 
             {
-                mundo->celulas[temp_alt][temp_lar] = 'O';
-                mundo->geracaoAtual = 0;
+                if (buscarVivo(temp_alt, temp_lar) == NULL)
+                {
+                    carregarVivos(temp_alt, temp_lar);
+                }
+
+                if (buscarVivo(temp_alt, temp_lar) != NULL)
+                {
+                    mundo->celulas[temp_alt][temp_lar] = 'O';
+                    mundo->geracaoAtual = 0;
+                }
+                
+                else
+                {
+                    mundo->celulas[temp_alt][temp_lar] = '.';
+                    mostrarMensagem("Falha na alocacao de memoria");
+                    pause();
+                }
             }
         }
     } while (continuar == 1);
@@ -419,36 +447,4 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
         }
 
     } while (continuar == 1);
-}
-
-//TODO: comentar
-int removerVivo(int linha, int coluna)
-{
-    celula *atual = pvivo;
-    celula *anterior = NULL;
-
-    while(atual != NULL && (atual -> linha != linha || atual -> coluna != coluna))
-    {
-        anterior = atual;
-        atual = atual -> proximo;
-    }
-
-    if (atual == NULL)
-    {
-        return 0;
-    } 
-    else
-    {
-        if(anterior == NULL)
-        {
-            *pvivo = atual -> proximo;
-        }
-        else
-        {
-            anterior -> proximo = atual -> proximo;
-        }
-    }
-    totvivo --;
-    free(atual);
-    return 1;
 }
