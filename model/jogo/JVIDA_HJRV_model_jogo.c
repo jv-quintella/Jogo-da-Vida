@@ -310,3 +310,50 @@ void carregarMortos(int linha, int coluna)
     pmorto = aux;
     totmorto ++;
 }
+
+//TODO: comentar
+int atualizarMortos(int tamanho)
+{
+    celula *aux = pvivo;
+    int linha, coluna;
+    liberarMortos();
+    while (aux != NULL)
+    {
+        for(linha = aux -> linha - 1; linha <= aux -> linha + 1; linha++)
+        {
+            for(coluna = aux -> coluna -1; coluna <= aux -> coluna + 1; coluna++)
+            {
+                if (linha == aux -> linha && coluna == aux -> coluna)
+                {
+                    continue;
+                }
+
+                if(linha < 0 || linha >= tamanho || coluna < 0 || coluna >= tamanho)
+                {
+                    continue;
+                }
+
+                if(buscarVivo(linha, coluna) != NULL)
+                {
+                    continue;
+                }
+
+                if(buscarMortos(linha, coluna) != NULL)
+                {
+                    continue;
+                }
+
+                carregarMortos(linha, coluna);
+
+                if(buscarMortos(linha, coluna) == NULL)
+                {
+                    liberarMortos();
+                    return 0;
+                }
+            }
+        }
+        aux = aux -> proximo;
+    }
+
+    return 1;
+}
