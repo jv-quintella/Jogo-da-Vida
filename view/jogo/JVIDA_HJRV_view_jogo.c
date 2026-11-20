@@ -8,6 +8,7 @@
 #include "JVIDA_HJRV_view_jogo.h"
 #include "../utilidades/JVIDA_HJRV_view_utilidades.h"
 #include "../../model/jogo/JVIDA_HJRV_model_jogo.h"
+#include "../../model/struct/JVIDA_HJRV_model_struct.h"
 
 /*
 ** Exibe o mundo atual, as coordenadas e os contadores da simulacao.
@@ -379,4 +380,24 @@ int obter_intervalo(int tamanho, char entrada[])
     } while (valido == 0);
 
     return intervalo;
+}
+
+//TODO: comentar
+void imprimir_lista_vivos(const celula *lista)
+{
+    const celula *aux = lista;
+    
+    if (aux == NULL)
+    {
+        printf("Lista vazia\n");
+        return;
+    }
+
+    while(aux != 0)
+    {
+        printf("%d", aux -> linha + 1, aux -> coluna + 1);
+        aux = aux -> proximo;
+    }
+
+    printf("\n");
 }
