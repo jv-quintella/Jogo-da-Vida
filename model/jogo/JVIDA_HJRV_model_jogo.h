@@ -15,4 +15,6 @@ void calcular_geracao(struct Mundo *mundo, struct Mundo *mundo_auxiliar);
 void carregarVivo(int linha, int coluna);
 celula *buscarVivo(int linha, int coluna);
 void liberarVivos(void);
+int removerVivo(int linha, int coluna);
+
 #endif

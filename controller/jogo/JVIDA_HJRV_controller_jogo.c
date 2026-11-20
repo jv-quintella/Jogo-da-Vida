@@ -420,3 +420,35 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
     } while (continuar == 1);
 }
+
+//TODO: comentar
+int removerVivo(int linha, int coluna)
+{
+    celula *atual = pvivo;
+    celula *anterior = NULL;
+
+    while(atual != NULL && (atual -> linha != linha || atual -> coluna != coluna))
+    {
+        anterior = atual;
+        atual = atual -> proximo;
+    }
+
+    if (atual == NULL)
+    {
+        return 0;
+    } 
+    else
+    {
+        if(anterior == NULL)
+        {
+            *pvivo = atual -> proximo;
+        }
+        else
+        {
+            anterior -> proximo = atual -> proximo;
+        }
+    }
+    totvivo --;
+    free(atual);
+    return 1;
+}
