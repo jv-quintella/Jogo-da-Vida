@@ -258,3 +258,22 @@ int removerVivo(int linha, int coluna)
     free(atual);
     return 1;
 }
+
+//TODO: comentar
+celula *buscarMortos(int linha, int coluna)
+{
+    celula *aux = pmorto;
+    while(aux != NULL)
+    {
+        if ((aux -> linha == linha) && (aux -> coluna == coluna))
+        {
+            return aux;
+        }
+        else
+        {
+            aux = aux -> proximo;
+        }
+
+    }
+    return NULL;
+}

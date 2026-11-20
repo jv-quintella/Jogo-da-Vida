@@ -16,5 +16,8 @@ void carregarVivo(int linha, int coluna);
 celula *buscarVivo(int linha, int coluna);
 void liberarVivos(void);
 int removerVivo(int linha, int coluna);
+celula *buscarMortos(int linha, int coluna);
+void liberarMortos(void);
+int atualizarMortos(int tamnanho);
 
 #endif
