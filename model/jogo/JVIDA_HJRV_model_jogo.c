@@ -166,7 +166,7 @@ void carregarVivos(int linha, int coluna)
 {
     celula *aux;
     aux = (celula*)malloc(sizeof (celula));
-    
+
     if (aux == NULL)
     {
         return;
@@ -188,4 +188,24 @@ void carregarVivos(int linha, int coluna)
     }
 
     totvivo++;
+}
+
+//TODO: comentar
+celula *buscarVivo(int linha, int coluna)
+{
+    celula *aux;
+    aux = pvivo;
+    while (aux != NULL)
+    {
+        if((aux -> linha == linha) && (aux -> coluna == coluna))
+        {
+            return aux;
+        }
+        
+        else
+        {
+            aux = aux -> proximo;
+        }
+        
+    }
 }
