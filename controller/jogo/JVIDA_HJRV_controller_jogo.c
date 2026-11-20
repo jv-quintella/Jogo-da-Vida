@@ -225,7 +225,7 @@ int mostrar_mortos(int tamanho, char entrada[])
 **      entrada - o vetor utilizado para armazenar as entradas do usuario
 **      mostrarvizinho - 1 para exibir as vizinhas-mortas ('+') no mapa; 0 caso contrario
 */
-//TODO: comentar (mudei o final da funcao, precisa de uns comentarios in line)
+//TODO: comentar (mudei algumas coisas na funcao, precisa de uns comentarios in line)
 void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostrarvizinho)
 {
     int temp_alt;

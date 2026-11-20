@@ -277,3 +277,17 @@ celula *buscarMortos(int linha, int coluna)
     }
     return NULL;
 }
+
+//TODO; comentar
+void liberarMortos(void)
+{
+    celula *aux;
+    while (pmorto != NULL)
+    {
+        aux = pmorto;
+        pmorto = aux -> proximo;
+        free(aux);
+        totmorto --;
+    }
+    totmorto = 0;
+}
