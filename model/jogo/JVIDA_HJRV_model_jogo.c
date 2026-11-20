@@ -291,3 +291,22 @@ void liberarMortos(void)
     }
     totmorto = 0;
 }
+
+
+//TODO: comentar
+void carregarMortos(int linha, int coluna)
+{
+    celula *aux;
+    aux = (celula*)malloc(sizeof(celula));
+
+    if(aux == NULL)
+    {
+        return;
+    }
+
+    aux -> linha = linha;
+    aux -> coluna = coluna;
+    aux -> proximo = pmorto;
+    pmorto = aux;
+    totmorto ++;
+}
