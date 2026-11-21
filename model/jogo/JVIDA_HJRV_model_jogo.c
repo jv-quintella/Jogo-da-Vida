@@ -133,34 +133,49 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
 **      mundo - o ponteiro para a estrutura do mundo atual (leitura)
 **      mundo_auxiliar - o ponteiro para a estrutura do mundo futuro (escrita)
 */
-void calcular_geracao(struct Mundo *mundo, struct Mundo *mundo_auxiliar)
+void calcular_geracao(struct Mundo *mundo)
     {
-        for(int i = 0; i < mundo -> tamanho; i++)
-            {
-                for(int j = 0; j < mundo -> tamanho; j++)
-                    {
-                        // Obtem a quantidade exata de vizinhos vivos da celula atual
-                        int qtd = contar_vizinhos(mundo, i, j);
-                        // Celula viva com 2 ou 3 vizinhos continua viva
-                        if(mundo -> celulas[i][j] == 'O' && (qtd == 2 || qtd == 3))
-                            {
-                                mundo_auxiliar -> celulas[i][j] = 'O';
-                            }
-                        // Celula morta com exatamente 3 vizinhos nasce
-                        else if (mundo -> celulas[i][j] == '.' && qtd == 3)
-                            {
-                                    mundo_auxiliar -> celulas[i][j] = 'O';
-                            }
-                        // Morte por solidao (0 ou 1) ou superpopulacao (4 ou mais)   
-                        else
-                            {
-                                mundo_auxiliar -> celulas[i][j] = '.';
-                            }
-                        
+        celula *aux;
+        int qtd, ant;
+        liberarVivosProx();
 
-                    }
+        aux = pvivo;
+        while (aux != NULL)
+        {
+            qtd = contar_vizinhos(mundo, aux -> linha, aux -> coluna);
+            if (qtd == 2 || qtd == 3)
+            {
+                ant = totvivoprox;
+                carregarVivosProx(aux -> linha; aux -> coluna);
+                if(totvivoprox != ant + 1)
+                {
+                    liberarVivosProx();
+                    return 0;
+                }
             }
+            aux = aux -> proximo;
+        }
+
+        aux = pmorto;
+        while(aux != NULL)
+        {
+            qtd = contar_vizinhos(mundo, aux -> linha, aux -> coluna);
+            if (qtd == 3)
+            {
+                ant = totvivoprox;
+                carregarVivosProx(aux -> linha, aux -> coluna);
+                if (totvivoprox != ant + 1)
+                {
+                    liberarVivosProx();
+                    return 0;
+                }
+            }
+            aux = aux -> proximo;
+        }
+
+        return 1;
     }
+
 //TODO: comentar
 void carregarVivos(int linha, int coluna)
 {
