@@ -16,7 +16,7 @@
 **      geracaoAtual - numero da geracao em exibicao; volta para 0 quando o usuario
 **                     adiciona ou remove celulas manualmente
 **      velocidade - velocidade da simulacao escolhida pelo usuario
-**      intervalo - tempo de espera entre uma geracao e outra
+**      intervalo - quantidade de geracoes por vez
 */
 struct Mundo {
     char celulas[60][60];

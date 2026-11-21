@@ -394,19 +394,31 @@ int obter_intervalo(int tamanho, char entrada[])
     return intervalo;
 }
 
-//TODO: comentar
+/*
+** Imprime no terminal as coordenadas de todas as celulas de uma lista,
+** no formato (linha, coluna), separadas por espaco, em uma unica linha.
+** As coordenadas sao exibidas a partir de 1 (indice da matriz + 1),
+** igual ao que o usuario digita em colocar_celula.
+** Se a lista estiver vazia, imprime "Lista vazia".
+** Parametros:
+**      lista - ponteiro para o inicio da lista a ser impressa (somente leitura),
+**              como pvivo ou pmorto
+*/
 void imprimir_lista(const celula *lista)
 {
     const celula *aux = lista;
     
+    // lista vazia: avisa e sai sem imprimir nada mais
     if (aux == NULL)
     {
         printf("Lista vazia\n");
         return;
     }
 
+    // percorre a lista imprimindo cada no
     while(aux != NULL)
     {
+        // soma 1 para converter do indice da matriz (base 0) para a contagem do usuario (base 1)
         printf("(%d, %d) ", aux->linha + 1, aux->coluna + 1);
         aux = aux -> proximo;
     }
