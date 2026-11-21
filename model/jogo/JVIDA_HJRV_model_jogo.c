@@ -208,6 +208,8 @@ celula *buscarVivos(int linha, int coluna)
         }
         
     }
+    
+    return NULL;
 }
 
 //TODO: comentar
