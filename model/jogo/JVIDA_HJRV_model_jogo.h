@@ -23,6 +23,7 @@ void carregarMortos(int linha, int coluna);
 celula *obterVivos(void);
 celula *obterMortos(void);
 void carregarVivosProx(int linha, int coluna);
-void carregarMortosProx(int linha, int coluna);
+void atualizarVivos(void);
+void atualizarMapa(struct Mundo *mundo);
 
 #endif

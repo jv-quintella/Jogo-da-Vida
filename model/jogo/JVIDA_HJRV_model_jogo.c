@@ -104,6 +104,7 @@ void contar_celulas(struct Mundo *mundo)
 ** Retorno:
 **      quantidade de vizinhos vivos, entre 0 e 8
 */
+//TODO: atualizar comentarios
 int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
     {
         int count = 0;
@@ -133,6 +134,7 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
 **      mundo - o ponteiro para a estrutura do mundo atual (leitura)
 **      mundo_auxiliar - o ponteiro para a estrutura do mundo futuro (escrita)
 */
+//TODO: atualizar comentarios
 void calcular_geracao(struct Mundo *mundo)
     {
         celula *aux;
@@ -146,7 +148,7 @@ void calcular_geracao(struct Mundo *mundo)
             if (qtd == 2 || qtd == 3)
             {
                 ant = totvivoprox;
-                carregarVivosProx(aux -> linha; aux -> coluna);
+                carregarVivosProx(aux -> linha, aux -> coluna);
                 if(totvivoprox != ant + 1)
                 {
                     liberarVivosProx();
@@ -415,5 +417,15 @@ void liberarVivosProx(int linha, int coluna)
         free(aux);
         totvivoprox--;
     }
+    totvivoprox = 0;
+}
+
+//TODO; comentar
+void atualizarVivos(void)
+{
+    liberarVivos();
+    pvivo = pvivoprox;
+    totvivo = totvivoprox;
+    pvivoprox = NULL;
     totvivoprox = 0;
 }
