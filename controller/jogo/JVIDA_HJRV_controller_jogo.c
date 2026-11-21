@@ -349,22 +349,13 @@ void limpar_mapa(struct Mundo *mundo)
 */
 void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 {
-    struct Mundo mundo_auxiliar;
     char entrada[10];
     int continuar = 1;
     int valido;
     int total = mundo->qtdgeracoes;
     int atual = mundo->geracaoAtual;
     int passo;
-    int i, j, k;
-    celula *inicio = NULL;
-
-    celula *novo = (celula*)malloc(sizeof(celula));
-    if (novo == NULL)
-    {
-        return;
-    }
-
+    int k;
 
     if (atual >= total)
     {
@@ -372,8 +363,13 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
         pause();
         return;
     }
-    novo -> proximo = NULL;
-    criar_mundo(&mundo_auxiliar, mundo->tamanho);
+
+    if (!atualizarMortos(mundo->tamanho))
+    {
+        mostrarMensagem("\nErro ao alocar memoria para celulas vizinhas.\n");
+        pause();
+        return;
+    }
 
     do {
         passo = 1;
@@ -390,18 +386,25 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
         for (k = 0; k < passo; k++)
         {
-            calcular_geracao(mundo, &mundo_auxiliar);
-            for (i = 0; i < mundo->tamanho; i++)
+            if (!calcular_geracao(mundo))
             {
-                for (j = 0; j < mundo->tamanho; j++)
-                {
-                    novo -> linha = i;
-                    novo -> coluna = j;
-                }
+                mostrarMensagem("\nErro ao alocar memoria para a proxima geracao.\n");
+                pause();
+                return;
             }
+
+            atualizarVivos();
+            atualizarMapa(mundo);
 
             atual++;
             mundo->geracaoAtual = atual;
+
+            if (!atualizarMortos(mundo->tamanho))
+            {
+                mostrarMensagem("\nErro ao alocar memoria para celulas vizinhas.\n");
+                pause();
+                return;
+            }
 
             contar_celulas(mundo);
             imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
