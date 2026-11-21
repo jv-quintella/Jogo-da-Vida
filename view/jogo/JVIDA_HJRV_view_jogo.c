@@ -60,7 +60,7 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
         {
             printf("Lista indisponivel\n");
         }
-        
+
         else
         {
             imprimir_lista(obterMortos());
@@ -407,7 +407,7 @@ void imprimir_lista(const celula *lista)
 
     while(aux != NULL)
     {
-        printf("%d, %d", aux -> linha + 1, aux -> coluna + 1);
+        printf("(%d, %d) ", aux->linha + 1, aux->coluna + 1);
         aux = aux -> proximo;
     }
 
