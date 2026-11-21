@@ -265,6 +265,11 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                         {
                             mundo->celulas[temp_alt][temp_lar] = '.';
                             mundo->geracaoAtual = 0;
+                            if(atualizarMortos(mundo -> tamanho) == 0)
+                            {
+                                mostrarMensagem("Falha na alocacao de memoria");
+                                pause();
+                            }
                             valido = 1;
                         }
 
@@ -299,6 +304,11 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                 {
                     mundo->celulas[temp_alt][temp_lar] = 'O';
                     mundo->geracaoAtual = 0;
+                    if(atualizarMortos(mundo -> tamanho) == 0)
+                    {
+                        mostrarMensagem("Falha na alocacao de memoria");
+                        pause();
+                    }
                 }
                 
                 else
