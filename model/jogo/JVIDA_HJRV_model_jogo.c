@@ -429,3 +429,24 @@ void atualizarVivos(void)
     pvivoprox = NULL;
     totvivoprox = 0;
 }
+
+//TODO: comentar
+void atualizarMapa(struct Mundo *mundo)
+{
+    celula *aux;
+    
+    for (int linha = 0; linha < mundo -> tamanho; linha++)
+    {
+        for(int coluna = 0; coluna < mundo -> tamanho; coluna++)
+        {
+            mundo -> celulas[linha][coluna] = '.';
+        }
+    }
+    
+    aux = pvivo;
+    while(aux != NULL)
+    {
+       mundo -> celulas[aux -> linha][aux -> coluna] = 'O';
+       aux = aux -> proximo; 
+    }
+}
