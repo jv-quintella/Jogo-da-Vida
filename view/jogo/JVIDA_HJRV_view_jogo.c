@@ -383,7 +383,7 @@ int obter_intervalo(int tamanho, char entrada[])
 }
 
 //TODO: comentar
-void imprimir_lista_vivos(const celula *lista)
+void imprimir_lista(const celula *lista)
 {
     const celula *aux = lista;
     
@@ -393,9 +393,9 @@ void imprimir_lista_vivos(const celula *lista)
         return;
     }
 
-    while(aux != 0)
+    while(aux != NULL)
     {
-        printf("%d", aux -> linha + 1, aux -> coluna + 1);
+        printf("%d, %d", aux -> linha + 1, aux -> coluna + 1);
         aux = aux -> proximo;
     }
 
