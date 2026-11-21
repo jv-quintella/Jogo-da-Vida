@@ -359,3 +359,14 @@ int atualizarMortos(int tamanho)
 
     return 1;
 }
+
+//TODO: comentar
+celula *obterVivos(void)
+{
+    return pvivo;
+}
+
+celula *obterMortos(void)
+{
+    return pmorto;
+}

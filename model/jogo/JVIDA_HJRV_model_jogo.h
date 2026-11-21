@@ -20,5 +20,7 @@ celula *buscarMortos(int linha, int coluna);
 void liberarMortos(void);
 int atualizarMortos(int tamnanho);
 void carregarMortos(int linha, int coluna);
+celula *obterVivos(void);
+celula *obterMortos(void);
 
 #endif
