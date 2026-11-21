@@ -56,7 +56,15 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
         printf("Celulas vivas: ");
         imprimir_lista(obterVivos());
         printf("Vizinhas-mortas: ");
-        imprimir_lista(obterMortos());
+        if (mundo->qtdmortos > 0 && obterMortos() == NULL)
+        {
+            printf("Lista indisponivel\n");
+        }
+        
+        else
+        {
+            imprimir_lista(obterMortos());
+        }   
     }
 
 /*
