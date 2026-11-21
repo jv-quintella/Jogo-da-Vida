@@ -370,3 +370,35 @@ celula *obterMortos(void)
 {
     return pmorto;
 }
+
+//TODO: comentar
+void carregarVivosProx(int linha, int coluna)
+{
+    celula *aux;
+    aux = (celula*) malloc(sizeof(celula));
+
+    if (aux == NULL)
+    {
+        return;
+    }
+
+    aux -> linha = linha;
+    aux -> coluna = coluna;
+    aux -> proximo = pvivoprox;
+    pvivoprox = aux;
+    totvivoprox++;
+}
+
+//TODO: comentar
+void liberarVivosProx(int linha, int coluna)
+{
+    celula *aux;
+    while (pvivoprox != NULL)
+    {
+        aux = pvivoprox;
+        pvivoprox = aux -> proximo;
+        free(aux);
+        totvivoprox--;
+    }
+    totvivoprox = 0;
+}

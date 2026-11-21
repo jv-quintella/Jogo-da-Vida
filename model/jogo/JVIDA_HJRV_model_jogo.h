@@ -22,5 +22,7 @@ int atualizarMortos(int tamnanho);
 void carregarMortos(int linha, int coluna);
 celula *obterVivos(void);
 celula *obterMortos(void);
+void carregarVivosProx(int linha, int coluna);
+void carregarMortosProx(int linha, int coluna);
 
 #endif
