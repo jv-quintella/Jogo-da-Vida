@@ -6,7 +6,16 @@
 #include <stdlib.h>
 
 //ponteiros/variaveis globais
-//TODO:comentar
+/*
+** Listas encadeadas globais que guardam o estado do jogo:
+**      pvivo     - celulas vivas da geracao atual
+**      pmorto    - celulas mortas que tem pelo menos um vizinho vivo
+**                  (candidatas a nascer na proxima geracao)
+**      pvivoprox - celulas vivas da proxima geracao, montada em
+**                  calcular_geracao antes de substituir a lista atual
+** Contadores globais (um para cada lista):
+**      totvivo, totmorto, totvivoprox - quantidade de nos em cada lista
+*/
 celula *pvivo = NULL;
 celula *pmorto = NULL;
 celula *pvivoprox = NULL;
@@ -97,14 +106,16 @@ void contar_celulas(struct Mundo *mundo)
 /*
 ** Conta os vizinhos vivos da celula informada, sem incluir a propria
 ** celula e sem considerar posicoes fora dos limites do mundo.
+** A consulta e feita na lista encadeada de celulas vivas (pvivo),
+** e nao na matriz do mundo.
 ** Parametros:
-**      mundo - ponteiro para a estrutura do mundo consultado
+**      mundo - ponteiro para a estrutura do mundo consultado (usado
+**              apenas para obter o tamanho e validar os limites)
 **      linha - indice da linha da celula, de 0 a tamanho - 1
 **      coluna - indice da coluna da celula, de 0 a tamanho - 1
 ** Retorno:
 **      quantidade de vizinhos vivos, entre 0 e 8
 */
-//TODO: atualizar comentarios
 int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
     {
         int count = 0;
@@ -129,27 +140,33 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
     }
 
 /*
-** Calcula a proxima geracao e armazena no mundo auxiliar.
+** Calcula a proxima geracao e armazena na lista de vivas da proxima
+** geracao (pvivoprox). 
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo atual (leitura)
-**      mundo_auxiliar - o ponteiro para a estrutura do mundo futuro (escrita)
+**      mundo - o ponteiro para a estrutura do mundo atual (usado para
+**              obter o tamanho e validar os limites)
+** Retorno:
+**      1 se a proxima geracao foi calculada com sucesso;
+**      0 se houve falha de alocacao (a lista da proxima geracao e liberada)
 */
-//TODO: atualizar comentarios
 int calcular_geracao(struct Mundo *mundo)
     {
         celula *aux;
         int qtd, ant;
-        liberarVivosProx();
+        liberarVivosProx(); // descarta resultado anterior
 
+        // percorre as celulas vivas
         aux = pvivo;
         while (aux != NULL)
         {
             qtd = contar_vizinhos(mundo, aux -> linha, aux -> coluna);
             if (qtd == 2 || qtd == 3)
             {
+                // guarda o total anterior para detectar falha do malloc
                 ant = totvivoprox;
                 carregarVivosProx(aux -> linha, aux -> coluna);
                 if(totvivoprox != ant + 1)
+                // se nao aumentou em 1, alocacao falhou
                 {
                     liberarVivosProx();
                     return 0;
@@ -158,6 +175,7 @@ int calcular_geracao(struct Mundo *mundo)
             aux = aux -> proximo;
         }
 
+        // percorre as vizinhas mortas, nascem as com exatamente 3 vizinhos
         aux = pmorto;
         while(aux != NULL)
         {
@@ -167,6 +185,7 @@ int calcular_geracao(struct Mundo *mundo)
                 ant = totvivoprox;
                 carregarVivosProx(aux -> linha, aux -> coluna);
                 if (totvivoprox != ant + 1)
+                // mesma checagem da falha de alocacao
                 {
                     liberarVivosProx();
                     return 0;
@@ -178,12 +197,20 @@ int calcular_geracao(struct Mundo *mundo)
         return 1;
     }
 
-//TODO: comentar
+/*
+** Insere uma nova celula viva no inicio da lista de vivas (pvivo).
+** Em caso de falha no malloc, a funcao apenas retorna e totvivo nao
+** muda (quem chama detecta a falha com buscarVivos).
+** Parametros:
+**      linha - indice da linha da celula
+**      coluna - indice da coluna da celula
+*/
 void carregarVivos(int linha, int coluna)
 {
     celula *aux;
     aux = (celula*)malloc(sizeof (celula));
 
+    // falha de alocacao nao altera a lista
     if (aux == NULL)
     {
         return;
@@ -192,12 +219,14 @@ void carregarVivos(int linha, int coluna)
     aux -> linha = linha;
     aux -> coluna = coluna;
 
+    // lista vazia: novo no e' o unico
     if (totvivo == 0)
     {
         pvivo = aux;
         aux -> proximo = NULL;
     }
 
+    // lista com elemento: insere no inicio
     else
     {
         aux -> proximo = pvivo;
@@ -207,11 +236,19 @@ void carregarVivos(int linha, int coluna)
     totvivo++;
 }
 
-//TODO: comentar
+/*
+** Procura uma celula na lista de vivas (pvivo).
+** Parametros:
+**      linha - indice da linha procurada
+**      coluna - indice da coluna procurada
+** Retorno:
+**      ponteiro para o no encontrado; NULL se a celula nao esta na lista
+*/
 celula *buscarVivos(int linha, int coluna)
 {
     celula *aux;
     aux = pvivo;
+    // percorre ate achar coordenadas ou chegar no fim
     while (aux != NULL)
     {
         if((aux -> linha == linha) && (aux -> coluna == coluna))
@@ -229,10 +266,14 @@ celula *buscarVivos(int linha, int coluna)
     return NULL;
 }
 
-//TODO: comentar
+/*
+** Libera todos os nos da lista de vivas (pvivo) e zera o contador.
+** Ao final, a lista fica vazia.
+*/
 void liberarVivos(void)
 {
     celula *aux;
+    // avanca o ponteiro da cabeca antes de liberar o no, para nao perder o resto da lista
     while(pvivo != NULL)
     {
         aux = pvivo;
@@ -246,28 +287,39 @@ void liberarVivos(void)
 }
 
 
-//TODO: comentar
+/*
+** Remove uma celula da lista de vivas (pvivo) e libera sua memoria.
+** Parametros:
+**      linha - indice da linha da celula a remover
+**      coluna - indice da coluna da celula a remover
+** Retorno:
+**      1 se a celula foi removida; 0 se nao foi encontrada na lista
+*/
 int removerVivos(int linha, int coluna)
 {
     celula *atual = pvivo;
-    celula *anterior = NULL;
+    celula *anterior = NULL; // guarda o no anterior para religar a lista
 
+    // procura o no, lembrando de quem veio antes dele
     while(atual != NULL && (atual -> linha != linha || atual -> coluna != coluna))
     {
         anterior = atual;
         atual = atual -> proximo;
     }
 
+    // chegou ao fim sem achar
     if (atual == NULL)
     {
         return 0;
     } 
     else
     {
+        // sem anterior: o no removido e a cabeca, entao a cabeca passa a ser o proximo
         if(anterior == NULL)
         {
             pvivo = atual -> proximo;
         }
+        // caso contrario, o anterior "pula" o no removido
         else
         {
             anterior -> proximo = atual -> proximo;
@@ -278,10 +330,19 @@ int removerVivos(int linha, int coluna)
     return 1;
 }
 
-//TODO: comentar
+/*
+** Procura uma celula na lista de mortas (pmorto), que guarda as
+** vizinhas-mortas das celulas vivas.
+** Parametros:
+**      linha - indice da linha procurada
+**      coluna - indice da coluna procurada
+** Retorno:
+**      ponteiro para o no encontrado; NULL se a celula nao esta na lista
+*/
 celula *buscarMortos(int linha, int coluna)
 {
     celula *aux = pmorto;
+    // percorre a lista ate achar as coordenadas ou chegar ao fim
     while(aux != NULL)
     {
         if ((aux -> linha == linha) && (aux -> coluna == coluna))
@@ -297,10 +358,14 @@ celula *buscarMortos(int linha, int coluna)
     return NULL;
 }
 
-//TODO; comentar
+/*
+** Libera todos os nos da lista de mortas (pmorto) e zera o contador.
+** Ao final, a lista fica vazia.
+*/
 void liberarMortos(void)
 {
     celula *aux;
+    // avanca o ponteiro da cabeca antes de liberar o no, para nao perder o resto da lista
     while (pmorto != NULL)
     {
         aux = pmorto;
@@ -312,12 +377,18 @@ void liberarMortos(void)
 }
 
 
-//TODO: comentar
+/*
+** Insere uma nova celula morta no inicio da lista de mortas (pmorto).
+** Parametros:
+**      linha - indice da linha da celula
+**      coluna - indice da coluna da celula
+*/
 void carregarMortos(int linha, int coluna)
 {
     celula *aux;
     aux = (celula*)malloc(sizeof(celula));
 
+    // falha de alocacao: nao altera a lista
     if(aux == NULL)
     {
         return;
@@ -330,33 +401,49 @@ void carregarMortos(int linha, int coluna)
     totmorto ++;
 }
 
-//TODO: comentar
+/*
+** Reconstroi a lista de mortas (pmorto) a partir da lista de vivas:
+** cada posicao vizinha de uma celula viva que nao seja viva entra na
+** lista, sem repeticoes e respeitando os limites do mundo.
+** Deve ser chamada sempre que a lista de vivas for alterada.
+** Parametros:
+**      tamanho - dimensao do mundo, usada para validar os limites
+** Retorno:
+**      1 se a lista foi montada com sucesso;
+**      0 se houve falha de alocacao (a lista de mortas e liberada)
+*/
 int atualizarMortos(int tamanho)
 {
     celula *aux = pvivo;
     int linha, coluna;
+    // descarta a lista antiga antes de montar a nova
     liberarMortos();
+    // para cada celula viva, examina as 8 posicoes ao redor
     while (aux != NULL)
     {
         for(linha = aux -> linha - 1; linha <= aux -> linha + 1; linha++)
         {
             for(coluna = aux -> coluna -1; coluna <= aux -> coluna + 1; coluna++)
             {
+                // ignora a propria celula viva
                 if (linha == aux -> linha && coluna == aux -> coluna)
                 {
                     continue;
                 }
 
+                // ignora posicoes fora do mundo
                 if(linha < 0 || linha >= tamanho || coluna < 0 || coluna >= tamanho)
                 {
                     continue;
                 }
 
+                // ignora posicoes que ja sao celulas vivas
                 if(buscarVivos(linha, coluna) != NULL)
                 {
                     continue;
                 }
 
+                // ignora posicoes que ja estao na lista de mortas
                 if(buscarMortos(linha, coluna) != NULL)
                 {
                     continue;
@@ -364,6 +451,7 @@ int atualizarMortos(int tamanho)
 
                 carregarMortos(linha, coluna);
 
+                // se nao foi inserida, o malloc falhou: desfaz tudo e avisa quem chamou
                 if(buscarMortos(linha, coluna) == NULL)
                 {
                     liberarMortos();
@@ -377,23 +465,37 @@ int atualizarMortos(int tamanho)
     return 1;
 }
 
-//TODO: comentar
+/*
+** Retorna o ponteiro para o inicio da lista de vivas (pvivo),
+** permitindo que outros arquivos percorram a lista sem acessar
+** a variavel global diretamente.
+*/
 celula *obterVivos(void)
 {
     return pvivo;
 }
 
+/*
+** Retorna o ponteiro para o inicio da lista de mortas (pmorto).
+*/
 celula *obterMortos(void)
 {
     return pmorto;
 }
 
-//TODO: comentar
+/*
+** Insere uma celula no inicio da lista de vivas da proxima geracao
+** (pvivoprox).
+** Parametros:
+**      linha - indice da linha da celula
+**      coluna - indice da coluna da celula
+*/
 void carregarVivosProx(int linha, int coluna)
 {
     celula *aux;
     aux = (celula*) malloc(sizeof(celula));
 
+    // falha de alocacao: nao altera a lista
     if (aux == NULL)
     {
         return;
@@ -401,15 +503,20 @@ void carregarVivosProx(int linha, int coluna)
 
     aux -> linha = linha;
     aux -> coluna = coluna;
+    // insere no inicio da lista
     aux -> proximo = pvivoprox;
     pvivoprox = aux;
     totvivoprox++;
 }
 
-//TODO: comentar
+/*
+** Libera todos os nos da lista de vivas da proxima geracao (pvivoprox)
+** e zera o contador. Ao final, a lista fica vazia.
+*/
 void liberarVivosProx(void)
 {
     celula *aux;
+    // avanca o ponteiro da cabeca antes de liberar o no, para nao perder o resto da lista
     while (pvivoprox != NULL)
     {
         aux = pvivoprox;
@@ -420,21 +527,35 @@ void liberarVivosProx(void)
     totvivoprox = 0;
 }
 
-//TODO; comentar
+/*
+** Avanca o jogo para a proxima geracao: descarta a lista de vivas atual
+** e a substitui pela lista calculada em calcular_geracao.
+** Depois da troca, pvivoprox fica vazia. Nao atualiza a lista de mortas
+** nem a matriz; use atualizarMortos e atualizarMapa em seguida.
+*/
 void atualizarVivos(void)
 {
+    // libera a geracao antiga
     liberarVivos();
+    // os nos da proxima geracao passam a ser a lista de vivas (sem copiar)
     pvivo = pvivoprox;
     totvivo = totvivoprox;
+    // zera a lista da proxima geracao sem liberar, pois seus nos agora pertencem a pvivo
     pvivoprox = NULL;
     totvivoprox = 0;
 }
 
-//TODO: comentar
+/*
+** Redesenha a matriz do mundo a partir da lista de vivas:
+** primeiro limpa tudo com '.', depois marca com 'O' cada celula viva.
+** Parametros:
+**      mundo - ponteiro para a estrutura do mundo cuja matriz sera atualizada
+*/
 void atualizarMapa(struct Mundo *mundo)
 {
     celula *aux;
     
+    // limpa a matriz inteira
     for (int linha = 0; linha < mundo -> tamanho; linha++)
     {
         for(int coluna = 0; coluna < mundo -> tamanho; coluna++)
@@ -443,6 +564,7 @@ void atualizarMapa(struct Mundo *mundo)
         }
     }
     
+    // marca as celulas vivas da lista
     aux = pvivo;
     while(aux != NULL)
     {
