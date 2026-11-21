@@ -11,7 +11,7 @@ void criar_mundo(struct Mundo *mundo, int tamanho);
 int verificar_vizinho(struct Mundo *mundo, int linha, int coluna);
 void contar_celulas(struct Mundo *mundo);
 int contar_vizinhos(struct Mundo *mundo, int linha, int coluna);
-void calcular_geracao(struct Mundo *mundo);
+int calcular_geracao(struct Mundo *mundo);
 void carregarVivos(int linha, int coluna);
 celula *buscarVivos(int linha, int coluna);
 void liberarVivos(void);
@@ -22,8 +22,8 @@ int atualizarMortos(int tamnanho);
 void carregarMortos(int linha, int coluna);
 celula *obterVivos(void);
 celula *obterMortos(void);
-void carregarVivosProx(int linha, int coluna);
+void carregarVivosProx(void);
+void liberarVivosProx(int linha ->, int -> coluna);
 void atualizarVivos(void);
 void atualizarMapa(struct Mundo *mundo);
-
 #endif

@@ -135,7 +135,7 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
 **      mundo_auxiliar - o ponteiro para a estrutura do mundo futuro (escrita)
 */
 //TODO: atualizar comentarios
-void calcular_geracao(struct Mundo *mundo)
+int calcular_geracao(struct Mundo *mundo)
     {
         celula *aux;
         int qtd, ant;
@@ -389,7 +389,7 @@ celula *obterMortos(void)
 }
 
 //TODO: comentar
-void carregarVivosProx(int linha, int coluna)
+void carregarVivosProx(void)
 {
     celula *aux;
     aux = (celula*) malloc(sizeof(celula));
