@@ -117,7 +117,7 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
                     if((i >= 0 && i < mundo-> tamanho) && (j >= 0 && j < mundo -> tamanho) && (i != linha || j != coluna))
                         {
                             // Verifica se a posicao vizinha valida contem o caractere de celula viva
-                            if(mundo-> celulas[i][j] == 'O')
+                            if(buscarVivos(i, j) != NULL)
                                 {
                                     count++;
                                 }
