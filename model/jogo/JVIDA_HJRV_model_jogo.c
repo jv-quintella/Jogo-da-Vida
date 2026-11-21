@@ -191,7 +191,7 @@ void carregarVivos(int linha, int coluna)
 }
 
 //TODO: comentar
-celula *buscarVivo(int linha, int coluna)
+celula *buscarVivos(int linha, int coluna)
 {
     celula *aux;
     aux = pvivo;
@@ -228,7 +228,7 @@ void liberarVivos(void)
 
 
 //TODO: comentar
-int removerVivo(int linha, int coluna)
+int removerVivos(int linha, int coluna)
 {
     celula *atual = pvivo;
     celula *anterior = NULL;

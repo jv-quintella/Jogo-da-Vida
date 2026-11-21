@@ -261,7 +261,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                     }
                     else if (entrada[0] == 's' || entrada[0] == 'S') 
                     {
-                        if(removerVivo(temp_alt, temp_lar) == 1)
+                        if(removerVivos(temp_alt, temp_lar) == 1)
                         {
                             mundo->celulas[temp_alt][temp_lar] = '.';
                             mundo->geracaoAtual = 0;
@@ -290,12 +290,12 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
 
             else 
             {
-                if (buscarVivo(temp_alt, temp_lar) == NULL)
+                if (buscarVivos(temp_alt, temp_lar) == NULL)
                 {
                     carregarVivos(temp_alt, temp_lar);
                 }
 
-                if (buscarVivo(temp_alt, temp_lar) != NULL)
+                if (buscarVivos(temp_alt, temp_lar) != NULL)
                 {
                     mundo->celulas[temp_alt][temp_lar] = 'O';
                     mundo->geracaoAtual = 0;
