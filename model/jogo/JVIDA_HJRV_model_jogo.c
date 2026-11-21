@@ -266,7 +266,7 @@ int removerVivos(int linha, int coluna)
     {
         if(anterior == NULL)
         {
-            *pvivo = atual -> proximo;
+            pvivo = atual -> proximo;
         }
         else
         {
@@ -352,7 +352,7 @@ int atualizarMortos(int tamanho)
                     continue;
                 }
 
-                if(buscarVivo(linha, coluna) != NULL)
+                if(buscarVivos(linha, coluna) != NULL)
                 {
                     continue;
                 }
@@ -389,7 +389,7 @@ celula *obterMortos(void)
 }
 
 //TODO: comentar
-void carregarVivosProx(void)
+void carregarVivosProx(int linha, int coluna)
 {
     celula *aux;
     aux = (celula*) malloc(sizeof(celula));
@@ -407,7 +407,7 @@ void carregarVivosProx(void)
 }
 
 //TODO: comentar
-void liberarVivosProx(int linha, int coluna)
+void liberarVivosProx(void)
 {
     celula *aux;
     while (pvivoprox != NULL)

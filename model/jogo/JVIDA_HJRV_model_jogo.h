@@ -22,8 +22,8 @@ int atualizarMortos(int tamnanho);
 void carregarMortos(int linha, int coluna);
 celula *obterVivos(void);
 celula *obterMortos(void);
-void carregarVivosProx(void);
-void liberarVivosProx(int linha ->, int -> coluna);
+void carregarVivosProx(int linha, int coluna);
+void liberarVivosProx(void);
 void atualizarVivos(void);
 void atualizarMapa(struct Mundo *mundo);
 #endif
