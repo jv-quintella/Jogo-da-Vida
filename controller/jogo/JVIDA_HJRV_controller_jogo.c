@@ -242,7 +242,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
         imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho); 
         mostrarMensagem("\nInforme linha e coluna (ex: 5 4) ou -1 -1 para parar: ");
 
-        if (obter_coordenada(mundo->tamanho, tamanho, entrada, &temp_alt, &temp_lar)) == 0
+        if (obter_coordenada(mundo->tamanho, tamanho, entrada, &temp_alt, &temp_lar) == 0)
         // para se o usuário digitar -1 -1
         {
             continuar = 0;
