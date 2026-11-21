@@ -229,7 +229,6 @@ int mostrar_mortos(int tamanho, char entrada[])
 **      entrada - o vetor utilizado para armazenar as entradas do usuario
 **      mostrarvizinho - 1 para exibir as vizinhas-mortas ('+') no mapa; 0 caso contrario
 */
-//TODO: comentar (mudei algumas coisas na funcao, precisa de uns comentarios in line)
 void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostrarvizinho)
 {
     int temp_alt;
@@ -240,10 +239,11 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
     do {
         limparTela();
         contar_celulas(mundo);
-        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
+        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho); 
         mostrarMensagem("\nInforme linha e coluna (ex: 5 4) ou -1 -1 para parar: ");
 
-        if (obter_coordenada(mundo->tamanho, tamanho, entrada, &temp_alt, &temp_lar) == 0)
+        if (obter_coordenada(mundo->tamanho, tamanho, entrada, &temp_alt, &temp_lar)) == 0
+        // para se o usuário digitar -1 -1
         {
             continuar = 0;
         }
@@ -259,6 +259,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                     mostrarMensagem("\nDeseja excluir esta celula? [s/n]: ");
 
                     if (obter_input(entrada, tamanho) == 0) 
+                    // sai da pergunta se sem entrada
                     {
                         continuar = 0;
                         valido = 1;
@@ -267,9 +268,10 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                     {
                         if(removerVivos(temp_alt, temp_lar) == 1)
                         {
-                            mundo->celulas[temp_alt][temp_lar] = '.';
-                            mundo->geracaoAtual = 0;
+                            mundo->celulas[temp_alt][temp_lar] = '.'; // altera pra morta
+                            mundo->geracaoAtual = 0; // reseta gerações
                             if(atualizarMortos(mundo -> tamanho) == 0)
+                            // recalcula a lista de vizinhas mortas
                             {
                                 mostrarMensagem("Falha na alocacao de memoria");
                                 pause();
@@ -278,6 +280,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                         }
 
                         else
+                        // celula aparece no mapa mas nao na lista de vivas
                         {
                             mostrarMensagem("Celula nao encontrada na lista");
                             pause();
@@ -285,6 +288,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                         valido = 1;
                     }
                     else if (entrada[0] == 'n' || entrada[0] == 'N') 
+                    // mantem a celula viva
                     {
                         valido = 1;
                     }
@@ -298,17 +302,20 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
             }
 
             else 
+            // se celula morta, cria nova celula
             {
                 if (buscarVivos(temp_alt, temp_lar) == NULL)
+                // aloca memoria para inserir a celula
                 {
                     carregarVivos(temp_alt, temp_lar);
                 }
 
                 if (buscarVivos(temp_alt, temp_lar) != NULL)
                 {
-                    mundo->celulas[temp_alt][temp_lar] = 'O';
-                    mundo->geracaoAtual = 0;
+                    mundo->celulas[temp_alt][temp_lar] = 'O'; // marca como viva
+                    mundo->geracaoAtual = 0; // reseta as gerações
                     if(atualizarMortos(mundo -> tamanho) == 0)
+                    // recalcula lista de vizinhas mortas
                     {
                         mostrarMensagem("Falha na alocacao de memoria");
                         pause();
@@ -316,6 +323,7 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                 }
                 
                 else
+                // falha na inserção
                 {
                     mundo->celulas[temp_alt][temp_lar] = '.';
                     mostrarMensagem("Falha na alocacao de memoria");
