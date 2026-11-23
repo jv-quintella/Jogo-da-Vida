@@ -42,8 +42,9 @@ int mostrar_Menu(int opcao) {
                 printf("[2] - Simular evolucao\n");
                 printf("[3] - Limpar mundo\n");
                 printf("[4] - Configuracoes\n");
+                printf("[5] - Salvar simulacao\n");
                 printf("[0] - Voltar\n");
-                maximo = 4;
+                maximo = 5;
                 break;
             case 3:
                 printf("\n| CONFIGURACOES\n");
