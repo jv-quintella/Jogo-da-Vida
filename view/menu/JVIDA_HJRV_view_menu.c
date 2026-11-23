@@ -43,6 +43,7 @@ int mostrar_Menu(int opcao) {
                 printf("[3] - Limpar mundo\n");
                 printf("[4] - Configuracoes\n");
                 printf("[5] - Salvar simulacao\n");
+                printf("[6] - Carregar simulacao\n");
                 printf("[0] - Voltar\n");
                 maximo = 5;
                 break;
