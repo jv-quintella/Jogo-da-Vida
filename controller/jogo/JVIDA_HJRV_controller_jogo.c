@@ -111,6 +111,7 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
 {
     char entrada[10];
     int menu2;
+    indice_geracao = 0;
 
     do{
         limparTela();
@@ -137,7 +138,11 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         }
         else if(menu2 == 5)
         {
-            salvar_simulacao(mundo, "simulacao.bin");
+            salvar_geracao_controller(mundo, "geracoes.bin");
+        }
+        else if(menu2 == 6)
+        {
+            carregar_geracao_controller(mundo, "geracoes.bin", &indice_geracao);
         }
         else if (menu2 == 0)
         {
