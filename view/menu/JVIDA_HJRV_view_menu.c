@@ -42,11 +42,9 @@ int mostrar_Menu(int opcao) {
                 printf("[2] - Simular evolucao\n");
                 printf("[3] - Limpar mundo\n");
                 printf("[4] - Configuracoes\n");
-                printf("[5] - Salvar simulacao\n");
-                printf("[6] - Carregar simulacao\n");
-                printf("[7] - Carregar proxima geracao \n");
+                printf("[5] - Opcoes de carregamento\n");
                 printf("[0] - Voltar\n");
-                maximo = 7;
+                maximo = 5;
                 break;
             case 3:
                 printf("\n| CONFIGURACOES\n");
@@ -70,9 +68,17 @@ int mostrar_Menu(int opcao) {
                 printf("[0] - Voltar\n");
                 maximo = 8;
                 break;
+            case 5:
+                printf("\n| OPCOES DE CARREGAMENTO\n");
+                printf("[1] - Salvar simulacao\n");
+                printf("[2] - Carregar simulacao\n");
+                printf("[3] - Carregar proxima geracao \n");
+                printf("[0] - voltar\n");
+                maximo = 3;
             default:
                 return -1;
         }
+
         printf("---------------------------\n");
         printf("Digite uma opcao: ");
 

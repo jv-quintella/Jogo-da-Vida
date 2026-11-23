@@ -138,15 +138,7 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         }
         else if(menu2 == 5)
         {
-            salvar_geracao_controller(mundo);
-        }
-        else if(menu2 == 6)
-        {
-            carregar_geracao_selecao_controller(mundo);
-        }
-        else if(menu2 == 7)
-        {
-            carregar_geracao_sucessiva_controller(mundo, &indice_geracao);
+            opcoes_carregamento(mundo);
         }
         else if (menu2 == 0)
         {
@@ -191,6 +183,33 @@ void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho)
             mundo->intervalo = obter_intervalo(sizeof entrada, entrada);
         }
     }while(menu3 != 0);
+}
+
+void opcoes_carregamento(struct Mundo *mundo)
+{
+    char entrada[10];
+    int menu5;
+    int indice_geracao = 0;
+
+    do{
+        limparTela();
+        //mostrar_configuracoes(mundo, *mostrarvizinho);
+
+        menu5 = mostrar_Menu(5);
+
+        if(menu5 == 1)
+        {
+            salvar_geracao_controller(mundo);
+        }
+        else if(menu5 == 2)
+        {
+            carregar_geracao_selecao_controller(mundo);
+        }
+        else if(menu5 == 3)
+        {
+            carregar_geracao_sucessiva_controller(mundo, &indice_geracao);
+        }
+    }while(menu5 != 0);
 }
 
 /*
