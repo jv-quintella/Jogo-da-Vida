@@ -75,6 +75,7 @@ int mostrar_Menu(int opcao) {
                 printf("[3] - Carregar proxima geracao \n");
                 printf("[0] - voltar\n");
                 maximo = 3;
+                break;
             default:
                 return -1;
         }
