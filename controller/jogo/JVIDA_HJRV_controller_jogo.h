@@ -15,5 +15,6 @@ int mostrar_mortos(int tamanho, char entrada[]);
 void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostrarvizinho);
 void limpar_mapa(struct Mundo *mundo);
 void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho);
+void salvar_simulacao(struct Mundo *mundo, char TESTEX[]);
 
 #endif

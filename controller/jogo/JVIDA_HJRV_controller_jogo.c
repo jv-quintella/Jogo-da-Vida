@@ -495,7 +495,7 @@ void salvar_simulacao(struct Mundo *partida, char TESTEX[])
     partida->velocidade = partida->velocidade;
     partida->intervalo = partida->intervalo;
 
-    
+    //FIX
 	FILE *fp = fopen(TESTEX, "wb"); //grava em modo binario, pois estamos gravando a struct inteira (fwrite), nao texto
 
 	if(fp == NULL)
