@@ -134,6 +134,10 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         {
             configurar_simulacao(mundo, mostrarvizinho);
         }
+        else if(menu2 == 5)
+        {
+            salvar_simulacao(mundo);
+        }
         else if (menu2 == 0)
         {
             mostrarMensagem("Saindo da simulacao...\n");
@@ -477,4 +481,32 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
         }
 
     } while (continuar == 1);
+}
+
+void salvar_simulacao(struct Mundo *partida, char TESTEX[])
+{
+	int i;
+	
+	for(i = 0; i <= partida->tamanho; i++)
+    {
+        partida->celulas[i][partida->tamanho] = '\0';
+    }
+    partida->geracaoAtual = partida->geracaoAtual;
+    partida->velocidade = partida->velocidade;
+    partida->intervalo = partida->intervalo;
+
+    
+	FILE *fp = fopen(TESTEX, "wb"); //grava em modo binario, pois estamos gravando a struct inteira (fwrite), nao texto
+
+	if(fp == NULL)
+	{
+		printf("Arquivo nao pode ser aberto");
+		return;
+	}
+	
+	if(fwrite(mundo, sizeof(struct Mundo), 1, fp) != 1) 
+    {
+        printf("Erro na gravacao do arquivo\n");
+    }
+	fclose(fp);
 }
