@@ -75,3 +75,4 @@ output/
 # Executables
 *.exe
 jogo_da_vida
+*.bin
