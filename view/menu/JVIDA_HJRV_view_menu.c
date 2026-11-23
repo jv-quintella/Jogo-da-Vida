@@ -45,7 +45,7 @@ int mostrar_Menu(int opcao) {
                 printf("[5] - Salvar simulacao\n");
                 printf("[6] - Carregar simulacao\n");
                 printf("[0] - Voltar\n");
-                maximo = 5;
+                maximo = 6;
                 break;
             case 3:
                 printf("\n| CONFIGURACOES\n");
