@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "JVIDA_HJRV_controller_jogo.h"
 #include "../../model/jogo/JVIDA_HJRV_model_jogo.h"
 #include "../../view/jogo/JVIDA_HJRV_view_jogo.h"
@@ -136,7 +137,7 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         }
         else if(menu2 == 5)
         {
-            salvar_simulacao(mundo);
+            salvar_simulacao(mundo); /FIX
         }
         else if (menu2 == 0)
         {
@@ -482,7 +483,9 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
     } while (continuar == 1);
 }
+/* Comentar
 
+*/
 void salvar_simulacao(struct Mundo *partida, char TESTEX[])
 {
 	int i;
@@ -504,7 +507,7 @@ void salvar_simulacao(struct Mundo *partida, char TESTEX[])
 		return;
 	}
 	
-	if(fwrite(mundo, sizeof(struct Mundo), 1, fp) != 1) 
+	if(fwrite(partida, sizeof(struct Mundo), 1, fp) != 1) 
     {
         printf("Erro na gravacao do arquivo\n");
     }
