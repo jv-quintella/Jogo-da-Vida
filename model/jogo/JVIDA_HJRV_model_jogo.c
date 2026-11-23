@@ -623,3 +623,113 @@ int salvar_geracao(struct Mundo *mundo, const char *nomeArquivo)
     return 1;
 }
 
+/*
+** Carrega do arquivo binario a geracao correspondente ao valor apontado por
+** indice (0 = primeira geracao salva, 1 = segunda, etc.). Ao carregar com
+** sucesso, avanca *indice para a proxima geracao e reconstroi o mundo,
+** a lista pvivo, a lista pmorto e os contadores.
+** Parametros:
+**      mundo - ponteiro para a estrutura do mundo que recebera os dados
+**      nomeArquivo - caminho/nome do arquivo binario de leitura
+**      indice - ponteiro para o contador da proxima geracao a carregar
+** Retorno:
+**      1 se a geracao foi carregada com sucesso;
+**      0 se o arquivo nao existir ou nao puder ser aberto;
+**     -1 se nao houver mais geracoes (fim do arquivo; *indice volta para 0);
+**     -2 se houver falha de alocacao de memoria ou arquivo corrompido
+*/
+int carregar_geracao(struct Mundo *mundo, const char *nomeArquivo, int *indice)
+{
+    FILE *fp;
+    int atual = 0;
+    int tamanhoLido;
+    int qtdLida;
+    int coord[2];
+    int i;
+    int ant;
+
+    fp = fopen(nomeArquivo, "rb");
+    if (fp == NULL)
+    {
+        return 0;
+    }
+
+    // Avanca pelos registros anteriores ate chegar ao indice desejado
+    while (atual < *indice)
+    {
+        if (fread(&tamanhoLido, sizeof(int), 1, fp) != 1 ||
+            fread(&qtdLida, sizeof(int), 1, fp) != 1)
+        {
+            fclose(fp);
+            *indice = 0; // Reinicia para a primeira geracao na proxima chamada
+            return -1;
+        }
+
+        // Pula os pares (linha, coluna) desse registro
+        if (fseek(fp, (long)(qtdLida * 2 * (int)sizeof(int)), SEEK_CUR) != 0)
+        {
+            fclose(fp);
+            *indice = 0;
+            return -1;
+        }
+        atual++;
+    }
+
+    // Le o cabecalho da geracao desejada
+    if (fread(&tamanhoLido, sizeof(int), 1, fp) != 1 ||
+        fread(&qtdLida, sizeof(int), 1, fp) != 1)
+    {
+        fclose(fp);
+        *indice = 0;
+        return -1;
+    }
+
+    if (tamanhoLido < 10 || tamanhoLido > 60 || qtdLida < 0)
+    {
+        fclose(fp);
+        return -2;
+    }
+
+    // Limpa o estado atual antes de carregar a nova geracao
+    liberarVivos();
+    liberarMortos();
+    liberarVivosProx();
+    criar_mundo(mundo, tamanhoLido);
+    mundo->geracaoAtual = 0;
+
+    // Le cada celula viva e insere em pvivo
+    for (i = 0; i < qtdLida; i++)
+    {
+        if (fread(coord, sizeof(int), 2, fp) != 2)
+        {
+            liberarVivos();
+            fclose(fp);
+            return -2;
+        }
+
+        if (coord[0] >= 0 && coord[0] < tamanhoLido &&
+            coord[1] >= 0 && coord[1] < tamanhoLido)
+        {
+            ant = totvivo;
+            carregarVivos(coord[0], coord[1]);
+            if (totvivo != ant + 1)
+            {
+                liberarVivos();
+                fclose(fp);
+                return -2;
+            }
+        }
+    }
+
+    fclose(fp);
+
+    atualizarMapa(mundo);
+    if (!atualizarMortos(mundo->tamanho))
+    {
+        return -2;
+    }
+    contar_celulas(mundo);
+
+    (*indice)++;
+    return 1;
+}
