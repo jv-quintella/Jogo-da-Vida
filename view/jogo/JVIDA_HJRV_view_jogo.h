@@ -17,4 +17,7 @@ void mostrar_configuracoes(struct Mundo *mundo, int mostrarvizinho);
 void mostrar_regra(int topico);
 int obter_intervalo(int tamanho, char entrada[]);
 void imprimir_lista(const celula *lista);
+int obter_nome_save(char nome[], int tamanho);
+int confirmar_sobrescrita(void);
+int escolher_save(char nomes[][50], int qtd);
 #endif

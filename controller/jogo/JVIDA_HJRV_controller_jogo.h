@@ -15,7 +15,8 @@ int mostrar_mortos(int tamanho, char entrada[]);
 void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostrarvizinho);
 void limpar_mapa(struct Mundo *mundo);
 void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho);
-void salvar_geracao_controller(struct Mundo *mundo, const char *nomeArquivo);
-void carregar_geracao_controller(struct Mundo *mundo, const char *nomeArquivo, int *indice);
+void salvar_geracao_controller(struct Mundo *mundo);
+void carregar_geracao_selecao_controller(struct Mundo *mundo);
+void carregar_geracao_sucessiva_controller(struct Mundo *mundo, int *indice);
     
 #endif

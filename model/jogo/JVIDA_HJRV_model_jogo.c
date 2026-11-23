@@ -624,24 +624,142 @@ int salvar_geracao(struct Mundo *mundo, const char *nomeArquivo)
 }
 
 /*
-** Carrega do arquivo binario a geracao correspondente ao valor apontado por
-** indice (0 = primeira geracao salva, 1 = segunda, etc.). Ao carregar com
-** sucesso, avanca *indice para a proxima geracao e reconstroi o mundo,
-** a lista pvivo, a lista pmorto e os contadores.
-** Parametros:
-**      mundo - ponteiro para a estrutura do mundo que recebera os dados
-**      nomeArquivo - caminho/nome do arquivo binario de leitura
-**      indice - ponteiro para o contador da proxima geracao a carregar
+** Verifica se um arquivo ja existe no disco tentando abri-lo para leitura.
 ** Retorno:
-**      1 se a geracao foi carregada com sucesso;
-**      0 se o arquivo nao existir ou nao puder ser aberto;
-**     -1 se nao houver mais geracoes (fim do arquivo; *indice volta para 0);
-**     -2 se houver falha de alocacao de memoria ou arquivo corrompido
+**      1 se o arquivo existe; 0 caso contrario
 */
-int carregar_geracao(struct Mundo *mundo, const char *nomeArquivo, int *indice)
+int arquivo_existe(const char *nomeArquivo)
+{
+    FILE *fp = fopen(nomeArquivo, "rb");
+    if (fp != NULL)
+    {
+        fclose(fp);
+        return 1;
+    }
+    return 0;
+}
+
+/*
+** Registra o nome de um save no arquivo de indice (ARQ_INDICE),
+** evitando nomes duplicados em caso de sobrescrita.
+** Retorno:
+**      1 em caso de sucesso; 0 em caso de erro de arquivo
+*/
+int registrar_nome_save(const char *nome)
+{
+    char nomes[MAX_SAVES][MAX_NOME_SAVE];
+    int qtd = listar_saves(nomes, MAX_SAVES);
+    int i;
+    FILE *fp;
+
+    // Se o nome ja estiver no indice (sobrescrita), nao duplica
+    for (i = 0; i < qtd; i++)
+    {
+        if (strcmp(nomes[i], nome) == 0)
+        {
+            return 1;
+        }
+    }
+
+    fp = fopen(ARQ_INDICE, "a");
+    if (fp == NULL)
+    {
+        return 0;
+    }
+
+    fprintf(fp, "%s\n", nome);
+    fclose(fp);
+    return 1;
+}
+
+/*
+** Le todos os nomes de geracoes salvas no arquivo de indice.
+** Parametros:
+**      nomes - matriz de strings que recebera os nomes encontrados
+**      maxSaves - capacidade maxima do vetor nomes
+** Retorno:
+**      quantidade de saves encontrados (0 se o indice nao existir ou estiver vazio)
+*/
+int listar_saves(char nomes[][MAX_NOME_SAVE], int maxSaves)
+{
+    FILE *fp = fopen(ARQ_INDICE, "r");
+    int qtd = 0;
+    char linha[MAX_NOME_SAVE];
+
+    if (fp == NULL)
+    {
+        return 0;
+    }
+
+    while (qtd < maxSaves && fgets(linha, sizeof linha, fp) != NULL)
+    {
+        linha[strcspn(linha, "\r\n")] = '\0';
+        if (linha[0] != '\0')
+        {
+            strncpy(nomes[qtd], linha, MAX_NOME_SAVE - 1);
+            nomes[qtd][MAX_NOME_SAVE - 1] = '\0';
+            qtd++;
+        }
+    }
+
+    fclose(fp);
+    return qtd;
+}
+
+/*
+** Grava a geracao atual (tamanho do mundo, quantidade de vivas e coordenadas
+** da lista pvivo) em um arquivo binario proprio. Se ja existir, sobrescreve.
+** Retorno:
+**      1 em caso de sucesso; 0 em caso de erro
+*/
+int salvar_geracao_arquivo(struct Mundo *mundo, const char *nomeArquivo)
 {
     FILE *fp;
-    int atual = 0;
+    celula *aux;
+    int coord[2];
+
+    fp = fopen(nomeArquivo, "wb");
+    if (fp == NULL)
+    {
+        return 0;
+    }
+
+    if (fwrite(&mundo->tamanho, sizeof(int), 1, fp) != 1 ||
+        fwrite(&totvivo, sizeof(int), 1, fp) != 1)
+    {
+        fclose(fp);
+        return 0;
+    }
+
+    aux = pvivo;
+    while (aux != NULL)
+    {
+        coord[0] = aux->linha;
+        coord[1] = aux->coluna;
+
+        if (fwrite(coord, sizeof(int), 2, fp) != 2)
+        {
+            fclose(fp);
+            return 0;
+        }
+        aux = aux->proximo;
+    }
+
+    fclose(fp);
+    return 1;
+}
+
+/*
+** Carrega uma geracao a partir do arquivo binario informado,
+** reconstruindo o mundo, as listas pvivo/pmorto e os contadores.
+** Retorno:
+**      1 em caso de sucesso;
+**      0 se o arquivo nao puder ser aberto;
+**     -2 se houver falha de alocacao ou arquivo invalido
+*/
+int carregar_geracao_arquivo(struct Mundo *mundo, const char *nomeArquivo)
+{
+    FILE *fp;
     int tamanhoLido;
     int qtdLida;
     int coord[2];
@@ -654,34 +772,11 @@ int carregar_geracao(struct Mundo *mundo, const char *nomeArquivo, int *indice)
         return 0;
     }
 
-    // Avanca pelos registros anteriores ate chegar ao indice desejado
-    while (atual < *indice)
-    {
-        if (fread(&tamanhoLido, sizeof(int), 1, fp) != 1 ||
-            fread(&qtdLida, sizeof(int), 1, fp) != 1)
-        {
-            fclose(fp);
-            *indice = 0; // Reinicia para a primeira geracao na proxima chamada
-            return -1;
-        }
-
-        // Pula os pares (linha, coluna) desse registro
-        if (fseek(fp, (long)(qtdLida * 2 * (int)sizeof(int)), SEEK_CUR) != 0)
-        {
-            fclose(fp);
-            *indice = 0;
-            return -1;
-        }
-        atual++;
-    }
-
-    // Le o cabecalho da geracao desejada
     if (fread(&tamanhoLido, sizeof(int), 1, fp) != 1 ||
         fread(&qtdLida, sizeof(int), 1, fp) != 1)
     {
         fclose(fp);
-        *indice = 0;
-        return -1;
+        return -2;
     }
 
     if (tamanhoLido < 10 || tamanhoLido > 60 || qtdLida < 0)
@@ -690,14 +785,12 @@ int carregar_geracao(struct Mundo *mundo, const char *nomeArquivo, int *indice)
         return -2;
     }
 
-    // Limpa o estado atual antes de carregar a nova geracao
     liberarVivos();
     liberarMortos();
     liberarVivosProx();
     criar_mundo(mundo, tamanhoLido);
     mundo->geracaoAtual = 0;
 
-    // Le cada celula viva e insere em pvivo
     for (i = 0; i < qtdLida; i++)
     {
         if (fread(coord, sizeof(int), 2, fp) != 2)
@@ -730,6 +823,5 @@ int carregar_geracao(struct Mundo *mundo, const char *nomeArquivo, int *indice)
     }
     contar_celulas(mundo);
 
-    (*indice)++;
     return 1;
 }

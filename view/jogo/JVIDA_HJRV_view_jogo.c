@@ -425,3 +425,96 @@ void imprimir_lista(const celula *lista)
 
     printf("\n");
 }
+
+/*
+** Solicita ao usuario um nome valido para o arquivo de geracao.
+** Retorno:
+**      1 se um nome valido foi lido; 0 em caso de falha na entrada
+*/
+int obter_nome_save(char nome[], int tamanho)
+{
+    int valido = 0;
+
+    do {
+        printf("\nDigite o nome para salvar a geracao (sem extensao): ");
+        if (obter_input(nome, tamanho) == 0)
+        {
+            return 0;
+        }
+
+        if (nome[0] == '\0' || strchr(nome, '/') != NULL || strchr(nome, '\\') != NULL)
+        {
+            printf("Nome invalido. Nao deixe vazio e nao use barras.\n");
+            valido = 0;
+        }
+        else
+        {
+            valido = 1;
+        }
+    } while (valido == 0);
+
+    return 1;
+}
+
+/*
+** Pergunta ao usuario se deseja sobrescrever um save ja existente.
+** Retorno:
+**      1 para sobrescrever ('s'/'S'); 0 para cancelar ('n'/'N')
+*/
+int confirmar_sobrescrita(void)
+{
+    char entrada[10];
+
+    while (1)
+    {
+        printf("Ja existe um save com esse nome. Deseja sobrescrever? [s/n]: ");
+        if (obter_input(entrada, sizeof entrada) == 0)
+        {
+            return 0;
+        }
+        if (entrada[0] == 's' || entrada[0] == 'S')
+        {
+            return 1;
+        }
+        if (entrada[0] == 'n' || entrada[0] == 'N')
+        {
+            return 0;
+        }
+        printf("Opcao invalida.\n");
+    }
+}
+
+/*
+** Exibe a lista numerada de saves disponiveis e le a escolha do usuario.
+** Retorno:
+**      indice escolhido (0 a qtd - 1); -1 se o usuario cancelar (0)
+*/
+int escolher_save(char nomes[][50], int qtd)
+{
+    char entrada[10];
+    char sobra;
+    int escolha;
+    int i;
+
+    printf("\n| GERACOES SALVAS\n\n");
+    for (i = 0; i < qtd; i++)
+    {
+        printf("[%d] - %s\n", i + 1, nomes[i]);
+    }
+    printf("[0] - Cancelar\n");
+    printf("---------------------------\n");
+
+    while (1)
+    {
+        printf("Escolha o numero da geracao: ");
+        if (obter_input(entrada, sizeof entrada) == 0)
+        {
+            return -1;
+        }
+        if (sscanf(entrada, "%d %c", &escolha, &sobra) == 1 && escolha >= 0 && escolha <= qtd)
+        {
+            return escolha - 1; // 0 vira -1 (cancelar)
+        }
+        printf("Opcao invalida. Digite um numero de 0 a %d.\n", qtd);
+    }
+}

@@ -4,6 +4,9 @@
 
 #ifndef JVIDA_HJRV_MODEL_JOGO_H
 #define JVIDA_HJRV_MODEL_JOGO_H
+#define ARQ_INDICE "saves_index.txt"
+#define MAX_SAVES 100
+#define MAX_NOME_SAVE 50
 
 #include "../struct/JVIDA_HJRV_model_struct.h"
 
@@ -28,4 +31,9 @@ void atualizarVivos(void);
 void atualizarMapa(struct Mundo *mundo);
 int salvar_geracao(struct Mundo *mundo, const char *nomeArquivo);
 int carregar_geracao(struct Mundo *mundo, const char *nomeArquivo, int *indice);
+int arquivo_existe(const char *nomeArquivo);
+int registrar_nome_save(const char *nome);
+int listar_saves(char nomes[][MAX_NOME_SAVE], int maxSaves);
+int salvar_geracao_arquivo(struct Mundo *mundo, const char *nomeArquivo);
+int carregar_geracao_arquivo(struct Mundo *mundo, const char *nomeArquivo);
 #endif

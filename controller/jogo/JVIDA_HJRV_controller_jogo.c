@@ -138,11 +138,15 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         }
         else if(menu2 == 5)
         {
-            salvar_geracao_controller(mundo, "geracoes.bin");
+            salvar_geracao_controller(mundo);
         }
         else if(menu2 == 6)
         {
-            carregar_geracao_controller(mundo, "geracoes.bin", &indice_geracao);
+            carregar_geracao_selecao_controller(mundo);
+        }
+        else if(menu2 == 7)
+        {
+            carregar_geracao_sucessiva_controller(mundo, &indice_geracao);
         }
         else if (menu2 == 0)
         {
@@ -488,51 +492,118 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
     } while (continuar == 1);
 }
+
 /*
-** Aciona a gravacao da geracao atual no arquivo e informa o resultado ao usuario.
-** Parametros:
-**      mundo - ponteiro para a estrutura do mundo atual
-**      nomeArquivo - caminho/nome do arquivo binario
+** Pede o nome do save ao usuario, verifica se ja existe (permitindo sobrescrever
+** sob confirmacao) e grava a geracao no arquivo correspondente.
 */
-void salvar_geracao_controller(struct Mundo *mundo, const char *nomeArquivo)
+void salvar_geracao_controller(struct Mundo *mundo)
 {
-    if (salvar_geracao(mundo, nomeArquivo) == 1)
+    char nome[MAX_NOME_SAVE];
+    char nomeArquivo[MAX_NOME_SAVE + 10];
+
+    if (!obter_nome_save(nome, sizeof nome))
+    {
+        return;
+    }
+
+    sprintf(nomeArquivo, "%s.bin", nome);
+
+    if (arquivo_existe(nomeArquivo))
+    {
+        if (!confirmar_sobrescrita())
+        {
+            mostrarMensagem("\nGravacao cancelada.\n");
+            pause();
+            return;
+        }
+    }
+
+    if (salvar_geracao_arquivo(mundo, nomeArquivo) == 1 && registrar_nome_save(nome) == 1)
     {
         mostrarMensagem("\nGeracao salva com sucesso!\n");
     }
     else
     {
-        mostrarMensagem("\nErro ao salvar a geracao no arquivo.\n");
+        mostrarMensagem("\nErro ao salvar a geracao.\n");
     }
     pause();
 }
+
 /*
-** Aciona o carregamento sucessivo da proxima geracao armazenada no arquivo
-** e exibe a mensagem correspondente ao resultado da operacao.
-** Parametros:
-**      mundo - ponteiro para a estrutura do mundo
-**      nomeArquivo - caminho/nome do arquivo binario
-**      indice - ponteiro para o contador da proxima geracao a carregar
+** Lista as geracoes salvas e carrega o arquivo selecionado pelo usuario.
 */
-void carregar_geracao_controller(struct Mundo *mundo, const char *nomeArquivo, int *indice)
+void carregar_geracao_selecao_controller(struct Mundo *mundo)
 {
-    int status = carregar_geracao(mundo, nomeArquivo, indice);
+    char nomes[MAX_SAVES][MAX_NOME_SAVE];
+    char nomeArquivo[MAX_NOME_SAVE + 10];
+    int qtd = listar_saves(nomes, MAX_SAVES);
+    int escolha;
+    int status;
+
+    if (qtd == 0)
+    {
+        mostrarMensagem("\nNenhuma geracao salva encontrada.\n");
+        pause();
+        return;
+    }
+
+    escolha = escolher_save(nomes, qtd);
+    if (escolha == -1)
+    {
+        return;
+    }
+
+    sprintf(nomeArquivo, "%s.bin", nomes[escolha]);
+    status = carregar_geracao_arquivo(mundo, nomeArquivo);
 
     if (status == 1)
     {
         mostrarMensagem("\nGeracao carregada com sucesso!\n");
     }
-    else if (status == 0)
+    else
     {
-        mostrarMensagem("\nNenhum arquivo de geracoes encontrado. Salve uma geracao primeiro.\n");
+        mostrarMensagem("\nErro ao carregar a geracao selecionada.\n");
     }
-    else if (status == -1)
+    pause();
+}
+
+/*
+** Carrega a proxima geracao da lista de saves de forma sucessiva,
+** voltando para a primeira quando chegar ao final.
+*/
+void carregar_geracao_sucessiva_controller(struct Mundo *mundo, int *indice)
+{
+    char nomes[MAX_SAVES][MAX_NOME_SAVE];
+    char nomeArquivo[MAX_NOME_SAVE + 10];
+    char msg[120];
+    int qtd = listar_saves(nomes, MAX_SAVES);
+    int status;
+
+    if (qtd == 0)
     {
-        mostrarMensagem("\nFim do arquivo de geracoes. A proxima leitura voltara para a primeira geracao.\n");
+        mostrarMensagem("\nNenhuma geracao salva encontrada.\n");
+        pause();
+        return;
+    }
+
+    if (*indice >= qtd)
+    {
+        *indice = 0;
+    }
+
+    sprintf(nomeArquivo, "%s.bin", nomes[*indice]);
+    status = carregar_geracao_arquivo(mundo, nomeArquivo);
+
+    if (status == 1)
+    {
+        sprintf(msg, "\nGeracao '%s' (%d/%d) carregada com sucesso!\n", nomes[*indice], *indice + 1, qtd);
+        mostrarMensagem(msg);
+        (*indice)++;
     }
     else
     {
-        mostrarMensagem("\nErro ao carregar a geracao (falha de memoria ou arquivo invalido).\n");
+        mostrarMensagem("\nErro ao carregar a proxima geracao.\n");
     }
     pause();
 }
