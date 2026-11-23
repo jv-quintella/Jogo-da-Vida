@@ -111,7 +111,7 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
 {
     char entrada[10];
     int menu2;
-    indice_geracao = 0;
+    int indice_geracao = 0;
 
     do{
         limparTela();
