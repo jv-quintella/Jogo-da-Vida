@@ -137,7 +137,7 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         }
         else if(menu2 == 5)
         {
-            salvar_simulacao(mundo); /FIX
+            salvar_simulacao(mundo, "simulacao.bin");
         }
         else if (menu2 == 0)
         {
@@ -483,33 +483,52 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
     } while (continuar == 1);
 }
-/* Comentar
-
+/*
+** Aciona a gravacao da geracao atual no arquivo e informa o resultado ao usuario.
+** Parametros:
+**      mundo - ponteiro para a estrutura do mundo atual
+**      nomeArquivo - caminho/nome do arquivo binario
 */
-void salvar_simulacao(struct Mundo *partida, char TESTEX[])
+void salvar_geracao_controller(struct Mundo *mundo, const char *nomeArquivo)
 {
-	int i;
-	
-	for(i = 0; i <= partida->tamanho; i++)
+    if (salvar_geracao(mundo, nomeArquivo) == 1)
     {
-        partida->celulas[i][partida->tamanho] = '\0';
+        mostrarMensagem("\nGeracao salva com sucesso!\n");
     }
-    partida->geracaoAtual = partida->geracaoAtual;
-    partida->velocidade = partida->velocidade;
-    partida->intervalo = partida->intervalo;
-
-    //FIX
-	FILE *fp = fopen(TESTEX, "wb"); //grava em modo binario, pois estamos gravando a struct inteira (fwrite), nao texto
-
-	if(fp == NULL)
-	{
-		printf("Arquivo nao pode ser aberto");
-		return;
-	}
-	
-	if(fwrite(partida, sizeof(struct Mundo), 1, fp) != 1) 
+    else
     {
-        printf("Erro na gravacao do arquivo\n");
+        mostrarMensagem("\nErro ao salvar a geracao no arquivo.\n");
     }
-	fclose(fp);
+    pause();
+}
+
+/*
+** Aciona o carregamento sucessivo da proxima geracao armazenada no arquivo
+** e exibe a mensagem correspondente ao resultado da operacao.
+** Parametros:
+**      mundo - ponteiro para a estrutura do mundo
+**      nomeArquivo - caminho/nome do arquivo binario
+**      indice - ponteiro para o contador da proxima geracao a carregar
+*/
+void carregar_geracao_controller(struct Mundo *mundo, const char *nomeArquivo, int *indice)
+{
+    int status = carregar_geracao(mundo, nomeArquivo, indice);
+
+    if (status == 1)
+    {
+        mostrarMensagem("\nGeracao carregada com sucesso!\n");
+    }
+    else if (status == 0)
+    {
+        mostrarMensagem("\nNenhum arquivo de geracoes encontrado. Salve uma geracao primeiro.\n");
+    }
+    else if (status == -1)
+    {
+        mostrarMensagem("\nFim do arquivo de geracoes. A proxima leitura voltara para a primeira geracao.\n");
+    }
+    else
+    {
+        mostrarMensagem("\nErro ao carregar a geracao (falha de memoria ou arquivo invalido).\n");
+    }
+    pause();
 }
