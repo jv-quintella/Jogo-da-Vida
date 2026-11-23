@@ -26,4 +26,6 @@ void carregarVivosProx(int linha, int coluna);
 void liberarVivosProx(void);
 void atualizarVivos(void);
 void atualizarMapa(struct Mundo *mundo);
+int salvar_geracao(struct Mundo *mundo, const char *nomeArquivo);
+int carregar_geracao(struct Mundo *mundo, const char *nomeArquivo, int *indice);
 #endif

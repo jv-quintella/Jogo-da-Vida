@@ -4,6 +4,7 @@
 
 #include "JVIDA_HJRV_model_jogo.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 //ponteiros/variaveis globais
 /*
@@ -572,3 +573,53 @@ void atualizarMapa(struct Mundo *mundo)
        aux = aux -> proximo; 
     }
 }
+
+/*
+** Grava a geracao atual de celulas vivas no final do arquivo binario,
+** de forma sucessiva (modo "ab"), preservando as geracoes ja salvas.
+** Formato de cada registro: tamanho (int), qtdvivos (int) e os pares
+** (linha, coluna) de cada celula da lista pvivo.
+** Parametros:
+**      mundo - ponteiro para a estrutura do mundo atual
+**      nomeArquivo - caminho/nome do arquivo binario de gravacao
+** Retorno:
+**      1 em caso de sucesso;
+**      0 se houver erro ao abrir ou gravar o arquivo
+*/
+int salvar_geracao(struct Mundo *mundo, const char *nomeArquivo)
+{
+    FILE *fp;
+    celula *aux;
+    int coord[2];
+
+    fp = fopen(nomeArquivo, "ab");
+    if (fp == NULL)
+    {
+        return 0;
+    }
+
+    if (fwrite(&mundo->tamanho, sizeof(int), 1, fp) != 1 ||
+        fwrite(&totvivo, sizeof(int), 1, fp) != 1)
+    {
+        fclose(fp);
+        return 0;
+    }
+
+    aux = pvivo;
+    while (aux != NULL)
+    {
+        coord[0] = aux->linha;
+        coord[1] = aux->coluna;
+
+        if (fwrite(coord, sizeof(int), 2, fp) != 2)
+        {
+            fclose(fp);
+            return 0;
+        }
+        aux = aux->proximo;
+    }
+
+    fclose(fp);
+    return 1;
+}
+
