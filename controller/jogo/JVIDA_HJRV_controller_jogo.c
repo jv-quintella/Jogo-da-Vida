@@ -501,7 +501,6 @@ void salvar_geracao_controller(struct Mundo *mundo, const char *nomeArquivo)
     }
     pause();
 }
-
 /*
 ** Aciona o carregamento sucessivo da proxima geracao armazenada no arquivo
 ** e exibe a mensagem correspondente ao resultado da operacao.
