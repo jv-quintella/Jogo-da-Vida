@@ -1,4 +1,4 @@
-//JVIDA_HJRV_Controller - Projeto Jogo da Vida LP2026
+//JVIDA_HJRV_Model - Projeto Jogo da Vida LP2026
 //24/11/2026
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
@@ -33,56 +33,57 @@ int totvivoprox = 0;
 **      tamanho - dimensao da matriz quadrada a ser preenchida
 */
 void criar_mundo(struct Mundo *mundo, int tamanho)
-    {
-        int i, j;
-        mundo->tamanho = tamanho;
-        //Percorre cada linha (i) e cada coluna (j) da matriz, preenchendo com '.' 
-        for(i = 0; i < tamanho; i++)
+{
+    int i, j;
+    mundo->tamanho = tamanho;
+    //Percorre cada linha (i) e cada coluna (j) da matriz, preenchendo com '.' 
+    for(i = 0; i < tamanho; i++)
+        {
+            for(j = 0; j < tamanho; j++)
             {
-                for(j = 0; j < tamanho; j++)
-                {
-                    mundo->celulas[i][j] = '.';
-                }
+                mundo->celulas[i][j] = '.';
             }
-    }
+        }
+}
 
 /*
-** Verifica se a celula informada possui pelo menos um vizinho vivo,
-** sem incluir a propria celula e respeitando os limites do mundo.
+** Verifica se existe uma celula viva na regiao de ate nove posicoes
+** centrada nas coordenadas informadas, respeitando os limites do mundo.
+** A verificacao inclui a propria posicao central.
 ** Parametros:
-**      mundo - ponteiro para a estrutura do mundo consultado
-**      linha - indice da linha da celula, de 0 a tamanho - 1
-**      coluna - indice da coluna da celula, de 0 a tamanho - 1
+**      mundo - ponteiro para a estrutura cuja matriz sera consultada
+**      linha - indice da linha da posicao central, de 0 a tamanho - 1
+**      coluna - indice da coluna da posicao central, de 0 a tamanho - 1
 ** Retorno:
-**      1 se existir pelo menos um vizinho vivo; 0 caso contrario
+**      1 se existir alguma celula viva nessa regiao; 0 caso contrario
 */
 int verificar_vizinho(struct Mundo *mundo, int linha, int coluna)
-    {
-        int resultvizinho = 0;
+{
+    int resultvizinho = 0;
 
-        for (int i = linha - 1; i <= linha + 1; i++)
+    for (int i = linha - 1; i <= linha + 1; i++)
+    {
+        for (int j = coluna - 1; j <= coluna + 1; j++)
         {
-            for (int j = coluna - 1; j <= coluna + 1; j++)
+            if (i >= 0 && i < mundo->tamanho && j >= 0 && j < mundo->tamanho)
             {
-                if (i >= 0 && i < mundo->tamanho && j >= 0 && j < mundo->tamanho)
+                if (mundo->celulas[i][j] == 'O')
                 {
-                    if (mundo->celulas[i][j] == 'O')
-                    {
-                        resultvizinho = 1;
-                    }
+                    resultvizinho = 1;
                 }
             }
         }
-
-        return resultvizinho; // retorna 0 se não encontrar vizinhos vivos
     }
 
+    return resultvizinho; // retorna 0 se não encontrar vizinhos vivos
+}
+
 /*
-** Conta as celulas vivas e as celulas vizinhas-mortas do mundo.
-** Atualiza os campos qtdvivos e qtdmortos da estrutura.
+** Percorre a area ativa da matriz do mundo e atualiza os contadores
+** de celulas vivas (qtdvivos) e de celulas vizinhas-mortas (qtdmortos)
+** na estrutura do mundo.
 ** Parametros:
-**      mundo - ponteiro para a estrutura cujo mapa sera percorrido
-**              e cujos contadores serao atualizados
+**      mundo - ponteiro para a estrutura do mundo cujos contadores serao atualizados
 */
 void contar_celulas(struct Mundo *mundo)
     {
@@ -119,27 +120,27 @@ void contar_celulas(struct Mundo *mundo)
 **      quantidade de vizinhos vivos, entre 0 e 8
 */
 int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
-    {
-        int count = 0;
-        for(int i = linha -1; i <= linha + 1; i++)
+{
+    int count = 0;
+    for(int i = linha -1; i <= linha + 1; i++)
+        {
+            for(int j = coluna - 1; j <= coluna + 1; j++)
             {
-                for(int j = coluna - 1; j <= coluna + 1; j++)
-                {
-                    // Validacoes antes de acessar a matriz:
-                    // (>= 0 e < tamanho) impede acesso a lixo de memoria.
-                    // (i != linha || j != coluna) garante que a celula nao conte a si mesma.
-                    if((i >= 0 && i < mundo-> tamanho) && (j >= 0 && j < mundo -> tamanho) && (i != linha || j != coluna))
-                        {
-                            // Verifica se a posicao vizinha valida contem o caractere de celula viva
-                            if(buscarVivos(i, j) != NULL)
-                                {
-                                    count++;
-                                }
-                        }
-                }
+                // Validacoes antes de acessar a matriz:
+                // (>= 0 e < tamanho) impede acesso a lixo de memoria.
+                // (i != linha || j != coluna) garante que a celula nao conte a si mesma.
+                if((i >= 0 && i < mundo-> tamanho) && (j >= 0 && j < mundo -> tamanho) && (i != linha || j != coluna))
+                    {
+                        // Verifica se a posicao vizinha valida contem o caractere de celula viva
+                        if(buscarVivos(i, j) != NULL)
+                            {
+                                count++;
+                            }
+                    }
             }
-        return count;
-    }
+        }
+    return count;
+}
 
 /*
 ** Calcula a proxima geracao e armazena na lista de vivas da proxima
@@ -152,57 +153,57 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
 **      0 se houve falha de alocacao (a lista da proxima geracao e liberada)
 */
 int calcular_geracao(struct Mundo *mundo)
+{
+    celula *aux;
+    int qtd, ant;
+    liberarVivosProx(); // descarta resultado anterior
+
+    // percorre as celulas vivas
+    aux = pvivo;
+    while (aux != NULL)
     {
-        celula *aux;
-        int qtd, ant;
-        liberarVivosProx(); // descarta resultado anterior
-
-        // percorre as celulas vivas
-        aux = pvivo;
-        while (aux != NULL)
+        qtd = contar_vizinhos(mundo, aux -> linha, aux -> coluna);
+        if (qtd == 2 || qtd == 3)
         {
-            qtd = contar_vizinhos(mundo, aux -> linha, aux -> coluna);
-            if (qtd == 2 || qtd == 3)
+            // guarda o total anterior para detectar falha do malloc
+            ant = totvivoprox;
+            carregarVivosProx(aux -> linha, aux -> coluna);
+            if(totvivoprox != ant + 1)
+            // se nao aumentou em 1, alocacao falhou
             {
-                // guarda o total anterior para detectar falha do malloc
-                ant = totvivoprox;
-                carregarVivosProx(aux -> linha, aux -> coluna);
-                if(totvivoprox != ant + 1)
-                // se nao aumentou em 1, alocacao falhou
-                {
-                    liberarVivosProx();
-                    return 0;
-                }
+                liberarVivosProx();
+                return 0;
             }
-            aux = aux -> proximo;
         }
-
-        // percorre as vizinhas mortas, nascem as com exatamente 3 vizinhos
-        aux = pmorto;
-        while(aux != NULL)
-        {
-            qtd = contar_vizinhos(mundo, aux -> linha, aux -> coluna);
-            if (qtd == 3)
-            {
-                ant = totvivoprox;
-                carregarVivosProx(aux -> linha, aux -> coluna);
-                if (totvivoprox != ant + 1)
-                // mesma checagem da falha de alocacao
-                {
-                    liberarVivosProx();
-                    return 0;
-                }
-            }
-            aux = aux -> proximo;
-        }
-
-        return 1;
+        aux = aux -> proximo;
     }
 
+    // percorre as vizinhas mortas, nascem as com exatamente 3 vizinhos
+    aux = pmorto;
+    while(aux != NULL)
+    {
+        qtd = contar_vizinhos(mundo, aux -> linha, aux -> coluna);
+        if (qtd == 3)
+        {
+            ant = totvivoprox;
+            carregarVivosProx(aux -> linha, aux -> coluna);
+            if (totvivoprox != ant + 1)
+            // mesma checagem da falha de alocacao
+            {
+                liberarVivosProx();
+                return 0;
+            }
+        }
+        aux = aux -> proximo;
+    }
+
+    return 1;
+}
+
 /*
-** Insere uma nova celula viva no inicio da lista de vivas (pvivo).
-** Em caso de falha no malloc, a funcao apenas retorna e totvivo nao
-** muda (quem chama detecta a falha com buscarVivos).
+** Aloca e insere uma nova celula no inicio da lista de vivas (pvivo),
+** incrementando totvivo. Nao verifica limites nem coordenadas repetidas.
+** Em caso de falha no malloc, retorna sem alterar a lista ou o contador.
 ** Parametros:
 **      linha - indice da linha da celula
 **      coluna - indice da coluna da celula
@@ -548,10 +549,11 @@ void atualizarVivos(void)
 }
 
 /*
-** Redesenha a matriz do mundo a partir da lista de vivas:
-** primeiro limpa tudo com '.', depois marca com 'O' cada celula viva.
+** Atualiza a area da matriz correspondente ao tamanho do mundo:
+** primeiro preenche essa area com '.', depois marca com 'O' as coordenadas
+** presentes na lista de celulas vivas. Nao atualiza os contadores.
 ** Parametros:
-**      mundo - ponteiro para a estrutura do mundo cuja matriz sera atualizada
+**      mundo - ponteiro para a estrutura cuja matriz sera atualizada
 */
 void atualizarMapa(struct Mundo *mundo)
 {
@@ -576,16 +578,17 @@ void atualizarMapa(struct Mundo *mundo)
 }
 
 /*
-** Grava a geracao atual de celulas vivas no final do arquivo binario,
-** de forma sucessiva (modo "ab"), preservando as geracoes ja salvas.
-** Formato de cada registro: tamanho (int), qtdvivos (int) e os pares
-** (linha, coluna) de cada celula da lista pvivo.
+** Acrescenta a configuracao atual de celulas vivas ao final do arquivo
+** binario, preservando os registros anteriores.
+** Cada registro contem o tamanho do mundo, totvivo e os pares de inteiros
+** (linha, coluna) dos nos da lista pvivo.
 ** Parametros:
-**      mundo - ponteiro para a estrutura do mundo atual
+**      mundo - ponteiro para a estrutura que fornece o tamanho do mundo
 **      nomeArquivo - caminho/nome do arquivo binario de gravacao
 ** Retorno:
-**      1 em caso de sucesso;
-**      0 se houver erro ao abrir ou gravar o arquivo
+**      1 se todas as chamadas de fwrite gravaram os elementos solicitados;
+**      0 se houver falha na abertura ou em alguma dessas gravacoes
+**      O resultado do fechamento do arquivo nao e verificado.
 */
 int salvar_geracao(struct Mundo *mundo, const char *nomeArquivo)
 {
@@ -625,9 +628,13 @@ int salvar_geracao(struct Mundo *mundo, const char *nomeArquivo)
 }
 
 /*
-** Verifica se um arquivo ja existe no disco tentando abri-lo para leitura.
+** Tenta abrir o arquivo informado para leitura binaria e o fecha
+** quando a abertura e bem-sucedida.
+** Parametros:
+**      nomeArquivo - caminho/nome do arquivo a consultar
 ** Retorno:
-**      1 se o arquivo existe; 0 caso contrario
+**      1 se o arquivo puder ser aberto para leitura;
+**      0 se a abertura falhar, inclusive por inexistencia ou falta de permissao
 */
 int arquivo_existe(const char *nomeArquivo)
 {
@@ -641,10 +648,14 @@ int arquivo_existe(const char *nomeArquivo)
 }
 
 /*
-** Registra o nome de um save no arquivo de indice (ARQ_INDICE),
-** evitando nomes duplicados em caso de sobrescrita.
+** Consulta ate MAX_SAVES nomes do indice e, se o nome informado nao estiver
+** entre eles, acrescenta esse nome ao arquivo ARQ_INDICE.
+** Parametros:
+**      nome - nome do save a registrar, sem a extensao do arquivo binario
 ** Retorno:
-**      1 em caso de sucesso; 0 em caso de erro de arquivo
+**      1 se o nome ja foi encontrado ou se o indice foi aberto e a escrita tentada;
+**      0 se nao foi possivel abrir o indice para acrescentar o nome
+**      Os resultados da escrita e do fechamento nao sao verificados.
 */
 int registrar_nome_save(const char *nome)
 {
@@ -674,12 +685,14 @@ int registrar_nome_save(const char *nome)
 }
 
 /*
-** Le todos os nomes de geracoes salvas no arquivo de indice.
+** Le nomes do arquivo de indice, remove as quebras de linha e ignora
+** entradas vazias, armazenando no maximo maxSaves nomes.
 ** Parametros:
 **      nomes - matriz de strings que recebera os nomes encontrados
-**      maxSaves - capacidade maxima do vetor nomes
+**      maxSaves - quantidade maxima de nomes que podem ser armazenados
 ** Retorno:
-**      quantidade de saves encontrados (0 se o indice nao existir ou estiver vazio)
+**      quantidade de nomes armazenados;
+**      0 se o indice nao puder ser aberto ou nenhum nome for armazenado
 */
 int listar_saves(char nomes[][MAX_NOME_SAVE], int maxSaves)
 {
@@ -708,10 +721,17 @@ int listar_saves(char nomes[][MAX_NOME_SAVE], int maxSaves)
 }
 
 /*
-** Grava a geracao atual (tamanho do mundo, quantidade de vivas e coordenadas
-** da lista pvivo) em um arquivo binario proprio. Se ja existir, sobrescreve.
+** Grava a configuracao atual em um arquivo binario, substituindo
+** o conteudo anterior caso o arquivo ja exista.
+** Grava o tamanho do mundo, totvivo, os pares de inteiros
+** (linha, coluna) dos nos da lista pvivo e o indice geracaoAtual.
+** Parametros:
+**      mundo - ponteiro para a estrutura que fornece o tamanho, a geracao e o mapa
+**      nomeArquivo - caminho/nome do arquivo binario de gravacao
 ** Retorno:
-**      1 em caso de sucesso; 0 em caso de erro
+**      1 se todas as chamadas de fwrite gravaram os elementos solicitados;
+**      0 se houver falha na abertura ou em alguma dessas gravacoes
+**      O resultado do fechamento do arquivo nao e verificado.
 */
 int salvar_geracao_arquivo(struct Mundo *mundo, const char *nomeArquivo)
 {
@@ -757,12 +777,22 @@ int salvar_geracao_arquivo(struct Mundo *mundo, const char *nomeArquivo)
 }
 
 /*
-** Carrega uma geracao a partir do arquivo binario informado,
-** reconstruindo o mundo, as listas pvivo/pmorto e os contadores.
+** Le uma configuracao do inicio do arquivo binario informado.
+** Apos validar o tamanho e a quantidade declarada, libera as tres listas,
+** inicializa o mapa e reinicia o contador da geracao atual.
+** Insere as coordenadas dentro dos limites, ignorando as demais, e le
+** o indice geracaoAtual caso esteja presente no final do arquivo.
+** Ao concluir, atualiza a matriz, as vizinhas-mortas e os contadores,
+** preservando as configuracoes de quantidade de geracoes, velocidade e intervalo.
+** Uma falha apos a limpeza das listas nao restaura a configuracao anterior.
+** Parametros:
+**      mundo - ponteiro para a estrutura que recebera a configuracao
+**      nomeArquivo - caminho/nome do arquivo binario de leitura
 ** Retorno:
-**      1 em caso de sucesso;
+**      1 se o carregamento e a reconstrucao das vizinhas-mortas terminarem;
 **      0 se o arquivo nao puder ser aberto;
-**     -2 se houver falha de alocacao ou arquivo invalido
+**     -2 se houver falha de leitura, tamanho fora de 10 a 60,
+**        quantidade negativa ou falha de alocacao
 */
 int carregar_geracao_arquivo(struct Mundo *mundo, const char *nomeArquivo)
 {
