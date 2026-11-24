@@ -148,6 +148,11 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         {
             opcoes_carregamento(mundo, mostrarvizinho);
         }
+        else if (menu2 == 6)
+        {
+            liberarVivosProx();
+            mundo->geracaoAtual = 0;
+        }
         else if (menu2 == 0)
         {
             mostrarMensagem("Saindo da simulacao...\n");
