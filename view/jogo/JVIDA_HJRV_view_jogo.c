@@ -71,11 +71,10 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
 ** Solicita, le e valida o tamanho do mundo matricial para a simulacao.
 ** Garante que a entrada seja um numero inteiro valido entre 10 e 60.
 ** Permite retornar ao menu ao digitar 0.
-**Funcao baseada em https://github.com/cs50/libcs50/blob/main/src/cs50.c (get_int)
 ** Parametros:
 **      (nenhum)
 ** Retorno:
-**      dimensao do mundo, entre 10 e 60
+**      dimensao do mundo entre 10 e 60, ou 0 se o usuario escolher voltar
 */
 int obter_tamanho()
 {
@@ -151,12 +150,12 @@ int obter_posicao(int limite, int tamanho, char entrada[])
 
 /*
 ** Solicita, le e valida a quantidade de geracoes a serem simuladas.
-** Repete a leitura enquanto a entrada for invalida ou o valor for menor que 1.
+** Permite digitar 0 para voltar ao menu anterior.
 ** Parametros:
 **      tamanho - capacidade do vetor de entrada
 **      entrada - vetor utilizado para armazenar a entrada do usuario
 ** Retorno:
-**      quantidade de geracoes informada pelo usuario, maior ou igual a 1
+**      quantidade de geracoes informada pelo usuario, ou 0 para voltar
 */
 int obter_qtdgeracoes(int tamanho, char entrada[])
 {
@@ -432,7 +431,11 @@ void imprimir_lista(const celula *lista)
 }
 
 /*
-** Solicita ao usuario um nome valido para o arquivo de geracao.
+** Solicita ao usuario um nome valido para o arquivo de geracao,
+** rejeitando entradas vazias ou que contenham barras.
+** Parametros:
+**      nome - vetor que armazenara o nome digitado
+**      tamanho - capacidade do vetor nome
 ** Retorno:
 **      1 se um nome valido foi lido; 0 em caso de falha na entrada
 */
@@ -463,8 +466,10 @@ int obter_nome_save(char nome[], int tamanho)
 
 /*
 ** Pergunta ao usuario se deseja sobrescrever um save ja existente.
+** Parametros:
+**      (nenhum)
 ** Retorno:
-**      1 para sobrescrever ('s'/'S'); 0 para cancelar ('n'/'N')
+**      1 para sobrescrever ('s'/'S'); 0 para cancelar ('n'/'N') ou em caso de falha na entrada
 */
 int confirmar_sobrescrita(void)
 {
@@ -491,6 +496,9 @@ int confirmar_sobrescrita(void)
 
 /*
 ** Exibe a lista numerada de saves disponiveis e le a escolha do usuario.
+** Parametros:
+**      nomes - matriz de strings com os nomes dos saves disponiveis
+**      qtd - quantidade de saves listados
 ** Retorno:
 **      indice escolhido (0 a qtd - 1); -1 se o usuario cancelar (0)
 */

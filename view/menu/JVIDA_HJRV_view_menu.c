@@ -88,12 +88,15 @@ int mostrar_Menu(int opcao) {
         if (!obter_input(entrada, sizeof entrada)) {
             return 0;
         }
-
+        // Converte a entrada para inteiro na base 10; 'fim' aponta para o primeiro caractere nao numerico
         id = strtol(entrada, &fim, 10);
 
+        // Garante que algum digito foi lido (fim != entrada), que nao sobrou texto apos o numero (*fim == '\0')
+        // e que a opcao esta dentro da faixa valida do menu
         valido = (fim != entrada && *fim == '\0' && id >= 0 && id <= maximo);
 
         if (!valido) {
+            // Limpa a tela apenas nos menus principais (1 e 4), onde o mapa nao esta sendo exibido acima
             if (opcao == 1 || opcao == 4) {
                 limparTela();
             }
