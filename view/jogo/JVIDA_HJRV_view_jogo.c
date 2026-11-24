@@ -70,6 +70,7 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
 /*
 ** Solicita, le e valida o tamanho do mundo matricial para a simulacao.
 ** Garante que a entrada seja um numero inteiro valido entre 10 e 60.
+** Permite retornar ao menu ao digitar 0.
 **Funcao baseada em https://github.com/cs50/libcs50/blob/main/src/cs50.c (get_int)
 ** Parametros:
 **      (nenhum)
