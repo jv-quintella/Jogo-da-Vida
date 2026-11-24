@@ -34,14 +34,18 @@
             limparTela();
             menu1 = mostrar_Menu(1);
 
-            switch(menu1) // Executa a escolha do usuario no menu inicial
+            switch(menu1) // Executa a escolha do usuario no menu inicial, retorna para a editar a entrada anterior caso digite
             {
                 case 1:
-                    tamanho = obter_tamanho();
-                    if (tamanho == 0){
-                        break;
-                    }
-                    geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+                    do {
+                        tamanho = obter_tamanho();
+                        if (tamanho == 0) break;
+                        
+                        geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+                    }while (geracoes == 0);
+
+                    if (geracoes == 0) break;
+
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
                     liberarVivos();
                     liberarMortos();
