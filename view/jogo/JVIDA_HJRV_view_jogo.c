@@ -84,12 +84,13 @@ int obter_tamanho()
     int valido = 0;
 
     do {
-        printf("\nInsira o tamanho do mundo para a simulacao (entre 10 e 60): ");
+        printf("\nInsira o tamanho do mundo para a simulacao (entre 10 e 60)\n");
+        printf("(0 para voltar): ");
 
         //Indica um erro se houver falha na leitura do teclado.
         if (obter_input(entrada, sizeof entrada) == 0) {
-            printf("Valor invalido!\n");
-            valido = 0;
+            valido = 1;
+            return;
         }
         /* Converte a entrada para numero e rejeita se:
         O retorno do sscanf for diferente de 1
@@ -159,13 +160,13 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
     int quantidade;
     char sobra;
 
-    printf("Quantidade de geracoes a serem simuladas: ");
+    printf("Quantidade de geracoes a serem simuladas (0 para voltar): ");
 
     do {
-        //Indica um erro se houver falha na leitura do teclado.
+        //Retorna dando possibilidade de editar o valor anterior
         if (obter_input(entrada, tamanho) == 0) {
-            printf("Opcao invalida.\nTente novamente: ");
-            valido = 0;
+            valido = 1;
+            return;
         }
         /* Converte a entrada para numero e rejeita se:
         O retorno do sscanf for diferente de 1
