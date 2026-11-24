@@ -138,7 +138,7 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         }
         else if(menu2 == 5)
         {
-            opcoes_carregamento(mundo);
+            opcoes_carregamento(mundo, mostrarvizinho);
         }
         else if (menu2 == 0)
         {
@@ -185,7 +185,7 @@ void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho)
     }while(menu3 != 0);
 }
 
-void opcoes_carregamento(struct Mundo *mundo)
+void opcoes_carregamento(struct Mundo *mundo, int *mostrarvizinho)
 {
     char entrada[10];
     int menu5;
@@ -193,7 +193,7 @@ void opcoes_carregamento(struct Mundo *mundo)
 
     do{
         limparTela();
-        //mostrar_configuracoes(mundo, *mostrarvizinho);
+        imprimir_mundo(mundo->tamanho, mundo, *mostrarvizinho);
 
         menu5 = mostrar_Menu(5);
 
@@ -560,6 +560,8 @@ void carregar_geracao_selecao_controller(struct Mundo *mundo)
     int escolha;
     int status;
 
+    limparTela();
+    
     if (qtd == 0)
     {
         mostrarMensagem("\nNenhuma geracao salva encontrada.\n");

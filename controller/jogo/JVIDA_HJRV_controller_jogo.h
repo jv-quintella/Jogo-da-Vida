@@ -18,6 +18,6 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho);
 void salvar_geracao_controller(struct Mundo *mundo);
 void carregar_geracao_selecao_controller(struct Mundo *mundo);
 void carregar_geracao_sucessiva_controller(struct Mundo *mundo, int *indice);
-void opcoes_carregamento(struct Mundo *mundo);
+void opcoes_carregamento(struct Mundo *mundo, int mostrarvizinho);
     
 #endif
