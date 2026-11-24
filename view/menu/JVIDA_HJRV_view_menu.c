@@ -33,8 +33,9 @@ int mostrar_Menu(int opcao) {
                 printf("\n[1] - Nova simulacao\n");
                 printf("[2] - Continuar simulacao\n");
                 printf("[3] - Regras do jogo\n");
+                printf("[4] - Carregar simulacao\n");
                 printf("[0] - Sair\n");
-                maximo = 3;
+                maximo = 4;
                 break;
             case 2:
                 printf("\n| MENU DA SIMULACAO\n");

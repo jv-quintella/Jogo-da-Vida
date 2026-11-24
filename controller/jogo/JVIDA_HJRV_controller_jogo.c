@@ -75,6 +75,47 @@
                 case 3:
                     menu_regras();
                     break;
+                    case 4:
+                    geracoes = carregar_geracao_selecao_controller(&mundo);
+
+                    if (geracoes == 1)
+                    {
+                        simulacao_ativa = 1;
+                        mundo.qtdgeracoes = mundo.geracaoAtual;
+
+                        do {
+                            mostrarMensagem(
+                                "\nDefina o limite de geracoes da simulacao carregada.\n");
+
+                            geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+
+                            if (geracoes == 0)
+                            {
+                                break;
+                            }
+
+                            if (geracoes <= mundo.geracaoAtual)
+                            {
+                                mostrarMensagem(
+                                    "\nO limite deve ser maior que a geracao carregada.\n");
+                                pause();
+                            }
+                        } while (geracoes <= mundo.geracaoAtual);
+
+                        if (geracoes != 0)
+                        {
+                            mundo.qtdgeracoes = geracoes;
+                            menu_simulacao(&mundo, &mostrarvizinho);
+                        }
+                    }
+                    else if (geracoes == -2)
+                    {
+                        liberarVivos();
+                        liberarMortos();
+                        liberarVivosProx();
+                        simulacao_ativa = 0;
+                    }
+                    break;
                 case 0:
                     liberarVivos();
                     liberarMortos();
@@ -580,7 +621,7 @@ void salvar_geracao_controller(struct Mundo *mundo)
 /*
 ** Lista as geracoes salvas e carrega o arquivo selecionado pelo usuario.
 */
-void carregar_geracao_selecao_controller(struct Mundo *mundo)
+int carregar_geracao_selecao_controller(struct Mundo *mundo)
 {
     char nomes[MAX_SAVES][MAX_NOME_SAVE];
     char nomeArquivo[MAX_NOME_SAVE + 10];
@@ -592,15 +633,19 @@ void carregar_geracao_selecao_controller(struct Mundo *mundo)
 
     if (qtd == 0)
     {
+    {
         mostrarMensagem("\nNenhuma geracao salva encontrada.\n");
         pause();
-        return;
+        return 0;
+    }
+
+    escolha = escolher_save(nomes, qtd);
     }
 
     escolha = escolher_save(nomes, qtd);
     if (escolha == -1)
     {
-        return;
+        return 0;
     }
 
     sprintf(nomeArquivo, "%s.bin", nomes[escolha]);
@@ -615,6 +660,7 @@ void carregar_geracao_selecao_controller(struct Mundo *mundo)
         mostrarMensagem("\nErro ao carregar a geracao selecionada.\n");
     }
     pause();
+    return status;
 }
 
 /*
@@ -631,7 +677,7 @@ void carregar_geracao_sucessiva_controller(struct Mundo *mundo, int *indice)
 
     if (qtd == 0)
     {
-        mostrarMensagem("\nNenhuma geracao salva encontrada.\n");
+        mostrarMensagem("\nNenhum save salvo encontrado.\n");
         pause();
         return;
     }
