@@ -746,6 +746,12 @@ int salvar_geracao_arquivo(struct Mundo *mundo, const char *nomeArquivo)
         aux = aux->proximo;
     }
 
+    if (fwrite(&mundo->geracaoAtual, sizeof(int), 1, fp) != 1)
+    {
+        fclose(fp);
+        return 0;
+    }
+
     fclose(fp);
     return 1;
 }
@@ -813,6 +819,18 @@ int carregar_geracao_arquivo(struct Mundo *mundo, const char *nomeArquivo)
                 return -2;
             }
         }
+    }
+
+    if (fread(&ant, sizeof(int), 1, fp) == 1)
+    {
+        if (ant < 0)
+        {
+            liberarVivos();
+            fclose(fp);
+            return -2;
+        }
+
+        mundo->geracaoAtual = ant;
     }
 
     fclose(fp);
