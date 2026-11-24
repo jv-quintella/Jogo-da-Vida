@@ -5,6 +5,7 @@
 #include "JVIDA_HJRV_model_jogo.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 //ponteiros/variaveis globais
 /*
