@@ -111,7 +111,6 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
 {
     char entrada[10];
     int menu2;
-    int indice_geracao = 0;
 
     do{
         limparTela();
@@ -187,7 +186,6 @@ void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho)
 
 void opcoes_carregamento(struct Mundo *mundo, int *mostrarvizinho)
 {
-    char entrada[10];
     int menu5;
     int indice_geracao = 0;
 
@@ -561,7 +559,7 @@ void carregar_geracao_selecao_controller(struct Mundo *mundo)
     int status;
 
     limparTela();
-    
+
     if (qtd == 0)
     {
         mostrarMensagem("\nNenhuma geracao salva encontrada.\n");
