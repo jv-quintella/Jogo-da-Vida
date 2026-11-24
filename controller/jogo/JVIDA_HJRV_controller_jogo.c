@@ -38,6 +38,9 @@
             {
                 case 1:
                     tamanho = obter_tamanho();
+                    if (tamanho == 0){
+                        break;
+                    }
                     geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
                     //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
                     liberarVivos();
