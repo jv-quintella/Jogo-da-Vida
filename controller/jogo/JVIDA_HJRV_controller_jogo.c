@@ -218,6 +218,7 @@ void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho)
 {
     char entrada[10];
     int menu3;
+    int geracoes;
 
     do{
         limparTela();
@@ -227,7 +228,11 @@ void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho)
 
         if(menu3 == 1)
         {
-            mundo->qtdgeracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+            geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+            if (geracoes > 0)
+            {
+                mundo -> qtdgeracoes = geracoes;
+            }
         }
         else if(menu3 == 2)
         {

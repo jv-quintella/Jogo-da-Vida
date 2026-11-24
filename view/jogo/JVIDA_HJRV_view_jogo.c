@@ -175,8 +175,8 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
         O retorno do sscanf for diferente de 1
         O valor lido estiver fora do intervalo de 1 ate o limite */
         else if (sscanf(entrada, "%d %c", &quantidade, &sobra) != 1 || quantidade < 0) {
-            valido = 1;
-            return 0;
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
         }
         else {
             valido = 1;
