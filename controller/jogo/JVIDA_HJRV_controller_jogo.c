@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <conio.h>
+#include <windows.h>
 #include "JVIDA_HJRV_controller_jogo.h"
 #include "../../model/jogo/JVIDA_HJRV_model_jogo.h"
 #include "../../view/jogo/JVIDA_HJRV_view_jogo.h"
@@ -481,9 +483,25 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
         if (mundo->velocidade > 0)
         {
-            //Automatico: espera N segundos e segue direto, sem perguntar
-            tempo(mundo->velocidade);
+            // Automatico: espera N segundos em blocos de 100ms checando o teclado
+            int total_ms = mundo->velocidade * 1000;
+            int decorrido = 0;
             continuar = 1;
+
+            mostrarMensagem("\nPressione qualquer tecla para interromper...\n");
+
+            while (decorrido < total_ms)
+            {
+                if (_kbhit())
+                {
+                    _getch(); // Limpa a tecla do buffer para nao sujar o proximo menu
+                    mostrarMensagem("\nSimulacao interrompida pelo usuario.\n");
+                    continuar = 0;
+                    break;
+                }
+                Sleep(100);
+                decorrido += 100;
+            }
         }
         else
         {
