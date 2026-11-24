@@ -73,7 +73,7 @@ int mostrar_Menu(int opcao) {
                 printf("[1] - Salvar simulacao\n");
                 printf("[2] - Carregar simulacao\n");
                 printf("[3] - Carregar proxima geracao \n");
-                printf("[0] - voltar\n");
+                printf("[0] - Voltar\n");
                 maximo = 3;
                 break;
             default:
