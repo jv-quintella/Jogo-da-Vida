@@ -21,111 +21,113 @@
 ** Parametros:
 **      (nenhum)
 */
-    void iniciar_simulacao()
-    {
-        struct Mundo mundo;
-        int tamanho;
-        int geracoes;
-        char entrada[10];
-        int mostrarvizinho = 0;
-        int simulacao_ativa = 0;
-        int menu1;
-        mundo.velocidade = 0;
-        mundo.intervalo = 0;
+void iniciar_simulacao()
+{
+    struct Mundo mundo;
+    int tamanho;
+    int geracoes;
+    char entrada[10];
+    int mostrarvizinho = 0;
+    int simulacao_ativa = 0;
+    int menu1;
+    mundo.velocidade = 0;
+    mundo.intervalo = 0;
 
-        do{
-            limparTela();
-            menu1 = mostrar_Menu(1);
+    do{
+        limparTela();
+        menu1 = mostrar_Menu(1);
 
-            switch(menu1) // Executa a opcao escolhida no menu principal e retorna ao menu caso a entrada seja cancelada
-            {
-                case 1:
-                    do {
-                        tamanho = obter_tamanho();
-                        if (tamanho == 0) break;
-                        
-                        geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
-                    }while (geracoes == 0);
+        switch(menu1) // Executa a opcao escolhida no menu principal e retorna ao menu caso a entrada seja cancelada
+        {
+            case 1:
+                tamanho = 0;
+                geracoes = 0;
+                do {
+                    tamanho = obter_tamanho();
+                    if (tamanho == 0) break;
+                    
+                    geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+                }while (geracoes == 0);
 
-                    if (geracoes == 0) break;
+                if (tamanho == 0) break;
 
-                    //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
-                    liberarVivos();
-                    liberarMortos();
-                    liberarVivosProx();
-                    criar_mundo(&mundo, tamanho);
-                    mundo.geracaoAtual = 0;
-                    mundo.qtdgeracoes = geracoes;
-                    mundo.velocidade = 0;
-                    mundo.intervalo = 0;
-                    mostrarvizinho = 0;
-                    simulacao_ativa = 1;
+                //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
+                liberarVivos();
+                liberarMortos();
+                liberarVivosProx();
+                criar_mundo(&mundo, tamanho);
+                mundo.geracaoAtual = 0;
+                mundo.qtdgeracoes = geracoes;
+                mundo.velocidade = 0;
+                mundo.intervalo = 0;
+                mostrarvizinho = 0;
+                simulacao_ativa = 1;
+                menu_simulacao(&mundo, &mostrarvizinho);
+                break;
+            case 2:
+                if(simulacao_ativa == 1)
+                {
                     menu_simulacao(&mundo, &mostrarvizinho);
-                    break;
-                case 2:
-                    if(simulacao_ativa == 1)
+                }
+                else
+                {
+                    mostrarMensagem("\nNenhuma simulacao em andamento. Escolha a opcao 1 para criar um mundo.\n");
+                    pause();
+                }
+                break;
+            case 3:
+                menu_regras();
+                break;
+                case 4:
+                geracoes = carregar_geracao_selecao_controller(&mundo);
+
+                if (geracoes == 1)
+                {
+                    simulacao_ativa = 1;
+                    mundo.qtdgeracoes = mundo.geracaoAtual;
+
+                    do {
+                        mostrarMensagem(
+                            "\nDefina o limite de geracoes da simulacao carregada.\n");
+
+                        geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+
+                        if (geracoes == 0)
+                        {
+                            break;
+                        }
+
+                        if (geracoes <= mundo.geracaoAtual)
+                        {
+                            mostrarMensagem(
+                                "\nO limite deve ser maior que a geracao carregada.\n");
+                            pause();
+                        }
+                    } while (geracoes <= mundo.geracaoAtual);
+
+                    if (geracoes != 0)
                     {
+                        mundo.qtdgeracoes = geracoes;
                         menu_simulacao(&mundo, &mostrarvizinho);
                     }
-                    else
-                    {
-                        mostrarMensagem("\nNenhuma simulacao em andamento. Escolha a opcao 1 para criar um mundo.\n");
-                        pause();
-                    }
-                    break;
-                case 3:
-                    menu_regras();
-                    break;
-                    case 4:
-                    geracoes = carregar_geracao_selecao_controller(&mundo);
-
-                    if (geracoes == 1)
-                    {
-                        simulacao_ativa = 1;
-                        mundo.qtdgeracoes = mundo.geracaoAtual;
-
-                        do {
-                            mostrarMensagem(
-                                "\nDefina o limite de geracoes da simulacao carregada.\n");
-
-                            geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
-
-                            if (geracoes == 0)
-                            {
-                                break;
-                            }
-
-                            if (geracoes <= mundo.geracaoAtual)
-                            {
-                                mostrarMensagem(
-                                    "\nO limite deve ser maior que a geracao carregada.\n");
-                                pause();
-                            }
-                        } while (geracoes <= mundo.geracaoAtual);
-
-                        if (geracoes != 0)
-                        {
-                            mundo.qtdgeracoes = geracoes;
-                            menu_simulacao(&mundo, &mostrarvizinho);
-                        }
-                    }
-                    else if (geracoes == -2)
-                    {
-                        liberarVivos();
-                        liberarMortos();
-                        liberarVivosProx();
-                        simulacao_ativa = 0;
-                    }
-                    break;
-                case 0:
+                }
+                else if (geracoes == -2)
+                {
                     liberarVivos();
                     liberarMortos();
                     liberarVivosProx();
-                    mostrarMensagem("Saindo do programa...\n");
-                    return;
-            }
-        } while(menu1 != 0);
-    }
+                    simulacao_ativa = 0;
+                }
+                break;
+            case 0:
+                liberarVivos();
+                liberarMortos();
+                liberarVivosProx();
+                mostrarMensagem("Saindo do programa...\n");
+                return;
+        }
+    } while(menu1 != 0);
+}
 
 /*
 ** Exibe o menu de regras do jogo e, a cada topico escolhido, mostra o texto
