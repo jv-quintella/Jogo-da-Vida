@@ -44,7 +44,7 @@ int mostrar_Menu(int opcao) {
                 printf("[3] - Limpar mundo\n");
                 printf("[4] - Configuracoes\n");
                 printf("[5] - Opcoes de carregamento\n");
-                printf("[6] - Reiniciar simulacao\n");
+                printf("[6] - Reiniciar contador\n");
                 printf("[0] - Voltar\n");
                 maximo = 6;
                 break;

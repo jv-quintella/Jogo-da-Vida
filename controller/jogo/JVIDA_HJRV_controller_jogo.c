@@ -14,12 +14,13 @@
 #include "../../view/utilidades/JVIDA_HJRV_view_utilidades.h"
 
 /*
-    ** Inicia a simulacao do Jogo da Vida, exibindo o menu principal.
-    ** Permite criar um novo mundo, continuar a simulacao em andamento ou consultar
-    ** as regras do jogo, ate o usuario escolher sair.
-    ** Parametros:
-    **      Nenhum.
-    */
+** Inicia a simulacao do Jogo da Vida, exibindo o menu principal.
+** Permite criar um novo mundo, continuar a simulacao em andamento,
+** consultar as regras do jogo ou carregar uma simulacao salva,
+** ate o usuario escolher sair.
+** Parametros:
+**      (nenhum)
+*/
     void iniciar_simulacao()
     {
         struct Mundo mundo;
@@ -36,7 +37,7 @@
             limparTela();
             menu1 = mostrar_Menu(1);
 
-            switch(menu1) // Executa a escolha do usuario no menu inicial, retorna para a editar a entrada anterior caso digite
+            switch(menu1) // Executa a opcao escolhida no menu principal e retorna ao menu caso a entrada seja cancelada
             {
                 case 1:
                     do {
@@ -151,9 +152,10 @@ void menu_regras(void)
 
 /*
 ** Exibe o mapa e o menu da simulacao e executa a opcao escolhida pelo usuario
-** (editar celulas, simular evolucao, limpar o mapa ou configurar), ate ele voltar.
+** (editar celulas, simular evolucao, limpar o mapa, configurar, acessar
+** as opcoes de gravacao e carregamento ou reiniciar a simulacao), ate ele escolher voltar.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
+**      mundo - ponteiro para a estrutura do mundo
 **      mostrarvizinho - ponteiro para o indicador de exibicao das vizinhas-mortas ('+');
 **                       1 para exibir, 0 caso contrario
 */
@@ -203,9 +205,10 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
 
 /*
 ** Exibe o menu de configuracoes e permite alterar a quantidade de geracoes,
-** a velocidade e a exibicao das vizinhas-mortas, ate o usuario voltar.
+** a velocidade, o intervalo e a exibicao das vizinhas-mortas, ate o usuario voltar.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo (recebe quantidade de geracoes e velocidade)
+**      mundo - ponteiro para a estrutura que recebe a quantidade de geracoes,
+**              a velocidade e o intervalo da simulacao
 **      mostrarvizinho - ponteiro para o indicador de exibicao das vizinhas-mortas ('+');
 **                       1 para exibir, 0 caso contrario
 */
@@ -239,6 +242,16 @@ void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho)
     }while(menu3 != 0);
 }
 
+/*
+** Exibe o mapa e o menu de gravacao e carregamento, permitindo salvar
+** a configuracao atual, carregar uma configuracao escolhida ou percorrer
+** os saves sucessivamente, ate o usuario escolher voltar.
+** A sequencia de carregamento comeca no primeiro save a cada entrada neste menu.
+** Parametros:
+**      mundo - ponteiro para a estrutura do mundo que sera salva ou atualizada
+**      mostrarvizinho - ponteiro para o indicador usado na apresentacao do mapa;
+**                       1 para exibir as vizinhas-mortas, 0 caso contrario
+*/
 void opcoes_carregamento(struct Mundo *mundo, int *mostrarvizinho)
 {
     int menu5;
@@ -421,9 +434,11 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
 }
 
 /*
-** Preenche toda a matriz de celulas com pontos e reinicia o contador de geracoes.
+** Libera as listas de celulas vivas, vizinhas-mortas e vivas da proxima geracao.
+** Preenche toda a matriz com pontos e zera as quantidades de celulas
+** e o contador da geracao atual, preservando as configuracoes da simulacao.
 ** Parametros:
-**      mundo - ponteiro para a estrutura cuja matriz sera preenchida
+**      mundo - ponteiro para a estrutura cujo mapa e contadores serao limpos
 */
 void limpar_mapa(struct Mundo *mundo)
     {
@@ -438,12 +453,15 @@ void limpar_mapa(struct Mundo *mundo)
     }
     
 /*
-** Calcula as geracoes sucessivas usando uma matriz auxiliar,
-** atualizando os contadores e exibindo cada geracao calculada.
-** Com velocidade 0, pede confirmacao a cada passo; com velocidade positiva,
-** espera esse numero de segundos e segue automaticamente.
-** O intervalo define quantas geracoes sao exibidas a cada passo,
-** sem ultrapassar a quantidade total configurada.
+** Calcula as geracoes sucessivas usando a lista de vivas da proxima geracao,
+** substitui a lista atual e atualiza a matriz, as vizinhas-mortas e os contadores.
+** Cada geracao concluida e apresentada na tela.
+** O intervalo define quantas geracoes sao calculadas por passo; quando zero,
+** calcula uma por passo, sem ultrapassar a quantidade total configurada.
+** Entre os passos, a velocidade zero exige confirmacao do usuario;
+** com velocidade positiva, espera esse numero de segundos.
+** Ao final de cada passo, verifica o limite de geracoes e a ausencia de vivas.
+** Interrompe a evolucao se houver falha na alocacao das listas.
 ** Parametros:
 **      mundo - ponteiro para a estrutura do mundo, cuja matriz
 **              e cujos contadores serao atualizados
@@ -582,8 +600,11 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 }
 
 /*
-** Pede o nome do save ao usuario, verifica se ja existe (permitindo sobrescrever
-** sob confirmacao) e grava a geracao no arquivo correspondente.
+** Solicita o nome do save e pede confirmacao caso o arquivo ja exista.
+** Grava a configuracao atual em um arquivo binario e registra seu nome
+** no indice de saves, apresentando o resultado da operacao.
+** Parametros:
+**      mundo - ponteiro para a estrutura do mundo cuja configuracao sera salva
 */
 void salvar_geracao_controller(struct Mundo *mundo)
 {
@@ -619,7 +640,15 @@ void salvar_geracao_controller(struct Mundo *mundo)
 }
 
 /*
-** Lista as geracoes salvas e carrega o arquivo selecionado pelo usuario.
+** Consulta o indice de saves, apresenta os nomes disponiveis e permite
+** ao usuario escolher uma configuracao para carregar.
+** Informa quando nao ha saves ou apresenta o resultado do carregamento.
+** Parametros:
+**      mundo - ponteiro para a estrutura que recebera a configuracao escolhida
+** Retorno:
+**      1 em caso de sucesso; 0 se nao houver saves, se a selecao for cancelada
+**      ou em caso de erro de leitura; -2 em caso de falha critica que exige
+**      limpeza do estado da simulacao
 */
 int carregar_geracao_selecao_controller(struct Mundo *mundo)
 {
@@ -664,8 +693,12 @@ int carregar_geracao_selecao_controller(struct Mundo *mundo)
 }
 
 /*
-** Carrega a proxima geracao da lista de saves de forma sucessiva,
-** voltando para a primeira quando chegar ao final.
+** Carrega o save indicado pelo indice e avanca para o seguinte somente
+** quando o carregamento termina com sucesso.
+** Ao atingir o final da lista de saves, retorna ao primeiro.
+** Parametros:
+**      mundo - ponteiro para a estrutura que recebera a configuracao carregada
+**      indice - ponteiro para a posicao do proximo save na lista, a partir de zero
 */
 void carregar_geracao_sucessiva_controller(struct Mundo *mundo, int *indice)
 {
