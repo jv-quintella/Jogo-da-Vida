@@ -155,7 +155,8 @@ void menu_regras(void)
 /*
 ** Exibe o mapa e o menu da simulacao e executa a opcao escolhida pelo usuario
 ** (editar celulas, simular evolucao, limpar o mapa, configurar, acessar
-** as opcoes de gravacao e carregamento ou reiniciar a simulacao), ate ele escolher voltar.
+** as opcoes de gravacao e carregamento ou reiniciar o contador de geracoes),
+** ate ele escolher voltar.
 ** Parametros:
 **      mundo - ponteiro para a estrutura do mundo
 **      mostrarvizinho - ponteiro para o indicador de exibicao das vizinhas-mortas ('+');

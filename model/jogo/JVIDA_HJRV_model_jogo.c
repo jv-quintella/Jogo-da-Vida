@@ -126,8 +126,8 @@ int contar_vizinhos(struct Mundo *mundo, int linha, int coluna)
         {
             for(int j = coluna - 1; j <= coluna + 1; j++)
             {
-                // Validacoes antes de acessar a matriz:
-                // (>= 0 e < tamanho) impede acesso a lixo de memoria.
+                // Validacoes antes de consultar a lista de vivas:
+                // (>= 0 e < tamanho) ignora posicoes fora dos limites do mundo.
                 // (i != linha || j != coluna) garante que a celula nao conte a si mesma.
                 if((i >= 0 && i < mundo-> tamanho) && (j >= 0 && j < mundo -> tamanho) && (i != linha || j != coluna))
                     {

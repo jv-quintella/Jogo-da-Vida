@@ -173,7 +173,7 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
         }
         /* Converte a entrada para numero e rejeita se:
         O retorno do sscanf for diferente de 1
-        O valor lido estiver fora do intervalo de 1 ate o limite */
+        O valor lido for menor que 0 */
         else if (sscanf(entrada, "%d %c", &quantidade, &sobra) != 1 || quantidade < 0) {
             printf("Opcao invalida.\nTente novamente: ");
             valido = 0;
@@ -212,7 +212,7 @@ int obter_velocidade(int tamanho, char entrada[])
         }
         /* Converte a entrada para numero e rejeita se:
         O retorno do sscanf for diferente de 1
-        O valor lido for menor que 0 */
+        O valor lido estiver fora do intervalo de 0 a 10 */
         else if (sscanf(entrada, "%d %c", &velocidade, &sobra) != 1 || velocidade < 0 || velocidade > 10) {
             printf("Opcao invalida.\nTente novamente: ");
             valido = 0;

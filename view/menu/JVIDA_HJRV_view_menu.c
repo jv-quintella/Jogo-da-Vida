@@ -9,11 +9,12 @@
 #include "../utilidades/JVIDA_HJRV_view_utilidades.h"
 /*
 ** Exibe o menu correspondente ao identificador informado, le e valida a opcao escolhida.
-** Menus disponiveis: 1 (principal), 2 (simulacao), 3 (configuracoes) e 4 (regras do jogo).
+** Menus disponiveis: 1 (principal), 2 (simulacao), 3 (configuracoes),
+** 4 (regras do jogo) e 5 (opcoes de carregamento).
 ** Se a opcao digitada for invalida, exibe uma mensagem de erro e repete a leitura.
 ** Parametros:
 **      opcao - identificador do menu a ser exibido (1 = principal, 2 = simulacao,
-**              3 = configuracoes, 4 = regras do jogo)
+**              3 = configuracoes, 4 = regras do jogo, 5 = opcoes de carregamento)
 ** Retorno:
 **      a opcao escolhida dentro do menu exibido (0 sempre significa sair ou voltar);
 **      0 tambem em caso de EOF na entrada; -1 se o identificador do menu for desconhecido.
