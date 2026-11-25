@@ -1,5 +1,5 @@
 //JVIDA_HJRV_View - Projeto Jogo da Vida LP2026
-//30/09/2026
+//24/11/2026
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
 #include <stdio.h>
@@ -8,6 +8,7 @@
 #include "JVIDA_HJRV_view_jogo.h"
 #include "../utilidades/JVIDA_HJRV_view_utilidades.h"
 #include "../../model/jogo/JVIDA_HJRV_model_jogo.h"
+#include "../../model/struct/JVIDA_HJRV_model_struct.h"
 
 /*
 ** Exibe o mundo atual, as coordenadas e os contadores da simulacao.
@@ -52,16 +53,28 @@ void imprimir_mundo(int tamanho, struct Mundo *mundo, int mostrarvizinho)
         printf("Geracao: %d/%d\n", mundo->geracaoAtual, mundo->qtdgeracoes);
         printf("Quantidade de celulas vivas: %d\n", mundo->qtdvivos);
         printf("Quantidade de celulas vizinhas-mortas: %d\n", mundo->qtdmortos);
+        printf("Celulas vivas: ");
+        imprimir_lista(obterVivos());
+        printf("Vizinhas-mortas: ");
+        if (mundo->qtdmortos > 0 && obterMortos() == NULL)
+        {
+            printf("Lista indisponivel\n");
+        }
+
+        else
+        {
+            imprimir_lista(obterMortos());
+        }   
     }
 
 /*
 ** Solicita, le e valida o tamanho do mundo matricial para a simulacao.
 ** Garante que a entrada seja um numero inteiro valido entre 10 e 60.
-**Funcao baseada em https://github.com/cs50/libcs50/blob/main/src/cs50.c (get_int)
+** Permite retornar ao menu ao digitar 0.
 ** Parametros:
 **      (nenhum)
 ** Retorno:
-**      dimensao do mundo, entre 10 e 60
+**      dimensao do mundo entre 10 e 60, ou 0 se o usuario escolher voltar
 */
 int obter_tamanho()
 {
@@ -71,17 +84,21 @@ int obter_tamanho()
     int valido = 0;
 
     do {
-        printf("\nInsira o tamanho do mundo para a simulacao (entre 10 e 60): ");
+        printf("\nInsira o tamanho do mundo para a simulacao entre 10 e 60 (0 para voltar): ");
 
-        //Indica um erro se houver falha na leitura do teclado.
         if (obter_input(entrada, sizeof entrada) == 0) {
             printf("Valor invalido!\n");
             valido = 0;
         }
-        /* Converte a entrada para numero e rejeita se:
-        O retorno do sscanf for diferente de 1
-        O valor lido estiver fora do intervalo de 10 a 60 */
-        else if (sscanf(entrada, "%d %c", &valor, &sobra) != 1 || valor < 10 || valor > 60) {
+        else if (sscanf(entrada, "%d %c", &valor, &sobra) != 1) {
+            printf("Valor invalido!\n");
+            valido = 0;
+        }
+        else if (valor == 0) {
+            limparTela();
+            return 0;
+        }
+        else if (valor < 10 || valor > 60) {
             printf("Valor invalido!\n");
             valido = 0;
         }
@@ -133,12 +150,12 @@ int obter_posicao(int limite, int tamanho, char entrada[])
 
 /*
 ** Solicita, le e valida a quantidade de geracoes a serem simuladas.
-** Repete a leitura enquanto a entrada for invalida ou o valor for menor que 1.
+** Permite digitar 0 para voltar ao menu anterior.
 ** Parametros:
 **      tamanho - capacidade do vetor de entrada
 **      entrada - vetor utilizado para armazenar a entrada do usuario
 ** Retorno:
-**      quantidade de geracoes informada pelo usuario, maior ou igual a 1
+**      quantidade de geracoes informada pelo usuario, ou 0 para voltar
 */
 int obter_qtdgeracoes(int tamanho, char entrada[])
 {
@@ -146,7 +163,7 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
     int quantidade;
     char sobra;
 
-    printf("Quantidade de geracoes a serem simuladas: ");
+    printf("Quantidade de geracoes a serem simuladas (0 para voltar): ");
 
     do {
         //Indica um erro se houver falha na leitura do teclado.
@@ -156,8 +173,8 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
         }
         /* Converte a entrada para numero e rejeita se:
         O retorno do sscanf for diferente de 1
-        O valor lido estiver fora do intervalo de 1 ate o limite */
-        else if (sscanf(entrada, "%d %c", &quantidade, &sobra) != 1 || quantidade < 1) {
+        O valor lido for menor que 0 */
+        else if (sscanf(entrada, "%d %c", &quantidade, &sobra) != 1 || quantidade < 0) {
             printf("Opcao invalida.\nTente novamente: ");
             valido = 0;
         }
@@ -171,14 +188,13 @@ int obter_qtdgeracoes(int tamanho, char entrada[])
 
 /*
 ** Solicita, le e valida a velocidade da simulacao.
-** Um valor positivo define quantas geracoes serao calculadas e exibidas
-** antes da proxima confirmacao; 0 indica uma geracao por confirmacao.
-** Repete a leitura enquanto a entrada for invalida ou negativa.
+** Um valor de 1 a 10 define quantos segundos esperar entre as geracoes
+** (modo automatico); 0 indica confirmacao manual a cada geracao.
 ** Parametros:
 **      tamanho - capacidade do vetor de entrada
 **      entrada - vetor utilizado para armazenar o texto digitado
 ** Retorno:
-**      velocidade informada pelo usuario, maior ou igual a 0
+**      velocidade informada pelo usuario, entre 0 e 10
 */
 int obter_velocidade(int tamanho, char entrada[])
 {
@@ -186,7 +202,7 @@ int obter_velocidade(int tamanho, char entrada[])
     int valido;
     char sobra;
 
-    printf("Velocidade de simulacao (0 para passo a passo): ");
+    printf("Velocidade: segundos entre geracoes (1 a 10, 0 para manual): ");
 
     do {
         //Indica um erro se houver falha na leitura do teclado.
@@ -196,8 +212,8 @@ int obter_velocidade(int tamanho, char entrada[])
         }
         /* Converte a entrada para numero e rejeita se:
         O retorno do sscanf for diferente de 1
-        O valor lido for menor que 0 */
-        else if (sscanf(entrada, "%d %c", &velocidade, &sobra) != 1 || velocidade < 0) {
+        O valor lido estiver fora do intervalo de 0 a 10 */
+        else if (sscanf(entrada, "%d %c", &velocidade, &sobra) != 1 || velocidade < 0 || velocidade > 10) {
             printf("Opcao invalida.\nTente novamente: ");
             valido = 0;
         }
@@ -258,11 +274,11 @@ void mostrar_configuracoes(struct Mundo *mundo, int mostrarvizinho)
     printf("Quantidade de geracoes: %d\n", mundo->qtdgeracoes);
     if (mundo->velocidade == 0)
     {
-        printf("Velocidade: 0 (passo a passo)\n");
+        printf("Velocidade: 0 (manual, confirmacao a cada geracao)\n");
     }
     else
     {
-        printf("Velocidade: %d (geracoes por tela)\n", mundo->velocidade);
+        printf("Velocidade: %d segundo(s) entre geracoes\n", mundo->velocidade);
     }
     if (mostrarvizinho == 1)
     {
@@ -271,6 +287,14 @@ void mostrar_configuracoes(struct Mundo *mundo, int mostrarvizinho)
     else
     {
         printf("Vizinhas-mortas: nao\n");
+    }
+    if (mundo->intervalo == 0)
+    {
+        printf("Intervalo: 0 (uma geracao por vez)\n");
+    }
+    else
+    {
+        printf("Intervalo: %d (geracoes por tela)\n", mundo->intervalo);
     }
 }
 
@@ -336,5 +360,174 @@ void mostrar_regra(int topico)
             printf("O mundo e plano: a ultima celula nao e vizinha da primeira.\n");
             printf("O tamanho do mundo vai de 10 a 60.\n");
             break;
+    }
+}
+
+/*
+** Solicita, le e valida o intervalo da simulacao.
+** Um valor positivo define quantas geracoes serao calculadas e exibidas
+** antes da proxima espera ou confirmacao; 0 indica uma geracao por vez.
+** Parametros:
+**      tamanho - capacidade do vetor de entrada
+**      entrada - vetor utilizado para armazenar o texto digitado
+** Retorno:
+**      intervalo informado pelo usuario, maior ou igual a 0
+*/
+int obter_intervalo(int tamanho, char entrada[])
+{
+    int intervalo;
+    int valido;
+    char sobra;
+
+    printf("Intervalo: geracoes por tela (0 para uma por vez): ");
+
+    do {
+        if (obter_input(entrada, tamanho) == 0) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        else if (sscanf(entrada, "%d %c", &intervalo, &sobra) != 1 || intervalo < 0) {
+            printf("Opcao invalida.\nTente novamente: ");
+            valido = 0;
+        }
+        else {
+            valido = 1;
+        }
+    } while (valido == 0);
+
+    return intervalo;
+}
+
+/*
+** Imprime no terminal as coordenadas de todas as celulas de uma lista,
+** no formato (linha, coluna), separadas por espaco, em uma unica linha.
+** As coordenadas sao exibidas a partir de 1 (indice da matriz + 1),
+** igual ao que o usuario digita em colocar_celula.
+** Se a lista estiver vazia, imprime "Lista vazia".
+** Parametros:
+**      lista - ponteiro para o inicio da lista a ser impressa (somente leitura),
+**              como pvivo ou pmorto
+*/
+void imprimir_lista(const celula *lista)
+{
+    const celula *aux = lista;
+    
+    // lista vazia: avisa e sai sem imprimir nada mais
+    if (aux == NULL)
+    {
+        printf("Lista vazia\n");
+        return;
+    }
+
+    // percorre a lista imprimindo cada no
+    while(aux != NULL)
+    {
+        // soma 1 para converter do indice da matriz (base 0) para a contagem do usuario (base 1)
+        printf("(%d, %d) ", aux->linha + 1, aux->coluna + 1);
+        aux = aux -> proximo;
+    }
+
+    printf("\n");
+}
+
+/*
+** Solicita ao usuario um nome valido para o arquivo de geracao,
+** rejeitando entradas vazias ou que contenham barras.
+** Parametros:
+**      nome - vetor que armazenara o nome digitado
+**      tamanho - capacidade do vetor nome
+** Retorno:
+**      1 se um nome valido foi lido; 0 em caso de falha na entrada
+*/
+int obter_nome_save(char nome[], int tamanho)
+{
+    int valido = 0;
+
+    do {
+        printf("\nDigite o nome para salvar a geracao (sem extensao): ");
+        if (obter_input(nome, tamanho) == 0)
+        {
+            return 0;
+        }
+
+        if (nome[0] == '\0' || strchr(nome, '/') != NULL || strchr(nome, '\\') != NULL)
+        {
+            printf("Nome invalido. Nao deixe vazio e nao use barras.\n");
+            valido = 0;
+        }
+        else
+        {
+            valido = 1;
+        }
+    } while (valido == 0);
+
+    return 1;
+}
+
+/*
+** Pergunta ao usuario se deseja sobrescrever um save ja existente.
+** Parametros:
+**      (nenhum)
+** Retorno:
+**      1 para sobrescrever ('s'/'S'); 0 para cancelar ('n'/'N') ou em caso de falha na entrada
+*/
+int confirmar_sobrescrita(void)
+{
+    char entrada[10];
+
+    while (1)
+    {
+        printf("Ja existe um save com esse nome. Deseja sobrescrever? [s/n]: ");
+        if (obter_input(entrada, sizeof entrada) == 0)
+        {
+            return 0;
+        }
+        if (entrada[0] == 's' || entrada[0] == 'S')
+        {
+            return 1;
+        }
+        if (entrada[0] == 'n' || entrada[0] == 'N')
+        {
+            return 0;
+        }
+        printf("Opcao invalida.\n");
+    }
+}
+
+/*
+** Exibe a lista numerada de saves disponiveis e le a escolha do usuario.
+** Parametros:
+**      nomes - matriz de strings com os nomes dos saves disponiveis
+**      qtd - quantidade de saves listados
+** Retorno:
+**      indice escolhido (0 a qtd - 1); -1 se o usuario cancelar (0)
+*/
+int escolher_save(char nomes[][50], int qtd)
+{
+    char entrada[10];
+    char sobra;
+    int escolha;
+    int i;
+
+    printf("\n| GERACOES SALVAS\n\n");
+    for (i = 0; i < qtd; i++)
+    {
+        printf("[%d] - %s\n", i + 1, nomes[i]);
+    }
+    printf("[0] - Cancelar\n");
+    printf("---------------------------\n");
+
+    while (1)
+    {
+        printf("Escolha o numero da geracao: ");
+        if (obter_input(entrada, sizeof entrada) == 0)
+        {
+            return -1;
+        }
+        if (sscanf(entrada, "%d %c", &escolha, &sobra) == 1 && escolha >= 0 && escolha <= qtd)
+        {
+            return escolha - 1; // 0 vira -1 (cancelar)
+        }
+        printf("Opcao invalida. Digite um numero de 0 a %d.\n", qtd);
     }
 }

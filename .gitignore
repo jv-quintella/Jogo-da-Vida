@@ -6,6 +6,7 @@
 *.ko
 *.obj
 *.elf
+*.txt
 
 # Linker output
 *.ilk
@@ -75,3 +76,4 @@ output/
 # Executables
 *.exe
 jogo_da_vida
+*.bin

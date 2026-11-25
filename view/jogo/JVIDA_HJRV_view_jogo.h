@@ -1,5 +1,5 @@
 //JVIDA_HJRV_View - Projeto Jogo da Vida LP2026
-//30/09/2026
+//24/11/2026
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
 #ifndef JVIDA_HJRV_VIEW_JOGO_H
@@ -15,4 +15,9 @@ int obter_velocidade(int tamanho, char entrada[]);
 int obter_coordenada(int limite, int tamanho, char entrada[], int *linha, int *coluna);
 void mostrar_configuracoes(struct Mundo *mundo, int mostrarvizinho);
 void mostrar_regra(int topico);
+int obter_intervalo(int tamanho, char entrada[]);
+void imprimir_lista(const celula *lista);
+int obter_nome_save(char nome[], int tamanho);
+int confirmar_sobrescrita(void);
+int escolher_save(char nomes[][50], int qtd);
 #endif

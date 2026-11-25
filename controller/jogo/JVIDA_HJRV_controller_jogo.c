@@ -1,8 +1,12 @@
 //JVIDA_HJRV_Controller - Projeto Jogo da Vida LP2026
-//30/09/2026
+//24/11/2026
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <conio.h>
+#include <windows.h>
 #include "JVIDA_HJRV_controller_jogo.h"
 #include "../../model/jogo/JVIDA_HJRV_model_jogo.h"
 #include "../../view/jogo/JVIDA_HJRV_view_jogo.h"
@@ -10,60 +14,120 @@
 #include "../../view/utilidades/JVIDA_HJRV_view_utilidades.h"
 
 /*
-    ** Inicia a simulacao do Jogo da Vida, exibindo o menu principal.
-    ** Permite criar um novo mundo, continuar a simulacao em andamento ou consultar
-    ** as regras do jogo, ate o usuario escolher sair.
-    ** Parametros:
-    **      Nenhum.
-    */
-    void iniciar_simulacao()
-    {
-        struct Mundo mundo;
-        int tamanho;
-        int geracoes;
-        char entrada[10];
-        int mostrarvizinho = 0;
-        int simulacao_ativa = 0;
-        int menu1;
+** Inicia a simulacao do Jogo da Vida, exibindo o menu principal.
+** Permite criar um novo mundo, continuar a simulacao em andamento,
+** consultar as regras do jogo ou carregar uma simulacao salva,
+** ate o usuario escolher sair.
+** Parametros:
+**      (nenhum)
+*/
+void iniciar_simulacao()
+{
+    struct Mundo mundo;
+    int tamanho;
+    int geracoes;
+    char entrada[10];
+    int mostrarvizinho = 0;
+    int simulacao_ativa = 0;
+    int menu1;
+    mundo.velocidade = 0;
+    mundo.intervalo = 0;
 
-        do{
-            limparTela();
-            menu1 = mostrar_Menu(1);
+    do{
+        limparTela();
+        menu1 = mostrar_Menu(1);
 
-            switch(menu1) // Executa a escolha do usuario no menu inicial
-            {
-                case 1:
+        switch(menu1) // Executa a opcao escolhida no menu principal e retorna ao menu caso a entrada seja cancelada
+        {
+            case 1:
+                tamanho = 0;
+                geracoes = 0;
+                do {
                     tamanho = obter_tamanho();
+                    if (tamanho == 0) break;
+                    
                     geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
-                    //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
-                    criar_mundo(&mundo, tamanho);
-                    mundo.geracaoAtual = 0;
-                    mundo.qtdgeracoes = geracoes;
-                    mundo.velocidade = 0;
-                    mostrarvizinho = 0;
-                    simulacao_ativa = 1;
+                }while (geracoes == 0);
+
+                if (tamanho == 0) break;
+
+                //Passa o endereco de memoria (&) da struct para o Model preencher os pontos 
+                liberarVivos();
+                liberarMortos();
+                liberarVivosProx();
+                criar_mundo(&mundo, tamanho);
+                mundo.geracaoAtual = 0;
+                mundo.qtdgeracoes = geracoes;
+                mundo.velocidade = 0;
+                mundo.intervalo = 0;
+                mostrarvizinho = 0;
+                simulacao_ativa = 1;
+                menu_simulacao(&mundo, &mostrarvizinho);
+                break;
+            case 2:
+                if(simulacao_ativa == 1)
+                {
                     menu_simulacao(&mundo, &mostrarvizinho);
-                    break;
-                case 2:
-                    if(simulacao_ativa == 1)
+                }
+                else
+                {
+                    mostrarMensagem("\nNenhuma simulacao em andamento. Escolha a opcao 1 para criar um mundo.\n");
+                    pause();
+                }
+                break;
+            case 3:
+                menu_regras();
+                break;
+                case 4:
+                geracoes = carregar_geracao_selecao_controller(&mundo);
+
+                if (geracoes == 1)
+                {
+                    simulacao_ativa = 1;
+                    mundo.qtdgeracoes = mundo.geracaoAtual;
+
+                    do {
+                        mostrarMensagem(
+                            "\nDefina o limite de geracoes da simulacao carregada.\n");
+
+                        geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+
+                        if (geracoes == 0)
+                        {
+                            break;
+                        }
+
+                        if (geracoes <= mundo.geracaoAtual)
+                        {
+                            mostrarMensagem(
+                                "\nO limite deve ser maior que a geracao carregada.\n");
+                            pause();
+                        }
+                    } while (geracoes <= mundo.geracaoAtual);
+
+                    if (geracoes != 0)
                     {
+                        mundo.qtdgeracoes = geracoes;
                         menu_simulacao(&mundo, &mostrarvizinho);
                     }
-                    else
-                    {
-                        mostrarMensagem("\nNenhuma simulacao em andamento. Escolha a opcao 1 para criar um mundo.\n");
-                        pause();
-                    }
-                    break;
-                case 3:
-                    menu_regras();
-                    break;
-                case 0:
-                    mostrarMensagem("Saindo do programa...\n");
-                    return;
-            }
-        } while(menu1 != 0);
-    }
+                }
+                else if (geracoes == -2)
+                {
+                    liberarVivos();
+                    liberarMortos();
+                    liberarVivosProx();
+                    simulacao_ativa = 0;
+                }
+                break;
+            case 0:
+                liberarVivos();
+                liberarMortos();
+                liberarVivosProx();
+                mostrarMensagem("Saindo do programa...\n");
+                return;
+        }
+    } while(menu1 != 0);
+}
 
 /*
 ** Exibe o menu de regras do jogo e, a cada topico escolhido, mostra o texto
@@ -90,9 +154,11 @@ void menu_regras(void)
 
 /*
 ** Exibe o mapa e o menu da simulacao e executa a opcao escolhida pelo usuario
-** (editar celulas, simular evolucao, limpar o mapa ou configurar), ate ele voltar.
+** (editar celulas, simular evolucao, limpar o mapa, configurar, acessar
+** as opcoes de gravacao e carregamento ou reiniciar o contador de geracoes),
+** ate ele escolher voltar.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo
+**      mundo - ponteiro para a estrutura do mundo
 **      mostrarvizinho - ponteiro para o indicador de exibicao das vizinhas-mortas ('+');
 **                       1 para exibir, 0 caso contrario
 */
@@ -124,6 +190,15 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         {
             configurar_simulacao(mundo, mostrarvizinho);
         }
+        else if(menu2 == 5)
+        {
+            opcoes_carregamento(mundo, mostrarvizinho);
+        }
+        else if (menu2 == 6)
+        {
+            liberarVivosProx();
+            mundo->geracaoAtual = 0;
+        }
         else if (menu2 == 0)
         {
             mostrarMensagem("Saindo da simulacao...\n");
@@ -133,9 +208,10 @@ void menu_simulacao(struct Mundo *mundo, int *mostrarvizinho)
 
 /*
 ** Exibe o menu de configuracoes e permite alterar a quantidade de geracoes,
-** a velocidade e a exibicao das vizinhas-mortas, ate o usuario voltar.
+** a velocidade, o intervalo e a exibicao das vizinhas-mortas, ate o usuario voltar.
 ** Parametros:
-**      mundo - o ponteiro para a estrutura do mundo (recebe quantidade de geracoes e velocidade)
+**      mundo - ponteiro para a estrutura que recebe a quantidade de geracoes,
+**              a velocidade e o intervalo da simulacao
 **      mostrarvizinho - ponteiro para o indicador de exibicao das vizinhas-mortas ('+');
 **                       1 para exibir, 0 caso contrario
 */
@@ -143,6 +219,7 @@ void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho)
 {
     char entrada[10];
     int menu3;
+    int geracoes;
 
     do{
         limparTela();
@@ -152,7 +229,11 @@ void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho)
 
         if(menu3 == 1)
         {
-            mundo->qtdgeracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+            geracoes = obter_qtdgeracoes(sizeof entrada, entrada);
+            if (geracoes > 0)
+            {
+                mundo -> qtdgeracoes = geracoes;
+            }
         }
         else if(menu3 == 2)
         {
@@ -162,7 +243,47 @@ void configurar_simulacao(struct Mundo *mundo, int *mostrarvizinho)
         {
             *mostrarvizinho = mostrar_mortos(sizeof entrada, entrada);
         }
+        else if(menu3 == 4)
+        {
+            mundo->intervalo = obter_intervalo(sizeof entrada, entrada);
+        }
     }while(menu3 != 0);
+}
+
+/*
+** Exibe o mapa e o menu de gravacao e carregamento, permitindo salvar
+** a configuracao atual, carregar uma configuracao escolhida ou percorrer
+** os saves sucessivamente, ate o usuario escolher voltar.
+** A sequencia de carregamento comeca no primeiro save a cada entrada neste menu.
+** Parametros:
+**      mundo - ponteiro para a estrutura do mundo que sera salva ou atualizada
+**      mostrarvizinho - ponteiro para o indicador usado na apresentacao do mapa;
+**                       1 para exibir as vizinhas-mortas, 0 caso contrario
+*/
+void opcoes_carregamento(struct Mundo *mundo, int *mostrarvizinho)
+{
+    int menu5;
+    int indice_geracao = 0;
+
+    do{
+        limparTela();
+        imprimir_mundo(mundo->tamanho, mundo, *mostrarvizinho);
+
+        menu5 = mostrar_Menu(5);
+
+        if(menu5 == 1)
+        {
+            salvar_geracao_controller(mundo);
+        }
+        else if(menu5 == 2)
+        {
+            carregar_geracao_selecao_controller(mundo);
+        }
+        else if(menu5 == 3)
+        {
+            carregar_geracao_sucessiva_controller(mundo, &indice_geracao);
+        }
+    }while(menu5 != 0);
 }
 
 /*
@@ -225,10 +346,11 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
     do {
         limparTela();
         contar_celulas(mundo);
-        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
+        imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho); 
         mostrarMensagem("\nInforme linha e coluna (ex: 5 4) ou -1 -1 para parar: ");
 
         if (obter_coordenada(mundo->tamanho, tamanho, entrada, &temp_alt, &temp_lar) == 0)
+        // para se o usuário digitar -1 -1
         {
             continuar = 0;
         }
@@ -244,54 +366,110 @@ void colocar_celula(struct Mundo *mundo, int tamanho, char entrada[], int mostra
                     mostrarMensagem("\nDeseja excluir esta celula? [s/n]: ");
 
                     if (obter_input(entrada, tamanho) == 0) 
+                    // sai da pergunta se sem entrada
                     {
                         continuar = 0;
                         valido = 1;
                     }
                     else if (entrada[0] == 's' || entrada[0] == 'S') 
                     {
-                        mundo->celulas[temp_alt][temp_lar] = '.';
-                        mundo->geracaoAtual = 0;
+                        if(removerVivos(temp_alt, temp_lar) == 1)
+                        {
+                            mundo->celulas[temp_alt][temp_lar] = '.'; // altera pra morta
+                            mundo->geracaoAtual = 0; // reseta gerações
+                            if(atualizarMortos(mundo -> tamanho) == 0)
+                            // recalcula a lista de vizinhas mortas
+                            {
+                                mostrarMensagem("Falha na alocacao de memoria");
+                                pause();
+                            }
+                            valido = 1;
+                        }
+
+                        else
+                        // celula aparece no mapa mas nao na lista de vivas
+                        {
+                            mostrarMensagem("Celula nao encontrada na lista");
+                            pause();
+                        }
                         valido = 1;
                     }
                     else if (entrada[0] == 'n' || entrada[0] == 'N') 
+                    // mantem a celula viva
                     {
                         valido = 1;
                     }
                     else 
                     {
                         mostrarMensagem("Opcao invalida.\n");
+                        pause();
                         valido = 0;
                     }
                 } while (valido == 0);
             }
+
             else 
+            // se celula morta, cria nova celula
             {
-                mundo->celulas[temp_alt][temp_lar] = 'O';
-                mundo->geracaoAtual = 0;
+                if (buscarVivos(temp_alt, temp_lar) == NULL)
+                // aloca memoria para inserir a celula
+                {
+                    carregarVivos(temp_alt, temp_lar);
+                }
+
+                if (buscarVivos(temp_alt, temp_lar) != NULL)
+                {
+                    mundo->celulas[temp_alt][temp_lar] = 'O'; // marca como viva
+                    mundo->geracaoAtual = 0; // reseta as gerações
+                    if(atualizarMortos(mundo -> tamanho) == 0)
+                    // recalcula lista de vizinhas mortas
+                    {
+                        mostrarMensagem("Falha na alocacao de memoria");
+                        pause();
+                    }
+                }
+                
+                else
+                // falha na inserção
+                {
+                    mundo->celulas[temp_alt][temp_lar] = '.';
+                    mostrarMensagem("Falha na alocacao de memoria");
+                    pause();
+                }
             }
         }
     } while (continuar == 1);
 }
 
 /*
-** Preenche toda a matriz de celulas com pontos e reinicia o contador de geracoes.
+** Libera as listas de celulas vivas, vizinhas-mortas e vivas da proxima geracao.
+** Preenche toda a matriz com pontos e zera as quantidades de celulas
+** e o contador da geracao atual, preservando as configuracoes da simulacao.
 ** Parametros:
-**      mundo - ponteiro para a estrutura cuja matriz sera preenchida
+**      mundo - ponteiro para a estrutura cujo mapa e contadores serao limpos
 */
 void limpar_mapa(struct Mundo *mundo)
     {
+        liberarVivos();
+        liberarMortos();
+        liberarVivosProx();
+        mundo->qtdvivos = 0;
+        mundo->qtdmortos = 0;
+        mundo->geracaoAtual = 0;
         memset(mundo->celulas, '.', sizeof(mundo->celulas));
         mundo->geracaoAtual = 0;
     }
     
 /*
-** Calcula as geracoes sucessivas usando uma matriz auxiliar,
-** atualizando os contadores e exibindo cada geracao calculada.
-** Com velocidade 0, avanca uma geracao por confirmacao.
-** Com velocidade positiva, avanca um grupo de geracoes por confirmacao,
-** sem ultrapassar a quantidade total configurada.
-** Solicita confirmacao para continuar enquanto restarem geracoes.
+** Calcula as geracoes sucessivas usando a lista de vivas da proxima geracao,
+** substitui a lista atual e atualiza a matriz, as vizinhas-mortas e os contadores.
+** Cada geracao concluida e apresentada na tela.
+** O intervalo define quantas geracoes sao calculadas por passo; quando zero,
+** calcula uma por passo, sem ultrapassar a quantidade total configurada.
+** Entre os passos, a velocidade zero exige confirmacao do usuario;
+** com velocidade positiva, espera esse numero de segundos.
+** Ao final de cada passo, verifica o limite de geracoes e a ausencia de vivas.
+** Interrompe a evolucao se houver falha na alocacao das listas.
 ** Parametros:
 **      mundo - ponteiro para a estrutura do mundo, cuja matriz
 **              e cujos contadores serao atualizados
@@ -300,14 +478,13 @@ void limpar_mapa(struct Mundo *mundo)
 */
 void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 {
-    struct Mundo mundo_auxiliar;
     char entrada[10];
     int continuar = 1;
     int valido;
     int total = mundo->qtdgeracoes;
     int atual = mundo->geracaoAtual;
     int passo;
-    int i, j, k;
+    int k;
 
     if (atual >= total)
     {
@@ -316,13 +493,18 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
         return;
     }
 
-    criar_mundo(&mundo_auxiliar, mundo->tamanho);
+    if (!atualizarMortos(mundo->tamanho))
+    {
+        mostrarMensagem("\nErro ao alocar memoria para celulas vizinhas.\n");
+        pause();
+        return;
+    }
 
     do {
         passo = 1;
-        if (mundo->velocidade > 0)
+        if (mundo->intervalo > 0)
         {
-            passo = mundo->velocidade;
+            passo = mundo->intervalo;
             if (passo > total - atual)
             {
                 passo = total - atual;
@@ -333,19 +515,25 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
 
         for (k = 0; k < passo; k++)
         {
-            //Calcula toda a proxima geracao no mundo auxiliar, preservando o mundo atua
-            calcular_geracao(mundo, &mundo_auxiliar);
-            //Copia a geracao calculada para o mundo atual somente apos a varredura completa.
-            for (i = 0; i < mundo->tamanho; i++)
+            if (!calcular_geracao(mundo))
             {
-                for (j = 0; j < mundo->tamanho; j++)
-                {
-                    mundo->celulas[i][j] = mundo_auxiliar.celulas[i][j];
-                }
+                mostrarMensagem("\nErro ao alocar memoria para a proxima geracao.\n");
+                pause();
+                return;
             }
+
+            atualizarVivos();
+            atualizarMapa(mundo);
 
             atual++;
             mundo->geracaoAtual = atual;
+
+            if (!atualizarMortos(mundo->tamanho))
+            {
+                mostrarMensagem("\nErro ao alocar memoria para celulas vizinhas.\n");
+                pause();
+                return;
+            }
 
             contar_celulas(mundo);
             imprimir_mundo(mundo->tamanho, mundo, mostrarvizinho);
@@ -358,30 +546,200 @@ void evoluir_geracoes(struct Mundo *mundo, int mostrarvizinho)
             break;
         }
 
-        valido = 0;
-        do {
-            mostrarMensagem("\nMostrar a proxima geracao? [s/n]: ");
+        if (mundo->qtdvivos == 0)
+        {
+            mostrarMensagem("\n0 CELULAS VIVAS - FIM DA SIMULACAO\n");
+            pause();
+            break;
+        }
 
-            if (obter_input(entrada, sizeof entrada) == 0)
+        if (mundo->velocidade > 0)
+        {
+            // Automatico: espera N segundos em blocos de 100ms checando o teclado
+            int total_ms = mundo->velocidade * 1000;
+            int decorrido = 0;
+            continuar = 1;
+
+            mostrarMensagem("\nPressione qualquer tecla para interromper...\n");
+
+            while (decorrido < total_ms)
             {
-                continuar = 0;
-                valido = 1;
+                if (_kbhit())
+                {
+                    _getch(); // Limpa a tecla do buffer para nao sujar o proximo menu
+                    mostrarMensagem("\nSimulacao interrompida pelo usuario.\n");
+                    continuar = 0;
+                    break;
+                }
+                Sleep(100);
+                decorrido += 100;
             }
-            else if (entrada[0] == 's' || entrada[0] == 'S')
-            {
-                continuar = 1;
-                valido = 1;
-            }
-            else if (entrada[0] == 'n' || entrada[0] == 'N')
-            {
-                continuar = 0;
-                valido = 1;
-            }
-            else
-            {
-                mostrarMensagem("Opcao invalida.\n");
-            }
-        } while (valido == 0);
+        }
+        else
+        {
+            //Manual: pergunta somente neste caminho
+            valido = 0;
+            do {
+                mostrarMensagem("\nMostrar a proxima geracao? [s/n]: ");
+
+                if (obter_input(entrada, sizeof entrada) == 0)
+                {
+                    continuar = 0;
+                    valido = 1;
+                }
+                else if (entrada[0] == 's' || entrada[0] == 'S')
+                {
+                    continuar = 1;
+                    valido = 1;
+                }
+                else if (entrada[0] == 'n' || entrada[0] == 'N')
+                {
+                    continuar = 0;
+                    valido = 1;
+                }
+                else
+                {
+                    mostrarMensagem("Opcao invalida.\n");
+                }
+            } while (valido == 0);
+        }
 
     } while (continuar == 1);
+}
+
+/*
+** Solicita o nome do save e pede confirmacao caso o arquivo ja exista.
+** Grava a configuracao atual em um arquivo binario e registra seu nome
+** no indice de saves, apresentando o resultado da operacao.
+** Parametros:
+**      mundo - ponteiro para a estrutura do mundo cuja configuracao sera salva
+*/
+void salvar_geracao_controller(struct Mundo *mundo)
+{
+    char nome[MAX_NOME_SAVE];
+    char nomeArquivo[MAX_NOME_SAVE + 10];
+
+    if (!obter_nome_save(nome, sizeof nome))
+    {
+        return;
+    }
+
+    sprintf(nomeArquivo, "%s.bin", nome);
+
+    if (arquivo_existe(nomeArquivo))
+    {
+        if (!confirmar_sobrescrita())
+        {
+            mostrarMensagem("\nGravacao cancelada.\n");
+            pause();
+            return;
+        }
+    }
+
+    if (salvar_geracao_arquivo(mundo, nomeArquivo) == 1 && registrar_nome_save(nome) == 1)
+    {
+        mostrarMensagem("\nGeracao salva com sucesso!\n");
+    }
+    else
+    {
+        mostrarMensagem("\nErro ao salvar a geracao.\n");
+    }
+    pause();
+}
+
+/*
+** Consulta o indice de saves, apresenta os nomes disponiveis e permite
+** ao usuario escolher uma configuracao para carregar.
+** Informa quando nao ha saves ou apresenta o resultado do carregamento.
+** Parametros:
+**      mundo - ponteiro para a estrutura que recebera a configuracao escolhida
+** Retorno:
+**      1 em caso de sucesso; 0 se nao houver saves, se a selecao for cancelada
+**      ou em caso de erro de leitura; -2 em caso de falha critica que exige
+**      limpeza do estado da simulacao
+*/
+int carregar_geracao_selecao_controller(struct Mundo *mundo)
+{
+    char nomes[MAX_SAVES][MAX_NOME_SAVE];
+    char nomeArquivo[MAX_NOME_SAVE + 10];
+    int qtd = listar_saves(nomes, MAX_SAVES);
+    int escolha;
+    int status;
+
+    limparTela();
+
+    if (qtd == 0)
+    {
+    {
+        mostrarMensagem("\nNenhuma geracao salva encontrada.\n");
+        pause();
+        return 0;
+    }
+
+    escolha = escolher_save(nomes, qtd);
+    }
+
+    escolha = escolher_save(nomes, qtd);
+    if (escolha == -1)
+    {
+        return 0;
+    }
+
+    sprintf(nomeArquivo, "%s.bin", nomes[escolha]);
+    status = carregar_geracao_arquivo(mundo, nomeArquivo);
+
+    if (status == 1)
+    {
+        mostrarMensagem("\nGeracao carregada com sucesso!\n");
+    }
+    else
+    {
+        mostrarMensagem("\nErro ao carregar a geracao selecionada.\n");
+    }
+    pause();
+    return status;
+}
+
+/*
+** Carrega o save indicado pelo indice e avanca para o seguinte somente
+** quando o carregamento termina com sucesso.
+** Ao atingir o final da lista de saves, retorna ao primeiro.
+** Parametros:
+**      mundo - ponteiro para a estrutura que recebera a configuracao carregada
+**      indice - ponteiro para a posicao do proximo save na lista, a partir de zero
+*/
+void carregar_geracao_sucessiva_controller(struct Mundo *mundo, int *indice)
+{
+    char nomes[MAX_SAVES][MAX_NOME_SAVE];
+    char nomeArquivo[MAX_NOME_SAVE + 10];
+    char msg[120];
+    int qtd = listar_saves(nomes, MAX_SAVES);
+    int status;
+
+    if (qtd == 0)
+    {
+        mostrarMensagem("\nNenhum save salvo encontrado.\n");
+        pause();
+        return;
+    }
+
+    if (*indice >= qtd)
+    {
+        *indice = 0;
+    }
+
+    sprintf(nomeArquivo, "%s.bin", nomes[*indice]);
+    status = carregar_geracao_arquivo(mundo, nomeArquivo);
+
+    if (status == 1)
+    {
+        sprintf(msg, "\nGeracao '%s' (%d/%d) carregada com sucesso!\n", nomes[*indice], *indice + 1, qtd);
+        mostrarMensagem(msg);
+        (*indice)++;
+    }
+    else
+    {
+        mostrarMensagem("\nErro ao carregar a proxima geracao.\n");
+    }
+    pause();
 }

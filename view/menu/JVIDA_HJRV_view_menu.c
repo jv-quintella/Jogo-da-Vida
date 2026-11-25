@@ -1,5 +1,5 @@
 //JVIDA_HJRV_View - Projeto Jogo da Vida LP2026
-//30/09/2026
+//24/11/2026
 //Hellen Araujo da Silva, João Vitor Carvalho Magalhaes Quintella, Rodrigo Corio Ferrer dos Santos, Victoria Spina Tavares
 
 #include <stdio.h>
@@ -9,11 +9,12 @@
 #include "../utilidades/JVIDA_HJRV_view_utilidades.h"
 /*
 ** Exibe o menu correspondente ao identificador informado, le e valida a opcao escolhida.
-** Menus disponiveis: 1 (principal), 2 (simulacao), 3 (configuracoes) e 4 (regras do jogo).
+** Menus disponiveis: 1 (principal), 2 (simulacao), 3 (configuracoes),
+** 4 (regras do jogo) e 5 (opcoes de carregamento).
 ** Se a opcao digitada for invalida, exibe uma mensagem de erro e repete a leitura.
 ** Parametros:
 **      opcao - identificador do menu a ser exibido (1 = principal, 2 = simulacao,
-**              3 = configuracoes, 4 = regras do jogo)
+**              3 = configuracoes, 4 = regras do jogo, 5 = opcoes de carregamento)
 ** Retorno:
 **      a opcao escolhida dentro do menu exibido (0 sempre significa sair ou voltar);
 **      0 tambem em caso de EOF na entrada; -1 se o identificador do menu for desconhecido.
@@ -33,8 +34,9 @@ int mostrar_Menu(int opcao) {
                 printf("\n[1] - Nova simulacao\n");
                 printf("[2] - Continuar simulacao\n");
                 printf("[3] - Regras do jogo\n");
+                printf("[4] - Carregar simulacao\n");
                 printf("[0] - Sair\n");
-                maximo = 3;
+                maximo = 4;
                 break;
             case 2:
                 printf("\n| MENU DA SIMULACAO\n");
@@ -42,16 +44,19 @@ int mostrar_Menu(int opcao) {
                 printf("[2] - Simular evolucao\n");
                 printf("[3] - Limpar mundo\n");
                 printf("[4] - Configuracoes\n");
+                printf("[5] - Opcoes de carregamento\n");
+                printf("[6] - Reiniciar contador\n");
                 printf("[0] - Voltar\n");
-                maximo = 4;
+                maximo = 6;
                 break;
             case 3:
                 printf("\n| CONFIGURACOES\n");
                 printf("\n[1] - Quantidade de geracoes\n");
-                printf("[2] - Velocidade (geracoes por tela)\n");
+                printf("[2] - Velocidade (segundos entre geracoes)\n");
                 printf("[3] - Vizinhas-mortas (sim/nao)\n");
+                printf("[4] - Intervalo (geracoes por tela)\n");
                 printf("[0] - Voltar\n");
-                maximo = 3;
+                maximo = 4;
                 break;
             case 4:
                 printf("\n| REGRAS DO JOGO DA VIDA\n");
@@ -66,21 +71,33 @@ int mostrar_Menu(int opcao) {
                 printf("[0] - Voltar\n");
                 maximo = 8;
                 break;
+            case 5:
+                printf("\n| OPCOES DE CARREGAMENTO\n");
+                printf("[1] - Salvar simulacao\n");
+                printf("[2] - Carregar simulacao\n");
+                printf("[3] - Carregar proxima geracao \n");
+                printf("[0] - Voltar\n");
+                maximo = 3;
+                break;
             default:
                 return -1;
         }
+
         printf("---------------------------\n");
         printf("Digite uma opcao: ");
 
         if (!obter_input(entrada, sizeof entrada)) {
             return 0;
         }
-
+        // Converte a entrada para inteiro na base 10; 'fim' aponta para o primeiro caractere nao numerico
         id = strtol(entrada, &fim, 10);
 
+        // Garante que algum digito foi lido (fim != entrada), que nao sobrou texto apos o numero (*fim == '\0')
+        // e que a opcao esta dentro da faixa valida do menu
         valido = (fim != entrada && *fim == '\0' && id >= 0 && id <= maximo);
 
         if (!valido) {
+            // Limpa a tela apenas nos menus principais (1 e 4), onde o mapa nao esta sendo exibido acima
             if (opcao == 1 || opcao == 4) {
                 limparTela();
             }
